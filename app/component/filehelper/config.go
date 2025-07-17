@@ -77,7 +77,7 @@ func ReadConfig(fullArgs []string) (*ConfigFileHelper, error) {
 					config.replace = append(config.replace, configList[i+1])
 					i++ // Skip the value part
 				default:
-					return nil, errors.New("unknown parameter: " + subStr)
+					continue
 				}
 			} else { // Not a flag, is a positional argument
 				// This part of the logic needs to be careful because the original code
