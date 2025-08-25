@@ -39,6 +39,7 @@ go build -o your_app_name.exe main.go # windows
 go build -o your_app_name main.go # windows
 go build main.go # windows
 go build app/raselper/main.go
+go build src/raseper.go
 
 # 为 Linux 系统打包
 GOOS=linux GOARCH=amd64 go build -o your_app_linux main.go
@@ -46,4 +47,12 @@ GOOS=linux GOARCH=amd64 go build -o your_app_linux main.go
 GOOS=windows GOARCH=amd64 go build -o your_app_windows.exe main.go
 # 为 macOS 打包
 GOOS=darwin GOARCH=amd64 go build -o your_app_mac main.go
+```
+
+```mermaid
+TD LR;
+
+入口参数->拦截器->对应逻辑
+
+对应逻辑--运行日志->缓存
 ```

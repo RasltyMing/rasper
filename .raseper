@@ -1,1 +1,4 @@
-filehelper filter D:\Temporary\log\catalina(3).out [Thread-25] T-25.log
+unzip D:\Temporary\test\*.zip ./ gbk
+rename D:\Temporary\test\*_*_*.svg (.+)_(.+)_(.+)_(.+)_(.+).svg $1.svg
+rename D:\Temporary\test\*_*_*.svg (.+)_(.+).svg $1.svg
+rename D:\Temporary\test\*_*_*.xml (.+)_(.+)_(.+).xml $1.xml
