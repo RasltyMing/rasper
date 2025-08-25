@@ -13,6 +13,7 @@ var (
 	InstanceList []component.Instance = []component.Instance{
 		new(impl.InstanceUnZip),
 		new(impl.InstanceRename),
+		new(impl.InstanceDelete),
 	}
 )
 

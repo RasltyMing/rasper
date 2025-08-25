@@ -17,5 +17,11 @@ func (r InstanceUnZip) Run(args []string) {
 	if len(args) > 4 {
 		decodeParam = args[4]
 	}
-	_ = utils.Unzip(args[2], args[3], decodeParam)
+	mode := ""
+	if len(args) > 5 {
+		mode = args[5]
+	}
+	if err := utils.Unzip(args[2], args[3], decodeParam, mode); err != nil {
+		panic(err)
+	}
 }

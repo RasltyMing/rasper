@@ -64,15 +64,20 @@ func Zip(targetPath string, sourcePath string) error {
 // Unzip 解压zip文件到指定目录
 // src: 源zip文件路径
 // dest: 目标解压目录
-func Unzip(src string, dest string, decode string) error {
+func Unzip(src string, dest string, decode string, mode string) error {
 	matches, err := filepath.Glob(src)
 	if err != nil {
 		return fmt.Errorf("invalid path pattern: %v", err)
 	}
 
 	for _, match := range matches {
+		fmt.Println("Unzip file:" + match)
 		r, err := zip.OpenReader(match)
 		if err != nil {
+			if mode == "pass" {
+				fmt.Println(err)
+				continue
+			}
 			return err
 		}
 		defer r.Close()
@@ -93,7 +98,7 @@ func Unzip(src string, dest string, decode string) error {
 				content, _ := ioutil.ReadAll(decoder)
 				fName = string(content)
 			}
-			filePath := filepath.Join(filepath.Dir(src), dest, fName)
+			filePath := filepath.Join(filepath.Dir(match), dest, fName)
 			if strings.HasPrefix(dest, "/") {
 				filePath = filepath.Join(dest, fName)
 			}
@@ -133,6 +138,22 @@ func Unzip(src string, dest string, decode string) error {
 					return err
 				}
 			}
+		}
+	}
+
+	return nil
+}
+
+func Delete(path string) error {
+	matches, err := filepath.Glob(path)
+	if err != nil {
+		return fmt.Errorf("invalid path pattern: %v", err)
+	}
+
+	for _, match := range matches {
+		err := os.Remove(match)
+		if err != nil {
+			return err
 		}
 	}
 

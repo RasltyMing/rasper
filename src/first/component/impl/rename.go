@@ -10,7 +10,9 @@ type InstanceRename struct {
 }
 
 func (r InstanceRename) Run(args []string) {
-	_ = utils.RenameFilesByRegex(args[2], args[3], args[4])
+	if err := utils.RenameFilesByRegex(args[2], args[3], args[4]); err != nil {
+		panic(err)
+	}
 }
 
 func (r InstanceRename) SelectComponent(args []string) bool {
