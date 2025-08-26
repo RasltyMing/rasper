@@ -1,7 +1,1 @@
-unzip /home/dcloud/backup/model-release/*/*.zip ./
-unzip /home/dcloud/backup/svg-release/*/*.zip ./
-delete /home/dcloud/backup/model-release/*/*.zip
-delete /home/dcloud/backup/svg-release/*/*.zip
-rename /home/dcloud/backup/svg-release/*/*_*_*.svg (.+)_(.+)_(.+)_(.+)_(.+).svg $1.svg
-rename /home/dcloud/backup/svg-release/*/*_*_*.svg (.+)_(.+).svg $1.svg
-rename /home/dcloud/backup/model-release/*/*_*_*.xml (.+)_(.+)_(.+).xml $1.xml
+unzip D:\Temporary\20250519导出\*.zip ./

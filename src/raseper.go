@@ -57,7 +57,7 @@ func main() {
 
 	for _, arg := range args {
 		// 确保至少有一个参数
-		if len(args) < 2 {
+		if len(arg) < 2 {
 			log.Print("请提供命令参数")
 			return
 		}

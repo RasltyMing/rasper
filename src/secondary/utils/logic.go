@@ -71,72 +71,77 @@ func Unzip(src string, dest string, decode string, mode string) error {
 	}
 
 	for _, match := range matches {
-		fmt.Println("Unzip file:" + match)
-		r, err := zip.OpenReader(match)
-		if err != nil {
+		if err := UnzipSingle(match, dest, decode); err != nil {
 			if mode == "pass" {
 				fmt.Println(err)
 				continue
 			}
 			return err
 		}
-		defer r.Close()
+	}
 
-		// 确保目标目录存在
-		err = os.MkdirAll(dest, 0755)
-		if err != nil {
-			return err
+	return nil
+}
+
+func UnzipSingle(file string, dest string, decode string) error {
+	fmt.Println("Unzip file:" + file)
+	r, err := zip.OpenReader(file)
+	if err != nil {
+		return err
+	}
+	defer r.Close()
+
+	// 遍历zip文件中的每个文件/文件夹
+	for _, f := range r.File {
+		fName := f.Name
+		// 验证文件路径，防止路径遍历攻击
+		if decode == "gbk" {
+			reader := bytes.NewReader([]byte(f.Name))
+			decoder := transform.NewReader(reader, simplifiedchinese.GB18030.NewDecoder())
+			content, _ := ioutil.ReadAll(decoder)
+			fName = string(content)
+		}
+		filePath := filepath.Join(filepath.Dir(file), dest, fName)
+		if strings.HasPrefix(dest, "/") {
+			filePath = filepath.Join(dest, fName)
+		}
+		if strings.Contains(dest, ":\\") {
+			filePath = filepath.Join(dest, fName)
 		}
 
-		// 遍历zip文件中的每个文件/文件夹
-		for _, f := range r.File {
-			fName := f.Name
-			// 验证文件路径，防止路径遍历攻击
-			if decode == "gbk" {
-				reader := bytes.NewReader([]byte(f.Name))
-				decoder := transform.NewReader(reader, simplifiedchinese.GB18030.NewDecoder())
-				content, _ := ioutil.ReadAll(decoder)
-				fName = string(content)
+		if f.FileInfo().IsDir() {
+			// 创建目录
+			err = os.MkdirAll(filePath, f.Mode())
+			if err != nil {
+				return err
 			}
-			filePath := filepath.Join(filepath.Dir(match), dest, fName)
-			if strings.HasPrefix(dest, "/") {
-				filePath = filepath.Join(dest, fName)
+		} else {
+			// 创建文件
+			err = os.MkdirAll(filepath.Dir(filePath), 0755)
+			if err != nil {
+				return err
 			}
 
-			if f.FileInfo().IsDir() {
-				// 创建目录
-				err = os.MkdirAll(filePath, f.Mode())
-				if err != nil {
-					return err
-				}
-			} else {
-				// 创建文件
-				err = os.MkdirAll(filepath.Dir(filePath), 0755)
-				if err != nil {
-					return err
-				}
+			// 打开源文件
+			rc, err := f.Open()
+			if err != nil {
+				return err
+			}
 
-				// 打开源文件
-				rc, err := f.Open()
-				if err != nil {
-					return err
-				}
-
-				// 创建目标文件
-				dstFile, err := os.OpenFile(filePath, os.O_WRONLY|os.O_CREATE|os.O_TRUNC, f.Mode())
-				if err != nil {
-					rc.Close()
-					return err
-				}
-
-				// 复制内容
-				_, err = io.Copy(dstFile, rc)
-				log.Println("unzip file to ", filePath)
+			// 创建目标文件
+			dstFile, err := os.OpenFile(filePath, os.O_WRONLY|os.O_CREATE|os.O_TRUNC, f.Mode())
+			if err != nil {
 				rc.Close()
-				dstFile.Close()
-				if err != nil {
-					return err
-				}
+				return err
+			}
+
+			// 复制内容
+			_, err = io.Copy(dstFile, rc)
+			log.Println("unzip:", file, " file to ", filePath)
+			rc.Close()
+			dstFile.Close()
+			if err != nil {
+				return err
 			}
 		}
 	}

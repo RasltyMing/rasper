@@ -21,6 +21,18 @@
 filehelper rname catalina.out .out .log
 # 运行切割日志
 filehelper filter D:\Temporary\log\catalina.out [Thread-25] catalina.log
+
+# get_all_model_svg
+/home/dcloud/backup/model_analysis_back /home/dcloud/backup/all/model-release /home/dcloud/backup/all/svg-release
+
+# 图模异动
+unzip /home/dcloud/backup/model-release/*/*.zip ./
+unzip /home/dcloud/backup/svg-release/*/*.zip ./
+delete /home/dcloud/backup/model-release/*/*.zip
+delete /home/dcloud/backup/svg-release/*/*.zip
+rename /home/dcloud/backup/svg-release/*/*_*_*.svg (.+)_(.+)_(.+)_(.+)_(.+).svg $1.svg
+rename /home/dcloud/backup/svg-release/*/*_*_*.svg (.+)_(.+).svg $1.svg
+rename /home/dcloud/backup/model-release/*/*_*_*.xml (.+)_(.+)_(.+).xml $1.xml
 ```
 
 ## 打包
