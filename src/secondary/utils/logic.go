@@ -217,3 +217,39 @@ func RenameFilesByRegex(pathPattern string, regexPattern string, replacement str
 
 	return nil
 }
+
+// StreamFromOffset 从偏移量开始流式读取大文件
+func StreamFromOffset(filename string, offset int64, chunkSize int) ([]byte, error) {
+	file, err := os.Open(filename)
+	if err != nil {
+		return []byte{}, err
+	}
+	defer func(file *os.File) {
+		err := file.Close()
+		if err != nil {
+
+		}
+	}(file)
+
+	// 定位到偏移位置
+	_, err = file.Seek(offset, 0)
+	if err != nil {
+		return []byte{}, err
+	}
+
+	buffer := make([]byte, chunkSize)
+	for {
+		n, err := file.Read(buffer)
+		if err == io.EOF {
+			break
+		}
+		if err != nil {
+			return []byte{}, err
+		}
+
+		// 处理读取的数据
+		return buffer[:n], nil
+	}
+
+	return []byte{}, err
+}
