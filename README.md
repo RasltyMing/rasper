@@ -59,6 +59,10 @@ GOOS=linux GOARCH=amd64 go build -o your_app_linux main.go
 GOOS=windows GOARCH=amd64 go build -o your_app_windows.exe main.go
 # 为 macOS 打包
 GOOS=darwin GOARCH=amd64 go build -o your_app_mac main.go
+
+set GOOS=linux
+set GOARCH=amd64
+go build -o generate_g_from_dm.exe src/forwork/generate_g_from_dm/generate_g_from_dm.go
 ```
 
 ```mermaid

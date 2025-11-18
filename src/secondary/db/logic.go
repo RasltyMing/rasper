@@ -11,9 +11,15 @@ import (
 func CreateTable(tableName string, tablePath string, tableInfo *Table) error {
 	// 转换为byte数组
 	data := []byte(tableInfo.Name)
+	data = append(data, byte(tableInfo.ColumnCount))
+	for _, column := range tableInfo.Columns {
+		data = append(data, byte(column.NameLength))
+		data = append(data, byte(column.Type))
+		data = append(data, []byte(column.Name)...)
+	}
 
 	// 一次性写入文件（如果文件存在会被覆盖）
-	err := os.WriteFile(filepath.Join(tablePath, tableName+".db"), data, 0644)
+	err := os.WriteFile(filepath.Join(tablePath, tableName+".idb"), data, 0644)
 	if err != nil {
 		fmt.Printf("create table fail: %v\n", err)
 		return nil
@@ -22,19 +28,38 @@ func CreateTable(tableName string, tablePath string, tableInfo *Table) error {
 	return nil
 }
 
-func SelectTable(tableName string, tablePath string) (*Table, error) {
+func SelectTable(tableName string, tablePath string) (*Table, []*TableRow, error) {
 	tableInfo := &Table{}
-	if offset, err := utils.StreamFromOffset(filepath.Join(tablePath, tableName+".db"), 0, 1024); err != nil {
-		return nil, err
+	var tableRows []*TableRow
+	length := getColumnLength(tableInfo.Columns)
+	if offset, err := utils.StreamFromOffset(filepath.Join(tablePath, tableName+".idb"), 0, 8192); err != nil {
+		return nil, make([]*TableRow, 0), err
 	} else {
-		tableInfo.Name = string(offset)
+		tableInfo = readTable(offset)
 	}
-	if offset, err := utils.StreamFromOffset(filepath.Join(tablePath, tableName+".db"), 1024, 1024); err != nil {
-		return nil, err
+	if offset, err := utils.StreamFromOffset(filepath.Join(tablePath, tableName+".db"), 0, length); err != nil {
+		return nil, make([]*TableRow, 0), err
 	} else {
-		tableInfo.Columns = string(offset)
-		return tableInfo, nil
+		tableRows = append(tableRows, readRow(offset))
 	}
 
-	return tableInfo, nil
+	return tableInfo, tableRows, nil
 }
+
+func InsertTable(tableName string, tablePath string) (int, error) {
+	tableInfo := &Table{}
+	readTable()
+	if offset, err := utils.StreamFromOffset(filepath.Join(tablePath, tableName+".idb"), 0, 8192); err != nil {
+		return 0, err
+	} else {
+		tableInfo = readTable(offset)
+	}
+}
+
+//func UpdateTable(tableName string, tablePath string) (int, error) {
+//
+//}
+//
+//func DeleteTable(tableName string, tablePath string) (int, error) {
+//
+//}
