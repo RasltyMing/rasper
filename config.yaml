@@ -1,0 +1,44 @@
+database:
+  source:
+    driver: "dameng"
+    dsn: ""
+    options:
+      user: "SYSDBA"
+      password: "SYSDBA001"
+      host: "127.0.0.1"
+      port: "5238"
+      schema: "DKYPW"
+      appName: "数据库同步工具"
+      connectTimeout: "30000"
+
+  target:
+    driver: "dameng"
+    dsn: ""
+    options:
+      user: "SYSDBA"
+      password: "SYSDBA001"
+      host: "127.0.0.1"
+      port: "5238"
+      schema: "DKYPW_TEST"
+      appName: "数据库同步工具"
+      connectTimeout: "30000"
+
+sync:
+  enable_soft_delete: true
+  hard_delete: false
+  batch_size: 500
+
+tables:
+  - table_name: "SG_CON_FEEDERLINE_C"
+    primary_key: ["DCLOUD_ID"]
+    schema1: "DKYPW"
+    schema2: "DKYPW_TEST"
+    soft_delete_field: ""
+    soft_delete_value: ""
+
+  - table_name: "SG_CON_FEEDERLINE_B"
+    primary_key: ["ID"]
+    schema1: "DKYPW"
+    schema2: "DKYPW_TEST"
+    soft_delete_field: "RUNNING_STATE"
+    soft_delete_value: "1006"

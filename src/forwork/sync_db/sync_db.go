@@ -2,14 +2,130 @@ package main
 
 import (
 	"fmt"
-	dameng "github.com/godoes/gorm-dameng"
 	"log"
+	"os"
 	"reflect"
 	"strings"
 
-	_ "gorm.io/driver/mysql"
+	dameng "github.com/godoes/gorm-dameng"
+	"gopkg.in/yaml.v3"
+	"gorm.io/driver/mysql"
 	"gorm.io/gorm"
 )
+
+// 配置文件结构体
+type ConfigFile struct {
+	Database struct {
+		Source struct {
+			Driver  string            `yaml:"driver"`
+			DSN     string            `yaml:"dsn"`
+			Options map[string]string `yaml:"options,omitempty"`
+		} `yaml:"source"`
+		Target struct {
+			Driver  string            `yaml:"driver"`
+			DSN     string            `yaml:"dsn"`
+			Options map[string]string `yaml:"options,omitempty"`
+		} `yaml:"target"`
+	} `yaml:"database"`
+	Sync struct {
+		EnableSoftDelete bool `yaml:"enable_soft_delete"`
+		HardDelete       bool `yaml:"hard_delete"`
+		BatchSize        int  `yaml:"batch_size"`
+	} `yaml:"sync"`
+	Tables []TableConfig `yaml:"tables"`
+}
+
+// 从YAML文件读取配置
+func LoadConfigFromFile(filename string) (*SyncConfig, error) {
+	data, err := os.ReadFile(filename)
+	if err != nil {
+		return nil, fmt.Errorf("读取配置文件失败: %w", err)
+	}
+
+	var fileConfig ConfigFile
+	err = yaml.Unmarshal(data, &fileConfig)
+	if err != nil {
+		return nil, fmt.Errorf("解析配置文件失败: %w", err)
+	}
+
+	// 初始化数据库连接
+	sourceDB, err := initDB(fileConfig.Database.Source)
+	if err != nil {
+		return nil, fmt.Errorf("初始化源数据库失败: %w", err)
+	}
+
+	targetDB, err := initDB(fileConfig.Database.Target)
+	if err != nil {
+		return nil, fmt.Errorf("初始化目标数据库失败: %w", err)
+	}
+
+	// 构建SyncConfig
+	config := &SyncConfig{
+		SourceDB:         sourceDB,
+		TargetDB:         targetDB,
+		Tables:           fileConfig.Tables,
+		EnableSoftDelete: fileConfig.Sync.EnableSoftDelete,
+		HardDelete:       fileConfig.Sync.HardDelete,
+		BatchSize:        fileConfig.Sync.BatchSize,
+	}
+
+	// 设置默认值
+	if config.BatchSize <= 0 {
+		config.BatchSize = 1000
+	}
+
+	return config, nil
+}
+
+// 初始化数据库连接
+func initDB(dbConfig struct {
+	Driver  string            `yaml:"driver"`
+	DSN     string            `yaml:"dsn"`
+	Options map[string]string `yaml:"options,omitempty"`
+}) (*gorm.DB, error) {
+	switch dbConfig.Driver {
+	case "mysql":
+		return gorm.Open(mysql.Open(dbConfig.DSN), &gorm.Config{})
+	case "dameng":
+		url := dameng.BuildUrl(
+			getOption(dbConfig.Options, "user", "SYSDBA"),
+			getOption(dbConfig.Options, "password", "SYSDBA"),
+			getOption(dbConfig.Options, "host", "127.0.0.1"),
+			getOptionInt(dbConfig.Options, "port", 5236),
+			dbConfig.Options,
+		)
+		return gorm.Open(dameng.Open(url), &gorm.Config{})
+	default:
+		return nil, fmt.Errorf("不支持的数据库驱动: %s", dbConfig.Driver)
+	}
+}
+
+// 获取字符串配置项，带默认值
+func getOption(options map[string]string, key, defaultValue string) string {
+	if options == nil {
+		return defaultValue
+	}
+	if value, exists := options[key]; exists {
+		return value
+	}
+	return defaultValue
+}
+
+// 获取整数配置项，带默认值
+func getOptionInt(options map[string]string, key string, defaultValue int) int {
+	if options == nil {
+		return defaultValue
+	}
+	if value, exists := options[key]; exists {
+		var result int
+		_, err := fmt.Sscanf(value, "%d", &result)
+		if err != nil {
+			return defaultValue
+		}
+		return result
+	}
+	return defaultValue
+}
 
 // 配置结构体
 type SyncConfig struct {
@@ -23,12 +139,12 @@ type SyncConfig struct {
 
 // 表配置
 type TableConfig struct {
-	TableName       string   // 表名
-	PrimaryKey      []string // 主键字段（支持复合主键）
+	TableName       string   `yaml:"table_name"`  // 表名
+	PrimaryKey      []string `yaml:"primary_key"` // 主键字段（支持复合主键）
 	Schema1         string   // 数据库1的schema
 	Schema2         string   // 数据库2的schema
-	SoftDeleteField string   // 软删除字段，如 "deleted_at"
-	SoftDeleteValue string   // 软删除值，如 "now()"
+	SoftDeleteField string   `yaml:"soft_delete_field"` // 软删除字段，如 "deleted_at"
+	SoftDeleteValue string   `yaml:"soft_delete_value"` // 软删除值，如 "now()"
 }
 
 // 同步结果
@@ -436,53 +552,10 @@ func (s *DBSynchronizer) recordsEqual(record1, record2 map[string]interface{}, p
 
 // 使用示例
 func main() {
-	options := map[string]string{
-		"schema":         "DKYPW",
-		"appName":        "GORM 连接达梦数据库示例",
-		"connectTimeout": "30000",
-	}
-
-	// 初始化数据库连接
-	//sourceDB, err := gorm.Open(mysql.Open("user:password@tcp(host:port)/database1?charset=utf8mb4&parseTime=True&loc=Local"), &gorm.Config{})
-	sourceDB, err := gorm.Open(dameng.Open(dameng.BuildUrl("SYSDBA", "SYSDBA001", "127.0.0.1", 5238, options)), &gorm.Config{})
+	// 从配置文件读取配置
+	config, err := LoadConfigFromFile("config.yaml")
 	if err != nil {
-		log.Fatal("连接源数据库失败:", err)
-	}
-
-	options = map[string]string{
-		"schema":         "DKYPW_TEST",
-		"appName":        "GORM 连接达梦数据库示例",
-		"connectTimeout": "30000",
-	}
-	//targetDB, err := gorm.Open(mysql.Open("user:password@tcp(host:port)/database2?charset=utf8mb4&parseTime=True&loc=Local"), &gorm.Config{})
-	targetDB, err := gorm.Open(dameng.Open(dameng.BuildUrl("SYSDBA", "SYSDBA001", "127.0.0.1", 5238, options)), &gorm.Config{})
-	if err != nil {
-		log.Fatal("连接目标数据库失败:", err)
-	}
-
-	// 配置同步表
-	config := &SyncConfig{
-		SourceDB:         sourceDB,
-		TargetDB:         targetDB,
-		EnableSoftDelete: true,
-		HardDelete:       false,
-		BatchSize:        500, // 设置批次大小，避免超过65535限制
-		Tables: []TableConfig{
-			{
-				TableName:  "SG_CON_FEEDERLINE_C",
-				PrimaryKey: []string{"DCLOUD_ID"},
-				Schema1:    "DKYPW",
-				Schema2:    "DKYPW_TEST",
-			},
-			{
-				TableName:       "SG_CON_FEEDERLINE_B",
-				PrimaryKey:      []string{"ID"},
-				Schema1:         "DKYPW",
-				Schema2:         "DKYPW_TEST",
-				SoftDeleteField: "RUNNING_STATE",
-				SoftDeleteValue: "1006",
-			},
-		},
+		log.Fatal("加载配置文件失败:", err)
 	}
 
 	// 创建同步器并执行同步
