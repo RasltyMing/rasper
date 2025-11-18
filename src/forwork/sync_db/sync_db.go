@@ -7,7 +7,7 @@ import (
 	"reflect"
 	"strings"
 
-	_ "github.com/godoes/gorm-dameng"
+	_ "gorm.io/driver/mysql"
 	"gorm.io/gorm"
 )
 
@@ -18,6 +18,7 @@ type SyncConfig struct {
 	Tables           []TableConfig
 	EnableSoftDelete bool // 是否启用软删除
 	HardDelete       bool // 是否硬删除（如果启用软删除，则此配置无效）
+	BatchSize        int  // 批量操作大小
 }
 
 // 表配置
@@ -46,6 +47,10 @@ type DBSynchronizer struct {
 }
 
 func NewDBSynchronizer(config *SyncConfig) *DBSynchronizer {
+	// 设置默认批量大小
+	if config.BatchSize <= 0 {
+		config.BatchSize = 1000 // 默认1000条
+	}
 	return &DBSynchronizer{
 		config: config,
 	}
@@ -183,46 +188,162 @@ func (s *DBSynchronizer) syncData(sourceData, targetData map[string]map[string]i
 		}
 	}
 
-	// 执行批量插入
+	// 执行批量插入（分批次）
 	if len(batchInsert) > 0 {
-		err := s.config.TargetDB.Table(tableName).Create(batchInsert).Error
+		err := s.batchInsert(tableName, batchInsert)
 		if err != nil {
 			return added, updated, fmt.Errorf("批量插入失败: %w", err)
 		}
 	}
 
-	// 执行批量更新
-	for _, record := range batchUpdate {
-		// 构建WHERE条件
-		whereClause := make(map[string]interface{})
-		for _, pk := range config.PrimaryKey {
-			if value, exists := record[pk]; exists {
-				whereClause[pk] = value
-			}
-		}
-
-		// 构建更新数据（排除主键）
-		updateData := make(map[string]interface{})
-		for k, v := range record {
-			isPrimaryKey := false
-			for _, pk := range config.PrimaryKey {
-				if k == pk {
-					isPrimaryKey = true
-					break
-				}
-			}
-			if !isPrimaryKey {
-				updateData[k] = v
-			}
-		}
-
-		err := s.config.TargetDB.Table(tableName).Where(whereClause).Updates(updateData).Error
+	// 执行批量更新（分批次）
+	if len(batchUpdate) > 0 {
+		err := s.batchUpdate(tableName, batchUpdate, config.PrimaryKey)
 		if err != nil {
-			return added, updated, fmt.Errorf("更新记录失败: %w", err)
+			return added, updated, fmt.Errorf("批量更新失败: %w", err)
 		}
 	}
 
 	return added, updated, nil
+}
+
+// 批量插入（分批次处理）
+func (s *DBSynchronizer) batchInsert(tableName string, records []map[string]interface{}) error {
+	batchSize := s.config.BatchSize
+	if batchSize <= 0 {
+		batchSize = 1000 // 默认批次大小
+	}
+
+	for i := 0; i < len(records); i += batchSize {
+		end := i + batchSize
+		if end > len(records) {
+			end = len(records)
+		}
+
+		batch := records[i:end]
+		err := s.config.TargetDB.Table(tableName).Create(batch).Error
+		if err != nil {
+			return fmt.Errorf("插入批次 %d-%d 失败: %w", i, end, err)
+		}
+	}
+
+	return nil
+}
+
+// 批量更新（分批次处理）
+func (s *DBSynchronizer) batchUpdate(tableName string, records []map[string]interface{}, primaryKeys []string) error {
+	batchSize := s.config.BatchSize
+	if batchSize <= 0 {
+		batchSize = 1000 // 默认批次大小
+	}
+
+	for i := 0; i < len(records); i += batchSize {
+		end := i + batchSize
+		if end > len(records) {
+			end = len(records)
+		}
+
+		batch := records[i:end]
+		for _, record := range batch {
+			// 构建WHERE条件
+			whereClause := make(map[string]interface{})
+			for _, pk := range primaryKeys {
+				if value, exists := record[pk]; exists {
+					whereClause[pk] = value
+				}
+			}
+
+			// 构建更新数据（排除主键）
+			updateData := make(map[string]interface{})
+			for k, v := range record {
+				isPrimaryKey := false
+				for _, pk := range primaryKeys {
+					if k == pk {
+						isPrimaryKey = true
+						break
+					}
+				}
+				if !isPrimaryKey {
+					updateData[k] = v
+				}
+			}
+
+			err := s.config.TargetDB.Table(tableName).Where(whereClause).Updates(updateData).Error
+			if err != nil {
+				return fmt.Errorf("更新记录失败 (主键: %v): %w", whereClause, err)
+			}
+		}
+	}
+
+	return nil
+}
+
+// 批量软删除（分批次处理）
+func (s *DBSynchronizer) batchSoftDelete(tableName string, records []map[string]interface{}, config TableConfig) error {
+	batchSize := s.config.BatchSize
+	if batchSize <= 0 {
+		batchSize = 1000
+	}
+
+	for i := 0; i < len(records); i += batchSize {
+		end := i + batchSize
+		if end > len(records) {
+			end = len(records)
+		}
+
+		batch := records[i:end]
+		for _, record := range batch {
+			whereClause := make(map[string]interface{})
+			for _, pk := range config.PrimaryKey {
+				if value, exists := record[pk]; exists {
+					whereClause[pk] = value
+				}
+			}
+
+			updateData := map[string]interface{}{
+				config.SoftDeleteField: config.SoftDeleteValue,
+			}
+
+			err := s.config.TargetDB.Table(tableName).Where(whereClause).Updates(updateData).Error
+			if err != nil {
+				return fmt.Errorf("软删除失败 (主键: %v): %w", whereClause, err)
+			}
+		}
+	}
+
+	return nil
+}
+
+// 批量硬删除（分批次处理）
+func (s *DBSynchronizer) batchHardDelete(tableName string, records []map[string]interface{}, config TableConfig) error {
+	batchSize := s.config.BatchSize
+	if batchSize <= 0 {
+		batchSize = 1000
+	}
+
+	for i := 0; i < len(records); i += batchSize {
+		end := i + batchSize
+		if end > len(records) {
+			end = len(records)
+		}
+
+		batch := records[i:end]
+		for _, record := range batch {
+			whereClause := make(map[string]interface{})
+			for _, pk := range config.PrimaryKey {
+				if value, exists := record[pk]; exists {
+					whereClause[pk] = value
+				}
+			}
+
+			err := s.config.TargetDB.Table(tableName).Where(whereClause).Delete(nil).Error
+			if err != nil {
+				return fmt.Errorf("硬删除失败 (主键: %v): %w", whereClause, err)
+			}
+		}
+	}
+
+	return nil
 }
 
 // 处理软删除
@@ -233,25 +354,20 @@ func (s *DBSynchronizer) handleSoftDelete(sourceData, targetData map[string]map[
 		tableName = config.Schema2 + "." + config.TableName
 	}
 
+	var recordsToDelete []map[string]interface{}
+
 	for key, targetRecord := range targetData {
 		if _, exists := sourceData[key]; !exists {
 			// 源数据库不存在，目标数据库存在，执行软删除
-			whereClause := make(map[string]interface{})
-			for _, pk := range config.PrimaryKey {
-				if value, exists := targetRecord[pk]; exists {
-					whereClause[pk] = value
-				}
-			}
-
-			updateData := map[string]interface{}{
-				config.SoftDeleteField: config.SoftDeleteValue, // 使用当前时间
-			}
-
-			err := s.config.TargetDB.Table(tableName).Where(whereClause).Updates(updateData).Error
-			if err != nil {
-				return softDeleted, err
-			}
+			recordsToDelete = append(recordsToDelete, targetRecord)
 			softDeleted++
+		}
+	}
+
+	if len(recordsToDelete) > 0 {
+		err := s.batchSoftDelete(tableName, recordsToDelete, config)
+		if err != nil {
+			return softDeleted, err
 		}
 	}
 
@@ -266,21 +382,20 @@ func (s *DBSynchronizer) handleHardDelete(sourceData, targetData map[string]map[
 		tableName = config.Schema2 + "." + config.TableName
 	}
 
+	var recordsToDelete []map[string]interface{}
+
 	for key, targetRecord := range targetData {
 		if _, exists := sourceData[key]; !exists {
 			// 源数据库不存在，目标数据库存在，执行硬删除
-			whereClause := make(map[string]interface{})
-			for _, pk := range config.PrimaryKey {
-				if value, exists := targetRecord[pk]; exists {
-					whereClause[pk] = value
-				}
-			}
-
-			err := s.config.TargetDB.Table(tableName).Where(whereClause).Delete(nil).Error
-			if err != nil {
-				return deleted, err
-			}
+			recordsToDelete = append(recordsToDelete, targetRecord)
 			deleted++
+		}
+	}
+
+	if len(recordsToDelete) > 0 {
+		err := s.batchHardDelete(tableName, recordsToDelete, config)
+		if err != nil {
+			return deleted, err
 		}
 	}
 
@@ -351,20 +466,21 @@ func main() {
 		TargetDB:         targetDB,
 		EnableSoftDelete: true,
 		HardDelete:       false,
+		BatchSize:        500, // 设置批次大小，避免超过65535限制
 		Tables: []TableConfig{
 			{
-				TableName:       "SG_CON_FEEDERLINE_C",
-				PrimaryKey:      []string{"DCLOUD_ID"},
+				TableName:  "SG_CON_FEEDERLINE_C",
+				PrimaryKey: []string{"DCLOUD_ID"},
+				Schema1:    "DKYPW",
+				Schema2:    "DKYPW_TEST",
+			},
+			{
+				TableName:       "SG_CON_FEEDERLINE_B",
+				PrimaryKey:      []string{"ID"},
 				Schema1:         "DKYPW",
 				Schema2:         "DKYPW_TEST",
 				SoftDeleteField: "RUNNING_STATE",
 				SoftDeleteValue: "1006",
-			},
-			{
-				TableName:  "SG_CON_FEEDERLINE_B",
-				PrimaryKey: []string{"ID"},
-				Schema1:    "DKYPW",
-				Schema2:    "DKYPW_TEST",
 			},
 		},
 	}
