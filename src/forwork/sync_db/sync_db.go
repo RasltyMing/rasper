@@ -3,6 +3,7 @@ package main
 import (
 	"fmt"
 	"log"
+	"net/url"
 	"os"
 	"reflect"
 	"strings"
@@ -94,6 +95,14 @@ func initDB(dbConfig struct {
 			getOptionInt(dbConfig.Options, "port", 5236),
 			dbConfig.Options,
 		)
+		fmt.Printf("user %s password %s ", getOption(dbConfig.Options, "user", "SYSDBA"), getOption(dbConfig.Options, "password", "SYSDBA"))
+		fmt.Printf("host %s port %d\n", getOption(dbConfig.Options, "host", "127.0.0.1"), getOptionInt(dbConfig.Options, "port", 5236))
+		url = fmt.Sprintf("dm://%s:%s@%s:%s",
+			getOption(dbConfig.Options, "user", "SYSDBA"),
+			getOption(dbConfig.Options, "password", "SYSDBA"),
+			getOption(dbConfig.Options, "host", "127.0.0.1"),
+			getOption(dbConfig.Options, "port", "5236"),
+		)
 		return gorm.Open(dameng.Open(url), &gorm.Config{})
 	default:
 		return nil, fmt.Errorf("不支持的数据库驱动: %s", dbConfig.Driver)
@@ -106,7 +115,7 @@ func getOption(options map[string]string, key, defaultValue string) string {
 		return defaultValue
 	}
 	if value, exists := options[key]; exists {
-		return value
+		return url.PathEscape(value)
 	}
 	return defaultValue
 }
@@ -191,12 +200,14 @@ func (s *DBSynchronizer) SyncTable(config TableConfig) SyncResult {
 	}
 
 	// 1. 从两个数据库读取数据
+	fmt.Printf("源端表读取开始 %s\n", config.TableName)
 	sourceData, err := s.fetchData(s.config.SourceDB, config, config.Schema1)
 	if err != nil {
 		result.Errors = append(result.Errors, fmt.Errorf("读取源数据库失败: %w", err))
 		return result
 	}
 
+	fmt.Printf("目的表读取开始 %s\n", config.TableName)
 	targetData, err := s.fetchData(s.config.TargetDB, config, config.Schema2)
 	if err != nil {
 		result.Errors = append(result.Errors, fmt.Errorf("读取目标数据库失败: %w", err))
@@ -204,6 +215,7 @@ func (s *DBSynchronizer) SyncTable(config TableConfig) SyncResult {
 	}
 
 	// 2. 比较数据并执行操作
+	fmt.Printf("开始比较数据 %s\n", config.TableName)
 	added, updated, err := s.syncData(sourceData, targetData, config)
 	if err != nil {
 		result.Errors = append(result.Errors, fmt.Errorf("同步数据失败: %w", err))
@@ -230,28 +242,57 @@ func (s *DBSynchronizer) SyncTable(config TableConfig) SyncResult {
 	return result
 }
 
-// 获取数据并转换为Map
+// 获取数据并转换为Map（分批次查询）
 func (s *DBSynchronizer) fetchData(db *gorm.DB, config TableConfig, schema string) (map[string]map[string]interface{}, error) {
-	var results []map[string]interface{}
+	dataMap := make(map[string]map[string]interface{})
 
 	tableName := config.TableName
 	if schema != "" {
 		tableName = schema + "." + config.TableName
 	}
 
-	// 使用GORM的Table方法指定表名
-	err := db.Table(tableName).Find(&results).Error
-	if err != nil {
-		return nil, err
+	batchSize := s.config.BatchSize
+	if batchSize <= 0 {
+		batchSize = 1000
 	}
 
-	// 转换为Map格式: Map<主键字符串, 记录Map>
-	dataMap := make(map[string]map[string]interface{})
-	for _, record := range results {
-		key := s.generatePrimaryKey(record, config.PrimaryKey)
-		dataMap[key] = record
+	offset := 0
+	for {
+		var batchResults []map[string]interface{}
+
+		// 使用Limit和Offset进行分批次查询
+		err := db.Table(tableName).
+			Limit(batchSize).
+			Offset(offset).
+			Find(&batchResults).Error
+
+		if err != nil {
+			return nil, err
+		}
+
+		// 如果本批次没有数据，说明已经查询完毕
+		if len(batchResults) == 0 {
+			break
+		}
+
+		// 处理本批次数据
+		for _, record := range batchResults {
+			key := s.generatePrimaryKey(record, config.PrimaryKey)
+			dataMap[key] = record
+		}
+
+		fmt.Printf("表 %s: 已读取 %d 条记录\n", tableName, offset+len(batchResults))
+
+		// 如果本批次数据量小于batchSize，说明已经是最后一批
+		if len(batchResults) < batchSize {
+			break
+		}
+
+		// 更新offset，准备查询下一批
+		offset += batchSize
 	}
 
+	fmt.Printf("表 %s: 总共读取 %d 条记录\n", tableName, len(dataMap))
 	return dataMap, nil
 }
 
