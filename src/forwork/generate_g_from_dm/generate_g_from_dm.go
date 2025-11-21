@@ -63,6 +63,7 @@ type DBConfig struct {
 	Password string `yaml:"password"`
 	Port     string `yaml:"port"`
 	IP       string `yaml:"ip"`
+	Database string `yaml:"database"` // 新增数据库名配置
 }
 
 type Config struct {
@@ -90,6 +91,9 @@ func LoadConfig(filename string) (*Config, error) {
 	}
 	if envIP := os.Getenv("DB_IP"); envIP != "" {
 		config.DB.IP = envIP
+	}
+	if envDB := os.Getenv("DB_DATABASE"); envDB != "" {
+		config.DB.Database = envDB
 	}
 
 	return &config, nil
@@ -140,7 +144,7 @@ func main() {
 	}
 
 	for _, arg := range args[0][1:] {
-		CreateGFileForOwner(arg)
+		CreateGFileForOwner(arg, config.DB.Database)
 	}
 
 	// 关闭连接
@@ -150,8 +154,8 @@ func main() {
 	}
 }
 
-func CreateGFileForOwner(owner string) {
-	feederList, err := queryFeeder(owner)
+func CreateGFileForOwner(owner string, database string) {
+	feederList, err := queryFeeder(owner, database)
 	if err != nil {
 		fmt.Println("err:", err)
 	}
@@ -164,7 +168,7 @@ func CreateGFileForOwner(owner string) {
 			fmt.Println("err:", err)
 		}
 		for k, v := range modelList {
-			if dataList, err := queryTable("SELECT ID, FEEDER_ID, RUNNING_STATE from DKYPW." + v + " where owner = " + "'" + owner + "'" + "and FEEDER_ID = " + "'" + feeder.id + "'"); err != nil {
+			if dataList, err := queryTable(database, "SELECT ID, FEEDER_ID, RUNNING_STATE from "+database+"."+v+" where owner = "+"'"+owner+"'"+"and FEEDER_ID = "+"'"+feeder.id+"'"); err != nil {
 				fmt.Println("err", err)
 				continue
 			} else {
@@ -194,7 +198,7 @@ func connect(driverName string, dataSourceName string) (*sql.DB, error) {
 }
 
 /* 查询产品信息表 */
-func queryTable(sql string) ([]RowData, error) {
+func queryTable(database string, sql string) ([]RowData, error) {
 	var dataList []RowData
 	data := RowData{}
 	rows, err := db.Query(sql)
@@ -212,10 +216,11 @@ func queryTable(sql string) ([]RowData, error) {
 	return dataList, nil
 }
 
-func queryFeeder(owner string) ([]FeederData, error) {
+func queryFeeder(owner string, database string) ([]FeederData, error) {
 	var dataList []FeederData
 	data := FeederData{}
-	rows, err := db.Query("select ID, \"NAME\", running_state from DKYPW.SG_CON_FEEDERLINE_B where owner =" + "'" + owner + "'")
+	// 使用传入的database参数
+	rows, err := db.Query("select ID, \"NAME\", running_state from " + database + ".SG_CON_FEEDERLINE_B where owner =" + "'" + owner + "'")
 	if err != nil {
 		return dataList, err
 	}

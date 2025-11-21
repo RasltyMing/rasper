@@ -248,6 +248,7 @@ func (s *DBSynchronizer) SyncTable(config TableConfig) SyncResult {
 }
 
 // 获取数据并转换为Map（分批次查询）
+// 获取数据并转换为Map（分批次查询）
 func (s *DBSynchronizer) fetchData(db *gorm.DB, config TableConfig, schema string) (map[string]map[string]interface{}, error) {
 	dataMap := make(map[string]map[string]interface{})
 
@@ -256,9 +257,13 @@ func (s *DBSynchronizer) fetchData(db *gorm.DB, config TableConfig, schema strin
 		tableName = schema + "." + config.TableName
 	}
 
-	batchSize := s.config.BatchSize
+	// 优先使用表级别的batch_size，如果没有则使用全局的
+	batchSize := config.BatchSize
 	if batchSize <= 0 {
-		batchSize = 1000
+		batchSize = s.config.BatchSize
+	}
+	if batchSize <= 0 {
+		batchSize = 1000 // 最终默认值
 	}
 
 	offset := 0
@@ -293,7 +298,7 @@ func (s *DBSynchronizer) fetchData(db *gorm.DB, config TableConfig, schema strin
 			dataMap[key] = record
 		}
 
-		fmt.Printf("表 %s: 已读取 %d 条记录\n", tableName, offset+len(batchResults))
+		fmt.Printf("表 %s: 已读取 %d 条记录 (批次大小: %d)\n", tableName, offset+len(batchResults), batchSize)
 
 		// 如果本批次数据量小于batchSize，说明已经是最后一批
 		if len(batchResults) < batchSize {
@@ -306,6 +311,188 @@ func (s *DBSynchronizer) fetchData(db *gorm.DB, config TableConfig, schema strin
 
 	fmt.Printf("表 %s: 总共读取 %d 条记录\n", tableName, len(dataMap))
 	return dataMap, nil
+}
+
+// 批量插入（分批次处理）
+func (s *DBSynchronizer) batchInsert(tableName string, records []map[string]interface{}, config TableConfig) error {
+	// 优先使用表级别的batch_size，如果没有则使用全局的
+	batchSize := config.BatchSize
+	if batchSize <= 0 {
+		batchSize = s.config.BatchSize
+	}
+	if batchSize <= 0 {
+		batchSize = 1000 // 最终默认值
+	}
+
+	for i := 0; i < len(records); i += batchSize {
+		end := i + batchSize
+		if end > len(records) {
+			end = len(records)
+		}
+
+		batch := records[i:end]
+		err := s.config.TargetDB.Table(tableName).Create(batch).Error
+		if err != nil {
+			return fmt.Errorf("插入批次 %d-%d 失败: %w", i, end, err)
+		}
+	}
+
+	return nil
+}
+
+// 批量更新（分批次处理）
+func (s *DBSynchronizer) batchUpdate(tableName string, records []map[string]interface{}, primaryKeys []string, config TableConfig) error {
+	// 优先使用表级别的batch_size，如果没有则使用全局的
+	batchSize := config.BatchSize
+	if batchSize <= 0 {
+		batchSize = s.config.BatchSize
+	}
+	if batchSize <= 0 {
+		batchSize = 1000 // 最终默认值
+	}
+
+	for i := 0; i < len(records); i += batchSize {
+		end := i + batchSize
+		if end > len(records) {
+			end = len(records)
+		}
+
+		batch := records[i:end]
+		for _, record := range batch {
+			// 构建WHERE条件 - 使用原始SQL避免自动引号
+			whereClause := make([]string, 0)
+			whereValues := make([]interface{}, 0)
+			for _, pk := range primaryKeys {
+				if value, exists := record[pk]; exists {
+					whereClause = append(whereClause, pk+" = ?")
+					whereValues = append(whereValues, value)
+				}
+			}
+
+			if len(whereClause) == 0 {
+				continue
+			}
+
+			// 构建更新数据（排除主键）
+			updateData := make(map[string]interface{})
+			for k, v := range record {
+				isPrimaryKey := false
+				for _, pk := range primaryKeys {
+					if k == pk {
+						isPrimaryKey = true
+						break
+					}
+				}
+				if !isPrimaryKey {
+					updateData[k] = v
+				}
+			}
+
+			// 使用原始SQL条件
+			err := s.config.TargetDB.Table(tableName).
+				Where(strings.Join(whereClause, " AND "), whereValues...).
+				Updates(updateData).Error
+			if err != nil {
+				return fmt.Errorf("更新记录失败 (主键: %v): %w", whereValues, err)
+			}
+		}
+	}
+
+	return nil
+}
+
+// 批量软删除（分批次处理）
+func (s *DBSynchronizer) batchSoftDelete(tableName string, records []map[string]interface{}, config TableConfig) error {
+	// 优先使用表级别的batch_size，如果没有则使用全局的
+	batchSize := config.BatchSize
+	if batchSize <= 0 {
+		batchSize = s.config.BatchSize
+	}
+	if batchSize <= 0 {
+		batchSize = 1000 // 最终默认值
+	}
+
+	for i := 0; i < len(records); i += batchSize {
+		end := i + batchSize
+		if end > len(records) {
+			end = len(records)
+		}
+
+		batch := records[i:end]
+		for _, record := range batch {
+			// 构建WHERE条件 - 使用原始SQL避免自动引号
+			whereClause := make([]string, 0)
+			whereValues := make([]interface{}, 0)
+			for _, pk := range config.PrimaryKey {
+				if value, exists := record[pk]; exists {
+					whereClause = append(whereClause, pk+" = ?")
+					whereValues = append(whereValues, value)
+				}
+			}
+
+			if len(whereClause) == 0 {
+				continue
+			}
+
+			updateData := map[string]interface{}{
+				config.SoftDeleteField: config.SoftDeleteValue,
+			}
+
+			err := s.config.TargetDB.Table(tableName).
+				Where(strings.Join(whereClause, " AND "), whereValues...).
+				Updates(updateData).Error
+			if err != nil {
+				return fmt.Errorf("软删除失败 (主键: %v): %w", whereValues, err)
+			}
+		}
+	}
+
+	return nil
+}
+
+// 批量硬删除（分批次处理）
+func (s *DBSynchronizer) batchHardDelete(tableName string, records []map[string]interface{}, config TableConfig) error {
+	// 优先使用表级别的batch_size，如果没有则使用全局的
+	batchSize := config.BatchSize
+	if batchSize <= 0 {
+		batchSize = s.config.BatchSize
+	}
+	if batchSize <= 0 {
+		batchSize = 1000 // 最终默认值
+	}
+
+	for i := 0; i < len(records); i += batchSize {
+		end := i + batchSize
+		if end > len(records) {
+			end = len(records)
+		}
+
+		batch := records[i:end]
+		for _, record := range batch {
+			// 构建WHERE条件 - 使用原始SQL避免自动引号
+			whereClause := make([]string, 0)
+			whereValues := make([]interface{}, 0)
+			for _, pk := range config.PrimaryKey {
+				if value, exists := record[pk]; exists {
+					whereClause = append(whereClause, pk+" = ?")
+					whereValues = append(whereValues, value)
+				}
+			}
+
+			if len(whereClause) == 0 {
+				continue
+			}
+
+			err := s.config.TargetDB.Table(tableName).
+				Where(strings.Join(whereClause, " AND "), whereValues...).
+				Delete(nil).Error
+			if err != nil {
+				return fmt.Errorf("硬删除失败 (主键: %v): %w", whereValues, err)
+			}
+		}
+	}
+
+	return nil
 }
 
 // 应用WHERE条件，避免自动引号
@@ -366,9 +553,10 @@ func (s *DBSynchronizer) syncData(sourceData, targetData map[string]map[string]i
 		}
 	}
 
+	// 在 syncData 方法中更新调用：
 	// 执行批量插入（分批次）
 	if len(batchInsert) > 0 {
-		err := s.batchInsert(tableName, batchInsert)
+		err := s.batchInsert(tableName, batchInsert, config)
 		if err != nil {
 			return added, updated, fmt.Errorf("批量插入失败: %w", err)
 		}
@@ -376,179 +564,13 @@ func (s *DBSynchronizer) syncData(sourceData, targetData map[string]map[string]i
 
 	// 执行批量更新（分批次）
 	if len(batchUpdate) > 0 {
-		err := s.batchUpdate(tableName, batchUpdate, config.PrimaryKey)
+		err := s.batchUpdate(tableName, batchUpdate, config.PrimaryKey, config)
 		if err != nil {
 			return added, updated, fmt.Errorf("批量更新失败: %w", err)
 		}
 	}
 
 	return added, updated, nil
-}
-
-// 批量插入（分批次处理）
-func (s *DBSynchronizer) batchInsert(tableName string, records []map[string]interface{}) error {
-	batchSize := s.config.BatchSize
-	if batchSize <= 0 {
-		batchSize = 1000 // 默认批次大小
-	}
-
-	for i := 0; i < len(records); i += batchSize {
-		end := i + batchSize
-		if end > len(records) {
-			end = len(records)
-		}
-
-		batch := records[i:end]
-		err := s.config.TargetDB.Table(tableName).Create(batch).Error
-		if err != nil {
-			return fmt.Errorf("插入批次 %d-%d 失败: %w", i, end, err)
-		}
-	}
-
-	return nil
-}
-
-// 批量更新（分批次处理）
-func (s *DBSynchronizer) batchUpdate(tableName string, records []map[string]interface{}, primaryKeys []string) error {
-	batchSize := s.config.BatchSize
-	if batchSize <= 0 {
-		batchSize = 1000 // 默认批次大小
-	}
-
-	for i := 0; i < len(records); i += batchSize {
-		end := i + batchSize
-		if end > len(records) {
-			end = len(records)
-		}
-
-		batch := records[i:end]
-		for _, record := range batch {
-			// 构建WHERE条件 - 使用原始SQL避免自动引号
-			whereClause := make([]string, 0)
-			whereValues := make([]interface{}, 0)
-			for _, pk := range primaryKeys {
-				if value, exists := record[pk]; exists {
-					whereClause = append(whereClause, pk+" = ?")
-					whereValues = append(whereValues, value)
-				}
-			}
-
-			if len(whereClause) == 0 {
-				continue
-			}
-
-			// 构建更新数据（排除主键）
-			updateData := make(map[string]interface{})
-			for k, v := range record {
-				isPrimaryKey := false
-				for _, pk := range primaryKeys {
-					if k == pk {
-						isPrimaryKey = true
-						break
-					}
-				}
-				if !isPrimaryKey {
-					updateData[k] = v
-				}
-			}
-
-			// 使用原始SQL条件
-			err := s.config.TargetDB.Table(tableName).
-				Where(strings.Join(whereClause, " AND "), whereValues...).
-				Updates(updateData).Error
-			if err != nil {
-				return fmt.Errorf("更新记录失败 (主键: %v): %w", whereValues, err)
-			}
-		}
-	}
-
-	return nil
-}
-
-// 批量软删除（分批次处理）
-func (s *DBSynchronizer) batchSoftDelete(tableName string, records []map[string]interface{}, config TableConfig) error {
-	batchSize := s.config.BatchSize
-	if batchSize <= 0 {
-		batchSize = 1000
-	}
-
-	for i := 0; i < len(records); i += batchSize {
-		end := i + batchSize
-		if end > len(records) {
-			end = len(records)
-		}
-
-		batch := records[i:end]
-		for _, record := range batch {
-			// 构建WHERE条件 - 使用原始SQL避免自动引号
-			whereClause := make([]string, 0)
-			whereValues := make([]interface{}, 0)
-			for _, pk := range config.PrimaryKey {
-				if value, exists := record[pk]; exists {
-					whereClause = append(whereClause, pk+" = ?")
-					whereValues = append(whereValues, value)
-				}
-			}
-
-			if len(whereClause) == 0 {
-				continue
-			}
-
-			updateData := map[string]interface{}{
-				config.SoftDeleteField: config.SoftDeleteValue,
-			}
-
-			err := s.config.TargetDB.Table(tableName).
-				Where(strings.Join(whereClause, " AND "), whereValues...).
-				Updates(updateData).Error
-			if err != nil {
-				return fmt.Errorf("软删除失败 (主键: %v): %w", whereValues, err)
-			}
-		}
-	}
-
-	return nil
-}
-
-// 批量硬删除（分批次处理）
-func (s *DBSynchronizer) batchHardDelete(tableName string, records []map[string]interface{}, config TableConfig) error {
-	batchSize := s.config.BatchSize
-	if batchSize <= 0 {
-		batchSize = 1000
-	}
-
-	for i := 0; i < len(records); i += batchSize {
-		end := i + batchSize
-		if end > len(records) {
-			end = len(records)
-		}
-
-		batch := records[i:end]
-		for _, record := range batch {
-			// 构建WHERE条件 - 使用原始SQL避免自动引号
-			whereClause := make([]string, 0)
-			whereValues := make([]interface{}, 0)
-			for _, pk := range config.PrimaryKey {
-				if value, exists := record[pk]; exists {
-					whereClause = append(whereClause, pk+" = ?")
-					whereValues = append(whereValues, value)
-				}
-			}
-
-			if len(whereClause) == 0 {
-				continue
-			}
-
-			err := s.config.TargetDB.Table(tableName).
-				Where(strings.Join(whereClause, " AND "), whereValues...).
-				Delete(nil).Error
-			if err != nil {
-				return fmt.Errorf("硬删除失败 (主键: %v): %w", whereValues, err)
-			}
-		}
-	}
-
-	return nil
 }
 
 // 处理软删除

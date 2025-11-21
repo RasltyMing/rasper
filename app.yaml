@@ -1,5 +1,6 @@
 db:
-  username: TESTM
-  password: Test@1234
-  port: 5238
+  username: SYSDBA
+  password: SYSDBA001
+  port: 5237
   ip: 127.0.0.1
+  database: DKYPW
