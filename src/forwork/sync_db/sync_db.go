@@ -103,7 +103,10 @@ func initDB(dbConfig struct {
 			getOption(dbConfig.Options, "host", "127.0.0.1"),
 			getOption(dbConfig.Options, "port", "5236"),
 		)
-		return gorm.Open(dameng.Open(url), &gorm.Config{})
+		// 为达梦数据库禁用自动引号
+		return gorm.Open(dameng.Open(url), &gorm.Config{
+			DisableAutomaticPing: true,
+		})
 	default:
 		return nil, fmt.Errorf("不支持的数据库驱动: %s", dbConfig.Driver)
 	}
@@ -148,12 +151,14 @@ type SyncConfig struct {
 
 // 表配置
 type TableConfig struct {
-	TableName       string   `yaml:"table_name"`  // 表名
-	PrimaryKey      []string `yaml:"primary_key"` // 主键字段（支持复合主键）
-	Schema1         string   // 数据库1的schema
-	Schema2         string   // 数据库2的schema
-	SoftDeleteField string   `yaml:"soft_delete_field"` // 软删除字段，如 "deleted_at"
-	SoftDeleteValue string   `yaml:"soft_delete_value"` // 软删除值，如 "now()"
+	TableName       string                 `yaml:"table_name"`        // 表名
+	PrimaryKey      []string               `yaml:"primary_key"`       // 主键字段（支持复合主键）
+	Schema1         string                 `yaml:"schema1"`           // 数据库1的schema
+	Schema2         string                 `yaml:"schema2"`           // 数据库2的schema
+	SoftDeleteField string                 `yaml:"soft_delete_field"` // 软删除字段，如 "deleted_at"
+	SoftDeleteValue string                 `yaml:"soft_delete_value"` // 软删除值，如 "now()"
+	BatchSize       int                    `yaml:"batch_size"`        // 批量操作大小
+	WhereCondition  map[string]interface{} `yaml:"where_condition"`   // 查询条件
 }
 
 // 同步结果
@@ -260,9 +265,16 @@ func (s *DBSynchronizer) fetchData(db *gorm.DB, config TableConfig, schema strin
 	for {
 		var batchResults []map[string]interface{}
 
+		// 构建查询 - 使用原始SQL避免自动引号
+		query := db.Table(tableName)
+
+		// 添加WHERE条件 - 使用自定义方法避免自动引号
+		if config.WhereCondition != nil && len(config.WhereCondition) > 0 {
+			query = s.applyWhereCondition(query, config.WhereCondition)
+		}
+
 		// 使用Limit和Offset进行分批次查询
-		err := db.Table(tableName).
-			Limit(batchSize).
+		err := query.Limit(batchSize).
 			Offset(offset).
 			Find(&batchResults).Error
 
@@ -294,6 +306,15 @@ func (s *DBSynchronizer) fetchData(db *gorm.DB, config TableConfig, schema strin
 
 	fmt.Printf("表 %s: 总共读取 %d 条记录\n", tableName, len(dataMap))
 	return dataMap, nil
+}
+
+// 应用WHERE条件，避免自动引号
+func (s *DBSynchronizer) applyWhereCondition(query *gorm.DB, conditions map[string]interface{}) *gorm.DB {
+	for field, value := range conditions {
+		// 使用原始SQL来避免自动引号
+		query = query.Where(field+" = ?", value)
+	}
+	return query
 }
 
 // 生成主键字符串
@@ -402,12 +423,18 @@ func (s *DBSynchronizer) batchUpdate(tableName string, records []map[string]inte
 
 		batch := records[i:end]
 		for _, record := range batch {
-			// 构建WHERE条件
-			whereClause := make(map[string]interface{})
+			// 构建WHERE条件 - 使用原始SQL避免自动引号
+			whereClause := make([]string, 0)
+			whereValues := make([]interface{}, 0)
 			for _, pk := range primaryKeys {
 				if value, exists := record[pk]; exists {
-					whereClause[pk] = value
+					whereClause = append(whereClause, pk+" = ?")
+					whereValues = append(whereValues, value)
 				}
+			}
+
+			if len(whereClause) == 0 {
+				continue
 			}
 
 			// 构建更新数据（排除主键）
@@ -425,9 +452,12 @@ func (s *DBSynchronizer) batchUpdate(tableName string, records []map[string]inte
 				}
 			}
 
-			err := s.config.TargetDB.Table(tableName).Where(whereClause).Updates(updateData).Error
+			// 使用原始SQL条件
+			err := s.config.TargetDB.Table(tableName).
+				Where(strings.Join(whereClause, " AND "), whereValues...).
+				Updates(updateData).Error
 			if err != nil {
-				return fmt.Errorf("更新记录失败 (主键: %v): %w", whereClause, err)
+				return fmt.Errorf("更新记录失败 (主键: %v): %w", whereValues, err)
 			}
 		}
 	}
@@ -450,20 +480,29 @@ func (s *DBSynchronizer) batchSoftDelete(tableName string, records []map[string]
 
 		batch := records[i:end]
 		for _, record := range batch {
-			whereClause := make(map[string]interface{})
+			// 构建WHERE条件 - 使用原始SQL避免自动引号
+			whereClause := make([]string, 0)
+			whereValues := make([]interface{}, 0)
 			for _, pk := range config.PrimaryKey {
 				if value, exists := record[pk]; exists {
-					whereClause[pk] = value
+					whereClause = append(whereClause, pk+" = ?")
+					whereValues = append(whereValues, value)
 				}
+			}
+
+			if len(whereClause) == 0 {
+				continue
 			}
 
 			updateData := map[string]interface{}{
 				config.SoftDeleteField: config.SoftDeleteValue,
 			}
 
-			err := s.config.TargetDB.Table(tableName).Where(whereClause).Updates(updateData).Error
+			err := s.config.TargetDB.Table(tableName).
+				Where(strings.Join(whereClause, " AND "), whereValues...).
+				Updates(updateData).Error
 			if err != nil {
-				return fmt.Errorf("软删除失败 (主键: %v): %w", whereClause, err)
+				return fmt.Errorf("软删除失败 (主键: %v): %w", whereValues, err)
 			}
 		}
 	}
@@ -486,16 +525,25 @@ func (s *DBSynchronizer) batchHardDelete(tableName string, records []map[string]
 
 		batch := records[i:end]
 		for _, record := range batch {
-			whereClause := make(map[string]interface{})
+			// 构建WHERE条件 - 使用原始SQL避免自动引号
+			whereClause := make([]string, 0)
+			whereValues := make([]interface{}, 0)
 			for _, pk := range config.PrimaryKey {
 				if value, exists := record[pk]; exists {
-					whereClause[pk] = value
+					whereClause = append(whereClause, pk+" = ?")
+					whereValues = append(whereValues, value)
 				}
 			}
 
-			err := s.config.TargetDB.Table(tableName).Where(whereClause).Delete(nil).Error
+			if len(whereClause) == 0 {
+				continue
+			}
+
+			err := s.config.TargetDB.Table(tableName).
+				Where(strings.Join(whereClause, " AND "), whereValues...).
+				Delete(nil).Error
 			if err != nil {
-				return fmt.Errorf("硬删除失败 (主键: %v): %w", whereClause, err)
+				return fmt.Errorf("硬删除失败 (主键: %v): %w", whereValues, err)
 			}
 		}
 	}

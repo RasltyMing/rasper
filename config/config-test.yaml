@@ -1,0 +1,330 @@
+database:
+  source:
+    driver: "dameng"
+    dsn: ""
+    options:
+      user: "SYSDBA"
+      password: "SYSDBA001"
+      host: "127.0.0.1"
+      port: "5238"
+      schema: "DKYPW"
+      appName: "数据库同步工具"
+      connectTimeout: "30000"
+
+  target:
+    driver: "dameng"
+    dsn: ""
+    options:
+      user: "SYSDBA"
+      password: "SYSDBA001"
+      host: "127.0.0.1"
+      port: "5238"
+      schema: "DKYPW_TEST"
+      appName: "数据库同步工具"
+      connectTimeout: "30000"
+
+sync:
+  enable_soft_delete: true
+  hard_delete: false
+  batch_size: 500
+
+tables:
+  # C表 - 先处理 (直接删除)
+  - table_name: "SG_CON_FEEDERLINE_C"
+    primary_key: ["DCLOUD_ID"]
+    schema1: "DKYPW"
+    schema2: "DKYPW_TEST"
+    soft_delete_field: ""
+    soft_delete_value: ""
+    process_order: 1  # 高优先级，先处理
+
+  # 其他C表 - 先处理
+  - table_name: "SG_DEV_DBREAKER_C"
+    primary_key: ["ID"]
+    schema1: "DKYPW"
+    schema2: "DKYPW_TEST"
+    soft_delete_field: ""
+    soft_delete_value: ""
+    process_order: 1
+
+  - table_name: "SG_DEV_DBUS_C"
+    primary_key: ["ID"]
+    schema1: "DKYPW"
+    schema2: "DKYPW_TEST"
+    soft_delete_field: ""
+    soft_delete_value: ""
+    process_order: 1
+
+  - table_name: "SG_DEV_DDIS_C"
+    primary_key: ["ID"]
+    schema1: "DKYPW"
+    schema2: "DKYPW_TEST"
+    soft_delete_field: ""
+    soft_delete_value: ""
+    process_order: 1
+
+  - table_name: "SG_DEV_DFAULTINDICATOR_C"
+    primary_key: ["ID"]
+    schema1: "DKYPW"
+    schema2: "DKYPW_TEST"
+    soft_delete_field: ""
+    soft_delete_value: ""
+    process_order: 1
+
+  - table_name: "SG_DEV_DFUSE_C"
+    primary_key: ["ID"]
+    schema1: "DKYPW"
+    schema2: "DKYPW_TEST"
+    soft_delete_field: ""
+    soft_delete_value: ""
+    process_order: 1
+
+  - table_name: "SG_DEV_DGROUNDDIS_C"
+    primary_key: ["ID"]
+    schema1: "DKYPW"
+    schema2: "DKYPW_TEST"
+    soft_delete_field: ""
+    soft_delete_value: ""
+    process_order: 1
+
+  - table_name: "SG_DEV_DLOADSWITCH_C"
+    primary_key: ["ID"]
+    schema1: "DKYPW"
+    schema2: "DKYPW_TEST"
+    soft_delete_field: ""
+    soft_delete_value: ""
+    process_order: 1
+
+  - table_name: "SG_DEV_DPOLE_C"
+    primary_key: ["ID"]
+    schema1: "DKYPW"
+    schema2: "DKYPW_TEST"
+    soft_delete_field: ""
+    soft_delete_value: ""
+    process_order: 1
+
+  - table_name: "SG_DEV_DPWRTRANSFM_C"
+    primary_key: ["ID"]
+    schema1: "DKYPW"
+    schema2: "DKYPW_TEST"
+    soft_delete_field: ""
+    soft_delete_value: ""
+    process_order: 1
+
+  - table_name: "SG_DEV_LOWVOLLINE_C"
+    primary_key: ["ID"]
+    schema1: "DKYPW"
+    schema2: "DKYPW_TEST"
+    soft_delete_field: ""
+    soft_delete_value: ""
+    process_order: 1
+
+  - table_name: "SG_CON_DDISTSUBSTATION_C"
+    primary_key: ["ID"]
+    schema1: "DKYPW"
+    schema2: "DKYPW_TEST"
+    soft_delete_field: ""
+    soft_delete_value: ""
+    process_order: 1
+
+  - table_name: "SG_CON_DCOMPOSITESWITCH_C"
+    primary_key: ["ID"]
+    schema1: "DKYPW"
+    schema2: "DKYPW_TEST"
+    soft_delete_field: ""
+    soft_delete_value: ""
+    process_order: 1
+
+  - table_name: "SG_DEV_DLUSERPOINT_C"
+    primary_key: ["ID"]
+    schema1: "DKYPW"
+    schema2: "DKYPW_TEST"
+    soft_delete_field: ""
+    soft_delete_value: ""
+    process_order: 1
+
+  # B表 - 后处理 (使用软删除)
+  - table_name: "SG_CON_FEEDERLINE_B"
+    primary_key: ["ID"]
+    schema1: "DKYPW"
+    schema2: "DKYPW_TEST"
+    soft_delete_field: "RUNNING_STATE"
+    soft_delete_value: "1006"
+    process_order: 2  # 低优先级，后处理
+
+  - table_name: "SG_DEV_DBREAKER_B"
+    primary_key: ["ID"]
+    schema1: "DKYPW"
+    schema2: "DKYPW_TEST"
+    soft_delete_field: "RUNNING_STATE"
+    soft_delete_value: "1006"
+    process_order: 2
+
+  - table_name: "SG_DEV_DBUS_B"
+    primary_key: ["ID"]
+    schema1: "DKYPW"
+    schema2: "DKYPW_TEST"
+    soft_delete_field: "RUNNING_STATE"
+    soft_delete_value: "1006"
+    process_order: 2
+
+  - table_name: "SG_DEV_DDIS_B"
+    primary_key: ["ID"]
+    schema1: "DKYPW"
+    schema2: "DKYPW_TEST"
+    soft_delete_field: "RUNNING_STATE"
+    soft_delete_value: "1006"
+    process_order: 2
+
+  - table_name: "SG_DEV_DFAULTINDICATOR_B"
+    primary_key: ["ID"]
+    schema1: "DKYPW"
+    schema2: "DKYPW_TEST"
+    soft_delete_field: "RUNNING_STATE"
+    soft_delete_value: "1006"
+    process_order: 2
+
+  - table_name: "SG_DEV_DFUSE_B"
+    primary_key: ["ID"]
+    schema1: "DKYPW"
+    schema2: "DKYPW_TEST"
+    soft_delete_field: "RUNNING_STATE"
+    soft_delete_value: "1006"
+    process_order: 2
+
+  - table_name: "SG_DEV_DGROUNDDIS_B"
+    primary_key: ["ID"]
+    schema1: "DKYPW"
+    schema2: "DKYPW_TEST"
+    soft_delete_field: "RUNNING_STATE"
+    soft_delete_value: "1006"
+    process_order: 2
+
+  - table_name: "SG_DEV_DLOADSWITCH_B"
+    primary_key: ["ID"]
+    schema1: "DKYPW"
+    schema2: "DKYPW_TEST"
+    soft_delete_field: "RUNNING_STATE"
+    soft_delete_value: "1006"
+    process_order: 2
+
+  - table_name: "SG_DEV_DPOLE_B"
+    primary_key: ["ID"]
+    schema1: "DKYPW"
+    schema2: "DKYPW_TEST"
+    soft_delete_field: "RUNNING_STATE"
+    soft_delete_value: "1006"
+    process_order: 2
+
+  - table_name: "SG_DEV_DPWRTRANSFM_B"
+    primary_key: ["ID"]
+    schema1: "DKYPW"
+    schema2: "DKYPW_TEST"
+    soft_delete_field: "RUNNING_STATE"
+    soft_delete_value: "1006"
+    process_order: 2
+
+  - table_name: "SG_DEV_LOWVOLLINE_B"
+    primary_key: ["ID"]
+    schema1: "DKYPW"
+    schema2: "DKYPW_TEST"
+    soft_delete_field: "RUNNING_STATE"
+    soft_delete_value: "1006"
+    process_order: 2
+
+  - table_name: "SG_CON_DDISTSUBSTATION_B"
+    primary_key: ["ID"]
+    schema1: "DKYPW"
+    schema2: "DKYPW_TEST"
+    soft_delete_field: "RUNNING_STATE"
+    soft_delete_value: "1006"
+    process_order: 2
+
+  - table_name: "SG_CON_DCOMPOSITESWITCH_B"
+    primary_key: ["ID"]
+    schema1: "DKYPW"
+    schema2: "DKYPW_TEST"
+    soft_delete_field: "RUNNING_STATE"
+    soft_delete_value: "1006"
+    process_order: 2
+
+  - table_name: "SG_DEV_DLUSERPOINT_B"
+    primary_key: ["ID"]
+    schema1: "DKYPW"
+    schema2: "DKYPW_TEST"
+    soft_delete_field: "RUNNING_STATE"
+    soft_delete_value: "1006"
+    process_order: 2
+
+  - table_name: "SG_CON_DCOMMONSTATION_B"
+    primary_key: ["ID"]
+    schema1: "DKYPW"
+    schema2: "DKYPW_TEST"
+    soft_delete_field: "RUNNING_STATE"
+    soft_delete_value: "1006"
+    process_order: 2
+
+  # 关系表 - 最后处理
+  - table_name: "SG_DEV_DPOLE_R_LOWVOLLINE"
+    primary_key: ["ID"]
+    schema1: "DKYPW"
+    schema2: "DKYPW_TEST"
+    soft_delete_field: ""
+    soft_delete_value: ""
+    process_order: 3
+
+  - table_name: "SG_R_DPWRGRID_NODE"
+    primary_key: ["ID"]
+    schema1: "DKYPW"
+    schema2: "DKYPW_TEST"
+    soft_delete_field: ""
+    soft_delete_value: ""
+    process_order: 3
+
+  - table_name: "SG_R_DPWRGRID_TOPO"
+    primary_key: ["ID"]
+    schema1: "DKYPW"
+    schema2: "DKYPW_TEST"
+    soft_delete_field: ""
+    soft_delete_value: ""
+    process_order: 3
+
+  - table_name: "SG_CON_DDISTSUBSTATION_R_FEEDER"
+    primary_key: ["ID"]
+    schema1: "DKYPW"
+    schema2: "DKYPW_TEST"
+    soft_delete_field: ""
+    soft_delete_value: ""
+    process_order: 3
+
+  - table_name: "SG_CON_DCOMPOSITESWITCH_R_DEVICE"
+    primary_key: ["ID"]
+    schema1: "DKYPW"
+    schema2: "DKYPW_TEST"
+    soft_delete_field: ""
+    soft_delete_value: ""
+    process_order: 3
+
+  - table_name: "SG_CON_DDISTSUBSTATION_P_GRAPH"
+    primary_key: ["ID"]
+    schema1: "DKYPW"
+    schema2: "DKYPW_TEST"
+    soft_delete_field: ""
+    soft_delete_value: ""
+    process_order: 3
+
+  - table_name: "SG_CON_DPWRGRID_R_NODE"
+    primary_key: ["ID"]
+    schema1: "DKYPW"
+    schema2: "DKYPW_TEST"
+    soft_delete_field: ""
+    soft_delete_value: ""
+    process_order: 3
+
+  - table_name: "SG_CON_DPWRGRID_R_TOPO"
+    primary_key: ["ID"]
+    schema1: "DKYPW"
+    schema2: "DKYPW_TEST"
+    soft_delete_field: ""
+    soft_delete_value: ""
+    process_order: 3
