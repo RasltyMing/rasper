@@ -3,11 +3,11 @@ database:
     driver: "dameng"
     dsn: ""
     options:
-      user: "DKYPW"
-      password: "Dkypw@1234"
+      user: "SYSDBA"
+      password: "SYSDBA001"
       host: "127.0.0.1"
       port: "5237"
-      schema: "DKYPW"
+      schema: "WEB"
       appName: "数据库同步工具"
       connectTimeout: "30000"
 
@@ -15,11 +15,11 @@ database:
     driver: "dameng"
     dsn: ""
     options:
-      user: "DKYPW"
-      password: "Dkypw@1234"
+      user: "SYSDBA"
+      password: "SYSDBA"
       host: "127.0.0.1"
-      port: "5238"
-      schema: "DKYPW_TEST"
+      port: "5236"
+      schema: "WEB"
       appName: "数据库同步工具"
       connectTimeout: "30000"
 
@@ -29,13 +29,12 @@ sync:
   batch_size: 1000
 
 tables:
-  # C表 - 先处理 (直接删除)
-  - table_name: "SG_DEV_DDIS_C"
-    primary_key: ["DCLOUD_ID"]
-    schema1: "DKYPW"
-    schema2: "DKYPW"
+  - table_name: "WJ_GYYHZSB"
+    primary_key: ["ID"]
+    schema1: "WEB"
+    schema2: "WEB"
     soft_delete_field: ""
     soft_delete_value: ""
-    batch_size: 1500
-    where_condition:
-      owner: "350300"
+    batch_size: 5000
+#    where_condition:
+#      owner: "350300"

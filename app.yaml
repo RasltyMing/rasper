@@ -4,3 +4,5 @@ db:
   port: 5237
   ip: 127.0.0.1
   database: DKYPW
+feeder: 170135010000027220
+owner: 350100
