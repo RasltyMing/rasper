@@ -96,11 +96,14 @@ func main() {
 func CalculateAndPrintTopoGroupsSequentially(db *gorm.DB) error {
 	// 首先获取所有唯一的分组（owner + feederID）
 	var groups []GroupInfo
-	result := db.Table(config.DB.Database+".SG_CON_DPWRGRID_R_TOPO").
+	tx := db.Table(config.DB.Database + ".SG_CON_DPWRGRID_R_TOPO").
 		Select("DISTINCT OWNER, FEEDER_ID").
-		Order("OWNER, FEEDER_ID"). // 按顺序处理
-		Where("OWNER = ? AND FEEDER_ID = ?", config.Owner, config.Feeder).
-		Find(&groups)
+		Order("OWNER, FEEDER_ID")
+	tx.Where("OWNER = ?", config.Owner)
+	if config.Feeder != "" {
+		tx.Where("FEEDER_ID in (" + config.Feeder + ")")
+	}
+	result := tx.Find(&groups)
 	if result.Error != nil {
 		return result.Error
 	}
