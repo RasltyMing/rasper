@@ -116,7 +116,7 @@ func CalculateAndPrintTopoGroupsSequentially(db *gorm.DB) error {
 			i+1, len(groups), group.Owner, group.FeederID)
 
 		// 处理孤立岛
-		fmt.Printf("处理孤立岛...")
+		fmt.Println("处理孤立岛...")
 		graph := make(map[string][]string)
 		for len(graph) != 1 {
 			// 刷新数据
@@ -134,13 +134,19 @@ func CalculateAndPrintTopoGroupsSequentially(db *gorm.DB) error {
 			connnectTopo(topoList, graph, db) // 连接topo
 		}
 		// 处理拓扑异常
-		fmt.Printf("处理拓扑异常...")
+		fmt.Println("处理拓扑异常...")
 		{
 			topoList := queryTopoData(db, group.Owner, group.FeederID)
-			_, nodeMap, idConnect, idEntityMap := GetNodeIDMap(topoList)
-			handleDupli(db, nodeMap, idConnect, idEntityMap)
+			_, nodeMap, idConnect, idEntityMap, _ := GetNodeIDMap(topoList)
+			handleDupliConnnect(db, nodeMap, idConnect, idEntityMap)
 		}
 		//connectedComponents := findConnectedComponentsWithUnionFind(graph)
+		// 处理重复拓扑节点
+		fmt.Println("处理重复拓扑节点...")
+		{
+			topoList := queryTopoData(db, group.Owner, group.FeederID)
+			handleDupliTopo(topoList, db)
+		}
 
 		// 打印当前分组的结果
 		//printGroupResult(group.Owner, group.FeederID, connectedComponents)
@@ -152,40 +158,103 @@ func CalculateAndPrintTopoGroupsSequentially(db *gorm.DB) error {
 	return nil
 }
 
-func handleDupli(db *gorm.DB, nodeMap, topoConnectMap map[string][]string, entityMap map[string]Topo) {
+func handleDupliTopo(list []Topo, db *gorm.DB) {
+	count := 1
+
+	_, _, _, _, duplicateTopoMap := GetNodeIDMap(list)
+	for _, topo := range duplicateTopoMap {
+		if len(topo) <= 1 {
+			continue
+		}
+
+		for _, t := range topo {
+			countStr := fmt.Sprintf("%04d", count)
+			count++
+			if t.FirstNodeID == "" && t.SecondNodeID == "" {
+				continue
+			}
+			if t.FirstNodeID == "" {
+				db.Table(config.DB.Database+".SG_CON_DPWRGRID_R_TOPO").
+					Where("ID = ?", t.ID).
+					Updates(map[string]interface{}{"FIRST_NODE_ID": t.SecondNodeID[0:10] + countStr + t.SecondNodeID[14:]})
+				fmt.Printf("   节点 %s 重复，已修改为 %s\n", t.ID, t.SecondNodeID[0:10]+countStr+t.SecondNodeID[14:])
+				continue
+			}
+			if t.SecondNodeID == "" {
+				db.Table(config.DB.Database+".SG_CON_DPWRGRID_R_TOPO").
+					Where("ID = ?", t.ID).
+					Updates(map[string]interface{}{"SECOND_NODE_ID": t.FirstNodeID[0:10] + countStr + t.FirstNodeID[14:]})
+				fmt.Printf("   节点 %s 重复，已修改为 %s\n", t.ID, t.FirstNodeID[0:10]+countStr+t.FirstNodeID[14:])
+				continue
+			}
+			db.Table(config.DB.Database+".SG_CON_DPWRGRID_R_TOPO").
+				Where("ID = ?", t.ID).
+				Updates(map[string]interface{}{"SECOND_NODE_ID": t.SecondNodeID[0:10] + countStr + t.SecondNodeID[14:]})
+			fmt.Printf("   节点 %s 重复，已修改为 %s\n", t.ID, t.FirstNodeID[0:10]+countStr+t.FirstNodeID[14:])
+		}
+
+		if topo[0].FirstNodeID == "" {
+			duplicateTopoMap[topo[0].FirstNodeID] = make([]Topo, 0)
+		}
+		if topo[0].SecondNodeID == "" {
+			duplicateTopoMap[topo[0].SecondNodeID] = make([]Topo, 0)
+		}
+		duplicateTopoMap[topo[0].FirstNodeID+topo[0].SecondNodeID] = make([]Topo, 0)
+		duplicateTopoMap[topo[0].SecondNodeID+topo[0].FirstNodeID] = make([]Topo, 0)
+	}
+}
+
+func handleDupliConnnect(db *gorm.DB, nodeMap, topoConnectMap map[string][]string, entityMap map[string]Topo) {
 	var lessNodeMap []string // 少于6个的node
-	for key, conected := range nodeMap {
-		if len(conected) < 6 {
-			lessNodeMap = append(lessNodeMap, key)
+	for key, conected := range topoConnectMap {
+		if len(conected) < 4 {
+			for i := 0; i < 4; i++ {
+				if !Contain(lessNodeMap, entityMap[key].FirstNodeID) {
+					lessNodeMap = append(lessNodeMap, entityMap[key].FirstNodeID)
+				}
+				if !Contain(lessNodeMap, entityMap[key].SecondNodeID) {
+					lessNodeMap = append(lessNodeMap, entityMap[key].SecondNodeID)
+				}
+			}
 		}
 	}
 
 	for node, idList := range nodeMap {
-		if len(idList) > 8 {
+		idSet := make([]string, 0)
+		idSet = append(idSet)
+		for _, id := range idList {
+			if !Contain(idSet, entityMap[id].FirstNodeID) {
+				idSet = append(idSet, entityMap[id].FirstNodeID)
+			}
+			if !Contain(idSet, entityMap[id].SecondNodeID) {
+				idSet = append(idSet, entityMap[id].SecondNodeID)
+			}
+		}
+		if len(idList) > 4 {
 			fmt.Println(node, "存在多个节点相连的情况")
 		}
 
-		if len(lessNodeMap) == 0 {
-			continue
-		}
+		for i := 5; i < len(idList); i++ {
+			if len(idSet) == 0 {
+				idSet = append(idSet, entityMap[idList[i-1]].FirstNodeID)
+			}
 
-		for i := 0; i < len(idList)-8; i++ {
 			// 获取第一个id, 连接到第二个后面
 			topo := entityMap[idList[i]]
 
 			if topo.FirstNodeID == node {
 				db.Table(config.DB.Database+".SG_CON_DPWRGRID_R_TOPO").
 					Where("ID = ?", topo.ID).
-					Updates(map[string]interface{}{"FIRST_NODE_ID": lessNodeMap[0]})
-				fmt.Printf("   删除拓扑 %s,%s 连接到 %s\n", topo.ID, topo.FirstNodeID, lessNodeMap[0])
-				lessNodeMap = lessNodeMap[1:]
+					Updates(map[string]interface{}{"FIRST_NODE_ID": idSet[0]})
+				fmt.Printf("   删除拓扑 %s,%s 连接到 %s\n", topo.ID, topo.FirstNodeID, idSet[0])
+				idSet = idSet[1:]
 			}
 			if topo.SecondNodeID == node {
 				db.Table(config.DB.Database+".SG_CON_DPWRGRID_R_TOPO").
 					Where("ID = ?", topo.ID).
-					Updates(map[string]interface{}{"SECOND_NODE_ID": lessNodeMap[0]})
-				fmt.Printf("   删除拓扑 %s,%s 连接到 %s\n", topo.ID, topo.SecondNodeID, lessNodeMap[0])
-				lessNodeMap = lessNodeMap[1:]
+					Updates(map[string]interface{}{"SECOND_NODE_ID": idSet[0]})
+				fmt.Printf("   删除拓扑 %s,%s 连接到 %s\n", topo.ID, topo.SecondNodeID, idSet[0])
+				idSet = idSet[1:]
 			}
 		}
 	}
@@ -204,16 +273,11 @@ func queryTopoData(db *gorm.DB, owner string, feederId string) []Topo {
 }
 
 func connnectTopo(topoList []Topo, graph map[string][]string, db *gorm.DB) {
-	_, nodeMap, idConnect, idEntityMap := GetNodeIDMap(topoList)
+	_, nodeMap, idConnect, idEntityMap, _ := GetNodeIDMap(topoList)
 
 	if len(graph) == 1 {
 		// 没有孤立岛
 		return
-	}
-
-	topoMap := make(map[string]Topo)
-	for _, topo := range topoList {
-		topoMap[topo.ID] = topo
 	}
 
 	var lastTopo *Topo
@@ -225,7 +289,7 @@ func connnectTopo(topoList []Topo, graph map[string][]string, db *gorm.DB) {
 			topoKeys := graph[lastKey]
 			topoList := make([]Topo, 0)
 			for _, key := range topoKeys {
-				topo := topoMap[key]
+				topo := idEntityMap[key]
 				topoList = append(topoList, topo)
 			}
 			if _, s, b := FindEndTopo(topoList); b {
@@ -236,7 +300,7 @@ func connnectTopo(topoList []Topo, graph map[string][]string, db *gorm.DB) {
 		}
 
 		for i, topo := range strings {
-			topoModel := topoMap[topo]
+			topoModel := idEntityMap[topo]
 			if topoModel.FirstNodeID == "" && topoModel.SecondNodeID == "" {
 				fmt.Printf("topo: %v\n", topoModel)
 				if lastTopoNode == "" { // 都空就更新
@@ -269,8 +333,8 @@ func connnectTopo(topoList []Topo, graph map[string][]string, db *gorm.DB) {
 				if lastTopoNode == "" { // 都空就更新
 					db.Table(config.DB.Database+".SG_CON_DPWRGRID_R_TOPO").
 						Where("ID = ?", topo).
-						Updates(map[string]interface{}{"FIRST_NODE_ID": topoMap[startTopo].FirstNodeID})
-					lastTopo.FirstNodeID = topoMap[startTopo].FirstNodeID
+						Updates(map[string]interface{}{"FIRST_NODE_ID": idEntityMap[startTopo].FirstNodeID})
+					lastTopo.FirstNodeID = idEntityMap[startTopo].FirstNodeID
 				}
 				break
 			}
@@ -353,7 +417,7 @@ func FindEndTopo(topoList []Topo) (Topo, string, bool) {
 func buildGraph(topoList []Topo) map[string][]string {
 	topoMap := make(map[string][]string)
 	visited := make(map[string]bool) // 已经击中的id
-	idMap, nodeMap, _, _ := GetNodeIDMap(topoList)
+	idMap, nodeMap, _, _, _ := GetNodeIDMap(topoList)
 
 	if len(topoList) == 0 {
 		fmt.Printf("❌ 无拓扑数据，无法构建图\n")
@@ -371,11 +435,12 @@ func buildGraph(topoList []Topo) map[string][]string {
 	return topoMap
 }
 
-func GetNodeIDMap(topoList []Topo) (map[string][]string, map[string][]string, map[string][]string, map[string]Topo) {
+func GetNodeIDMap(topoList []Topo) (map[string][]string, map[string][]string, map[string][]string, map[string]Topo, map[string][]Topo) {
 	idMap := make(map[string][]string)        // id - node
 	nodeMap := make(map[string][]string)      // node - id
 	idConnectMap := make(map[string][]string) // id - idList
 	idEntityMap := make(map[string]Topo)
+	duplicateTopoMap := make(map[string][]Topo)
 
 	for _, topo := range topoList {
 		idEntityMap[topo.ID] = topo
@@ -395,6 +460,19 @@ func GetNodeIDMap(topoList []Topo) (map[string][]string, map[string][]string, ma
 		if !Contain(idMap[topo.ID], topo.SecondNodeID) {
 			idMap[topo.ID] = append(idMap[topo.ID], topo.SecondNodeID)
 		}
+		{ // 查重复拓扑
+			if topo.FirstNodeID == "" {
+				duplicateTopoMap[topo.FirstNodeID] = append(duplicateTopoMap[topo.FirstNodeID], topo)
+				continue
+			}
+			if topo.SecondNodeID == "" {
+				duplicateTopoMap[topo.SecondNodeID] = append(duplicateTopoMap[topo.SecondNodeID], topo)
+				continue
+			}
+			duplicateTopoMap[topo.FirstNodeID+topo.SecondNodeID] = append(duplicateTopoMap[topo.FirstNodeID+topo.SecondNodeID], topo)
+			duplicateTopoMap[topo.SecondNodeID+topo.FirstNodeID] = append(duplicateTopoMap[topo.SecondNodeID+topo.FirstNodeID], topo)
+			continue
+		}
 	}
 
 	for id, nodeList := range idMap {
@@ -412,7 +490,7 @@ func GetNodeIDMap(topoList []Topo) (map[string][]string, map[string][]string, ma
 		}
 	}
 
-	return idMap, nodeMap, idConnectMap, idEntityMap
+	return idMap, nodeMap, idConnectMap, idEntityMap, duplicateTopoMap
 }
 
 func RecusionGraph(hitMap map[string]bool, idMap, nodeMap, topoMap map[string][]string, startTopo string) map[string]bool {

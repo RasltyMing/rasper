@@ -1,8 +1,12 @@
 db:
   username: SYSDBA
   password: SYSDBA001
-  port: 5237
+  port: 5238
   ip: 127.0.0.1
-  database: DKYPW
-#feeder: 170135010000027220
-owner: 350100
+  database: DKYPW_TEST
+#feeder: 170135030000001912
+#feeder: 170135030000001703
+#feeder: 170135030000002014
+feeder: 170135030000001093
+#feeder: 170135030000026594
+owner: 350300
