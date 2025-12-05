@@ -2,12 +2,13 @@ package main
 
 import (
 	"fmt"
-	dameng "github.com/godoes/gorm-dameng"
-	"gopkg.in/yaml.v3"
-	"gorm.io/gorm"
 	"io/ioutil"
 	"log"
 	"sort"
+
+	dameng "github.com/godoes/gorm-dameng"
+	"gopkg.in/yaml.v3"
+	"gorm.io/gorm"
 )
 
 var config Config
@@ -131,7 +132,7 @@ func CalculateAndPrintTopoGroupsSequentially(db *gorm.DB) error {
 			for key, connected := range graph {
 				fmt.Println(key, ": ", len(connected))
 			}
-			connnectTopo(topoList, graph, db) // 连接topo
+			//connnectTopo(topoList, graph, db) // 连接topo
 		}
 		// 处理拓扑异常
 		fmt.Println("处理拓扑异常...")
@@ -174,33 +175,33 @@ func handleDupliTopo(list []Topo, db *gorm.DB) {
 				continue
 			}
 			if t.FirstNodeID == "" {
-				db.Table(config.DB.Database+".SG_CON_DPWRGRID_R_TOPO").
-					Where("ID = ?", t.ID).
-					Updates(map[string]interface{}{"FIRST_NODE_ID": t.SecondNodeID[0:10] + countStr + t.SecondNodeID[14:]})
+				//db.Table(config.DB.Database+".SG_CON_DPWRGRID_R_TOPO").
+				//	Where("ID = ?", t.ID).
+				//	Updates(map[string]interface{}{"FIRST_NODE_ID": t.SecondNodeID[0:10] + countStr + t.SecondNodeID[14:]})
 				fmt.Printf("   节点 %s 重复，已修改为 %s\n", t.ID, t.SecondNodeID[0:10]+countStr+t.SecondNodeID[14:])
 				continue
 			}
 			if t.SecondNodeID == "" {
-				db.Table(config.DB.Database+".SG_CON_DPWRGRID_R_TOPO").
-					Where("ID = ?", t.ID).
-					Updates(map[string]interface{}{"SECOND_NODE_ID": t.FirstNodeID[0:10] + countStr + t.FirstNodeID[14:]})
+				//db.Table(config.DB.Database+".SG_CON_DPWRGRID_R_TOPO").
+				//	Where("ID = ?", t.ID).
+				//	Updates(map[string]interface{}{"SECOND_NODE_ID": t.FirstNodeID[0:10] + countStr + t.FirstNodeID[14:]})
 				fmt.Printf("   节点 %s 重复，已修改为 %s\n", t.ID, t.FirstNodeID[0:10]+countStr+t.FirstNodeID[14:])
 				continue
 			}
-			db.Table(config.DB.Database+".SG_CON_DPWRGRID_R_TOPO").
-				Where("ID = ?", t.ID).
-				Updates(map[string]interface{}{"SECOND_NODE_ID": t.SecondNodeID[0:10] + countStr + t.SecondNodeID[14:]})
+			//db.Table(config.DB.Database+".SG_CON_DPWRGRID_R_TOPO").
+			//	Where("ID = ?", t.ID).
+			//	Updates(map[string]interface{}{"SECOND_NODE_ID": t.SecondNodeID[0:10] + countStr + t.SecondNodeID[14:]})
 			fmt.Printf("   节点 %s 重复，已修改为 %s\n", t.ID, t.FirstNodeID[0:10]+countStr+t.FirstNodeID[14:])
 		}
 
-		if topo[0].FirstNodeID == "" {
-			duplicateTopoMap[topo[0].FirstNodeID] = make([]Topo, 0)
-		}
-		if topo[0].SecondNodeID == "" {
-			duplicateTopoMap[topo[0].SecondNodeID] = make([]Topo, 0)
-		}
-		duplicateTopoMap[topo[0].FirstNodeID+topo[0].SecondNodeID] = make([]Topo, 0)
-		duplicateTopoMap[topo[0].SecondNodeID+topo[0].FirstNodeID] = make([]Topo, 0)
+		//if topo[0].FirstNodeID == "" {
+		//	duplicateTopoMap[topo[0].FirstNodeID] = make([]Topo, 0)
+		//}
+		//if topo[0].SecondNodeID == "" {
+		//	duplicateTopoMap[topo[0].SecondNodeID] = make([]Topo, 0)
+		//}
+		//duplicateTopoMap[topo[0].FirstNodeID+topo[0].SecondNodeID] = make([]Topo, 0)
+		//duplicateTopoMap[topo[0].SecondNodeID+topo[0].FirstNodeID] = make([]Topo, 0)
 	}
 }
 
@@ -234,29 +235,30 @@ func handleDupliConnnect(db *gorm.DB, nodeMap, topoConnectMap map[string][]strin
 			fmt.Println(node, "存在多个节点相连的情况")
 		}
 
-		for i := 5; i < len(idList); i++ {
-			if len(idSet) == 0 {
-				idSet = append(idSet, entityMap[idList[i-1]].FirstNodeID)
-			}
-
-			// 获取第一个id, 连接到第二个后面
-			topo := entityMap[idList[i]]
-
-			if topo.FirstNodeID == node {
-				db.Table(config.DB.Database+".SG_CON_DPWRGRID_R_TOPO").
-					Where("ID = ?", topo.ID).
-					Updates(map[string]interface{}{"FIRST_NODE_ID": idSet[0]})
-				fmt.Printf("   删除拓扑 %s,%s 连接到 %s\n", topo.ID, topo.FirstNodeID, idSet[0])
-				idSet = idSet[1:]
-			}
-			if topo.SecondNodeID == node {
-				db.Table(config.DB.Database+".SG_CON_DPWRGRID_R_TOPO").
-					Where("ID = ?", topo.ID).
-					Updates(map[string]interface{}{"SECOND_NODE_ID": idSet[0]})
-				fmt.Printf("   删除拓扑 %s,%s 连接到 %s\n", topo.ID, topo.SecondNodeID, idSet[0])
-				idSet = idSet[1:]
-			}
-		}
+		// 开始处理
+		//for i := 5; i < len(idList); i++ {
+		//	if len(idSet) == 0 {
+		//		idSet = append(idSet, entityMap[idList[i-1]].FirstNodeID)
+		//	}
+		//
+		//	// 获取第一个id, 连接到第二个后面
+		//	topo := entityMap[idList[i]]
+		//
+		//	if topo.FirstNodeID == node {
+		//		db.Table(config.DB.Database+".SG_CON_DPWRGRID_R_TOPO").
+		//			Where("ID = ?", topo.ID).
+		//			Updates(map[string]interface{}{"FIRST_NODE_ID": idSet[0]})
+		//		fmt.Printf("   删除拓扑 %s,%s 连接到 %s\n", topo.ID, topo.FirstNodeID, idSet[0])
+		//		idSet = idSet[1:]
+		//	}
+		//	if topo.SecondNodeID == node {
+		//		db.Table(config.DB.Database+".SG_CON_DPWRGRID_R_TOPO").
+		//			Where("ID = ?", topo.ID).
+		//			Updates(map[string]interface{}{"SECOND_NODE_ID": idSet[0]})
+		//		fmt.Printf("   删除拓扑 %s,%s 连接到 %s\n", topo.ID, topo.SecondNodeID, idSet[0])
+		//		idSet = idSet[1:]
+		//	}
+		//}
 	}
 }
 

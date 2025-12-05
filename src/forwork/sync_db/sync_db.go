@@ -248,7 +248,6 @@ func (s *DBSynchronizer) SyncTable(config TableConfig) SyncResult {
 }
 
 // 获取数据并转换为Map（分批次查询）
-// 获取数据并转换为Map（分批次查询）
 func (s *DBSynchronizer) fetchData(db *gorm.DB, config TableConfig, schema string) (map[string]map[string]interface{}, error) {
 	dataMap := make(map[string]map[string]interface{})
 

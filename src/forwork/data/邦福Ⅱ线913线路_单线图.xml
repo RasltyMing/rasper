@@ -1,0 +1,1389 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:cim="http://www.sgcc.com.cn/SG-CIM/2010MAY#" xmlns:iescim="http://www.ieslab.com.cn">
+
+<cim:BaseVoltage rdf:ID="BaseVoltage_5">
+<cim:IdentifiedObject.name>10kV</cim:IdentifiedObject.name>
+<cim:BaseVoltage.isDC>false</cim:BaseVoltage.isDC>
+<cim:BaseVoltage.nominalVoltage>10.00</cim:BaseVoltage.nominalVoltage>
+<iescim:PowerSystemResource.DeviceID>5</iescim:PowerSystemResource.DeviceID>
+</cim:BaseVoltage>
+<cim:SubGeographicalRegion rdf:ID="8a0f688f46db11f00146db13661d0f8a">
+<cim:IdentifiedObject.name>国网福鼎市供电公司</cim:IdentifiedObject.name>
+<cim:SubGeographicalRegion.Region rdf:resource="#_"/>
+</cim:SubGeographicalRegion>
+<cim:Circuit rdf:ID="10000100_55694">
+<cim:IdentifiedObject.name>邦福Ⅱ线913线路</cim:IdentifiedObject.name>
+<cim:Circuit.BelongtoHVSubstation rdf:resource="#30000000_5661174"/>
+<cim:PowerSystemResource.SubGeographicalRegion rdf:resource="#8a0f688f46db11f00146db13661d0f8a"/>
+<cim:iscurrentfeeder>1</cim:iscurrentfeeder>
+</cim:Circuit>
+<cim:Substation rdf:ID="30000000_5661174">
+<cim:IdentifiedObject.name>邦福变电站</cim:IdentifiedObject.name>
+<iescim:PowerSystemResource.DeviceType>13</iescim:PowerSystemResource.DeviceType>
+<iescim:PowerSystemResource.SubType>1</iescim:PowerSystemResource.SubType>
+<cim:PowerSystemResource.PSRType rdf:resource="#30000000"/>
+<iescim:PowerSystemResource.DeviceID>3659174697321832</iescim:PowerSystemResource.DeviceID>
+<cim:PowerSystemResource.SubGeographicalRegion rdf:resource="#8a0f688f46db11f00146db13661d0f8a"/>
+</cim:Substation>
+<cim:Substation rdf:ID="30000006_1215151">
+<cim:IdentifiedObject.name>麦德龙Z007配电室</cim:IdentifiedObject.name>
+<iescim:PowerSystemResource.DeviceType>153</iescim:PowerSystemResource.DeviceType>
+<iescim:PowerSystemResource.SubType>18</iescim:PowerSystemResource.SubType>
+<cim:PowerSystemResource.PSRType rdf:resource="#30000006"/>
+<iescim:PowerSystemResource.DeviceID>43065671436793039</iescim:PowerSystemResource.DeviceID>
+<cim:PowerSystemResource.SubGeographicalRegion rdf:resource="#8a0f688f46db11f00146db13661d0f8a"/>
+</cim:Substation>
+<cim:Breaker rdf:ID="11100000_215866">
+<cim:IdentifiedObject.name>10kV麦德龙支线#003杆03开关</cim:IdentifiedObject.name>
+<cim:IdentifiedObject.bianhao>03</cim:IdentifiedObject.bianhao>
+<cim:PowerSystemResource.Circuit rdf:resource="#10000100_55694" />
+<cim:ConductingEquipment.BaseVoltage rdf:resource="#BaseVoltage_5"/>
+<iescim:PowerSystemResource.SubType>2</iescim:PowerSystemResource.SubType>
+<iescim:PowerSystemResource.DeviceID>4503599627384102</iescim:PowerSystemResource.DeviceID>
+<iescim:PowerSystemResource.DeviceType>16</iescim:PowerSystemResource.DeviceType>
+<iescim:PowerSystemResource.Cxmc></iescim:PowerSystemResource.Cxmc>
+</cim:Breaker>
+<cim:Breaker rdf:ID="11100000_848625">
+<cim:IdentifiedObject.name>10kV岭福线Ⅰ线#028杆28Z1开关</cim:IdentifiedObject.name>
+<cim:IdentifiedObject.bianhao>28Z1</cim:IdentifiedObject.bianhao>
+<cim:PowerSystemResource.Circuit rdf:resource="#10000100_55694" />
+<cim:ConductingEquipment.BaseVoltage rdf:resource="#BaseVoltage_5"/>
+<iescim:PowerSystemResource.SubType>2</iescim:PowerSystemResource.SubType>
+<iescim:PowerSystemResource.DeviceID>4503599627484603</iescim:PowerSystemResource.DeviceID>
+<iescim:PowerSystemResource.DeviceType>16</iescim:PowerSystemResource.DeviceType>
+<iescim:PowerSystemResource.Cxmc></iescim:PowerSystemResource.Cxmc>
+</cim:Breaker>
+<cim:Breaker rdf:ID="30500000_2317796">
+<cim:IdentifiedObject.name>邦福变电站.10kV.邦福Ⅱ线间隔.913开关</cim:IdentifiedObject.name>
+<cim:IdentifiedObject.bianhao>_</cim:IdentifiedObject.bianhao>
+<cim:Equipment.EquipmentContainer rdf:resource="#30000000_5661174"/>
+<cim:PowerSystemResource.Circuit rdf:resource="#10000100_55694" />
+<cim:ConductingEquipment.BaseVoltage rdf:resource="#BaseVoltage_5"/>
+<iescim:PowerSystemResource.SubType>1</iescim:PowerSystemResource.SubType>
+<iescim:PowerSystemResource.DeviceID>4503599627502259</iescim:PowerSystemResource.DeviceID>
+<iescim:PowerSystemResource.DeviceType>16</iescim:PowerSystemResource.DeviceType>
+<iescim:PowerSystemResource.Cxmc></iescim:PowerSystemResource.Cxmc>
+</cim:Breaker>
+<cim:Breaker rdf:ID="11100000_929160">
+<cim:IdentifiedObject.name>10kV岭福线Ⅰ线#020杆20Z1开关</cim:IdentifiedObject.name>
+<cim:IdentifiedObject.bianhao>20Z1</cim:IdentifiedObject.bianhao>
+<cim:PowerSystemResource.Circuit rdf:resource="#10000100_55694" />
+<cim:ConductingEquipment.BaseVoltage rdf:resource="#BaseVoltage_5"/>
+<iescim:PowerSystemResource.SubType>2</iescim:PowerSystemResource.SubType>
+<iescim:PowerSystemResource.DeviceID>4503599627506422</iescim:PowerSystemResource.DeviceID>
+<iescim:PowerSystemResource.DeviceType>16</iescim:PowerSystemResource.DeviceType>
+<iescim:PowerSystemResource.Cxmc></iescim:PowerSystemResource.Cxmc>
+</cim:Breaker>
+<cim:Breaker rdf:ID="11100000_940834">
+<cim:IdentifiedObject.name>10kV石雕厂支线#005杆05开关</cim:IdentifiedObject.name>
+<cim:IdentifiedObject.bianhao>05</cim:IdentifiedObject.bianhao>
+<cim:PowerSystemResource.Circuit rdf:resource="#10000100_55694" />
+<cim:ConductingEquipment.BaseVoltage rdf:resource="#BaseVoltage_5"/>
+<iescim:PowerSystemResource.SubType>2</iescim:PowerSystemResource.SubType>
+<iescim:PowerSystemResource.DeviceID>4503599627508779</iescim:PowerSystemResource.DeviceID>
+<iescim:PowerSystemResource.DeviceType>16</iescim:PowerSystemResource.DeviceType>
+<iescim:PowerSystemResource.Cxmc></iescim:PowerSystemResource.Cxmc>
+</cim:Breaker>
+<cim:Breaker rdf:ID="30700000_1534474">
+<cim:IdentifiedObject.name>负荷开关903</cim:IdentifiedObject.name>
+<cim:IdentifiedObject.bianhao>903</cim:IdentifiedObject.bianhao>
+<cim:Equipment.EquipmentContainer rdf:resource="#30000006_1215151"/>
+<cim:PowerSystemResource.Circuit rdf:resource="#10000100_55694" />
+<cim:ConductingEquipment.BaseVoltage rdf:resource="#BaseVoltage_5"/>
+<iescim:PowerSystemResource.SubType>4</iescim:PowerSystemResource.SubType>
+<iescim:PowerSystemResource.DeviceID>4503599627574722</iescim:PowerSystemResource.DeviceID>
+<iescim:PowerSystemResource.DeviceType>16</iescim:PowerSystemResource.DeviceType>
+<iescim:PowerSystemResource.Cxmc></iescim:PowerSystemResource.Cxmc>
+</cim:Breaker>
+<cim:Breaker rdf:ID="30700000_1534459">
+<cim:IdentifiedObject.name>负荷开关902</cim:IdentifiedObject.name>
+<cim:IdentifiedObject.bianhao>902</cim:IdentifiedObject.bianhao>
+<cim:Equipment.EquipmentContainer rdf:resource="#30000006_1215151"/>
+<cim:PowerSystemResource.Circuit rdf:resource="#10000100_55694" />
+<cim:ConductingEquipment.BaseVoltage rdf:resource="#BaseVoltage_5"/>
+<iescim:PowerSystemResource.SubType>4</iescim:PowerSystemResource.SubType>
+<iescim:PowerSystemResource.DeviceID>4503599627574723</iescim:PowerSystemResource.DeviceID>
+<iescim:PowerSystemResource.DeviceType>16</iescim:PowerSystemResource.DeviceType>
+<iescim:PowerSystemResource.Cxmc></iescim:PowerSystemResource.Cxmc>
+</cim:Breaker>
+<cim:Breaker rdf:ID="30500000_2454899">
+<cim:IdentifiedObject.name>901开关</cim:IdentifiedObject.name>
+<cim:IdentifiedObject.bianhao>901</cim:IdentifiedObject.bianhao>
+<cim:Equipment.EquipmentContainer rdf:resource="#30000006_1215151"/>
+<cim:PowerSystemResource.Circuit rdf:resource="#10000100_55694" />
+<cim:ConductingEquipment.BaseVoltage rdf:resource="#BaseVoltage_5"/>
+<iescim:PowerSystemResource.SubType>1</iescim:PowerSystemResource.SubType>
+<iescim:PowerSystemResource.DeviceID>4503599627574724</iescim:PowerSystemResource.DeviceID>
+<iescim:PowerSystemResource.DeviceType>16</iescim:PowerSystemResource.DeviceType>
+<iescim:PowerSystemResource.Cxmc></iescim:PowerSystemResource.Cxmc>
+</cim:Breaker>
+<cim:Breaker rdf:ID="11100000_1518220480">
+<cim:IdentifiedObject.name>10kV万古亭线#032杆32开关</cim:IdentifiedObject.name>
+<cim:IdentifiedObject.bianhao>32</cim:IdentifiedObject.bianhao>
+<cim:PowerSystemResource.Circuit rdf:resource="#10000100_55694" />
+<cim:ConductingEquipment.BaseVoltage rdf:resource="#BaseVoltage_5"/>
+<iescim:PowerSystemResource.SubType>2</iescim:PowerSystemResource.SubType>
+<iescim:PowerSystemResource.DeviceID>4503599627598494</iescim:PowerSystemResource.DeviceID>
+<iescim:PowerSystemResource.DeviceType>16</iescim:PowerSystemResource.DeviceType>
+<iescim:PowerSystemResource.Cxmc></iescim:PowerSystemResource.Cxmc>
+</cim:Breaker>
+<cim:Disconnector rdf:ID="11300000_1264414">
+<cim:IdentifiedObject.name>10kV石雕厂支线#005杆051刀闸</cim:IdentifiedObject.name>
+<cim:IdentifiedObject.bianhao>051</cim:IdentifiedObject.bianhao>
+<cim:PowerSystemResource.Circuit rdf:resource="#10000100_55694" />
+<cim:ConductingEquipment.BaseVoltage rdf:resource="#BaseVoltage_5"/>
+<iescim:PowerSystemResource.SubType>6</iescim:PowerSystemResource.SubType>
+<iescim:PowerSystemResource.DeviceID>4785074604107360</iescim:PowerSystemResource.DeviceID>
+<iescim:PowerSystemResource.DeviceType>17</iescim:PowerSystemResource.DeviceType>
+<iescim:PowerSystemResource.Cxmc></iescim:PowerSystemResource.Cxmc>
+</cim:Disconnector>
+<cim:Disconnector rdf:ID="11300000_1268499">
+<cim:IdentifiedObject.name>10kV麦德龙支线#003杆031刀闸</cim:IdentifiedObject.name>
+<cim:IdentifiedObject.bianhao>031</cim:IdentifiedObject.bianhao>
+<cim:PowerSystemResource.Circuit rdf:resource="#10000100_55694" />
+<cim:ConductingEquipment.BaseVoltage rdf:resource="#BaseVoltage_5"/>
+<iescim:PowerSystemResource.SubType>6</iescim:PowerSystemResource.SubType>
+<iescim:PowerSystemResource.DeviceID>4785074604107422</iescim:PowerSystemResource.DeviceID>
+<iescim:PowerSystemResource.DeviceType>17</iescim:PowerSystemResource.DeviceType>
+<iescim:PowerSystemResource.Cxmc></iescim:PowerSystemResource.Cxmc>
+</cim:Disconnector>
+<cim:Disconnector rdf:ID="11300000_2573760">
+<cim:IdentifiedObject.name>10kV岭福线Ⅰ线#028杆28G1刀闸</cim:IdentifiedObject.name>
+<cim:IdentifiedObject.bianhao>28G1</cim:IdentifiedObject.bianhao>
+<cim:PowerSystemResource.Circuit rdf:resource="#10000100_55694" />
+<cim:ConductingEquipment.BaseVoltage rdf:resource="#BaseVoltage_5"/>
+<iescim:PowerSystemResource.SubType>6</iescim:PowerSystemResource.SubType>
+<iescim:PowerSystemResource.DeviceID>4785074604160899</iescim:PowerSystemResource.DeviceID>
+<iescim:PowerSystemResource.DeviceType>17</iescim:PowerSystemResource.DeviceType>
+<iescim:PowerSystemResource.Cxmc></iescim:PowerSystemResource.Cxmc>
+</cim:Disconnector>
+<cim:Disconnector rdf:ID="11300000_3648300">
+<cim:IdentifiedObject.name>10kV石雕厂支线#001杆011刀闸</cim:IdentifiedObject.name>
+<cim:IdentifiedObject.bianhao>011</cim:IdentifiedObject.bianhao>
+<cim:PowerSystemResource.Circuit rdf:resource="#10000100_55694" />
+<cim:ConductingEquipment.BaseVoltage rdf:resource="#BaseVoltage_5"/>
+<iescim:PowerSystemResource.SubType>6</iescim:PowerSystemResource.SubType>
+<iescim:PowerSystemResource.DeviceID>4785074604251542</iescim:PowerSystemResource.DeviceID>
+<iescim:PowerSystemResource.DeviceType>17</iescim:PowerSystemResource.DeviceType>
+<iescim:PowerSystemResource.Cxmc></iescim:PowerSystemResource.Cxmc>
+</cim:Disconnector>
+<cim:Disconnector rdf:ID="30600001_3627963">
+<cim:IdentifiedObject.name>邦福变电站.10kV.邦福Ⅱ线间隔.9136接地刀闸</cim:IdentifiedObject.name>
+<cim:IdentifiedObject.bianhao>_</cim:IdentifiedObject.bianhao>
+<cim:Equipment.EquipmentContainer rdf:resource="#30000000_5661174"/>
+<cim:PowerSystemResource.Circuit rdf:resource="#10000100_55694" />
+<cim:ConductingEquipment.BaseVoltage rdf:resource="#BaseVoltage_5"/>
+<iescim:PowerSystemResource.SubType>9</iescim:PowerSystemResource.SubType>
+<iescim:PowerSystemResource.DeviceID>4785074604264099</iescim:PowerSystemResource.DeviceID>
+<iescim:PowerSystemResource.DeviceType>17</iescim:PowerSystemResource.DeviceType>
+<iescim:PowerSystemResource.Cxmc></iescim:PowerSystemResource.Cxmc>
+</cim:Disconnector>
+<cim:Disconnector rdf:ID="5132474">
+<cim:IdentifiedObject.name>邦福变电站.10kV.邦福Ⅱ线间隔.913手车刀闸</cim:IdentifiedObject.name>
+<cim:IdentifiedObject.bianhao>_</cim:IdentifiedObject.bianhao>
+<cim:Equipment.EquipmentContainer rdf:resource="#30000000_5661174"/>
+<cim:PowerSystemResource.Circuit rdf:resource="#10000100_55694" />
+<cim:ConductingEquipment.BaseVoltage rdf:resource="#BaseVoltage_5"/>
+<iescim:PowerSystemResource.SubType>5</iescim:PowerSystemResource.SubType>
+<iescim:PowerSystemResource.DeviceID>4785074604264127</iescim:PowerSystemResource.DeviceID>
+<iescim:PowerSystemResource.DeviceType>17</iescim:PowerSystemResource.DeviceType>
+<iescim:PowerSystemResource.Cxmc></iescim:PowerSystemResource.Cxmc>
+</cim:Disconnector>
+<cim:Disconnector rdf:ID="11300000_3864510">
+<cim:IdentifiedObject.name>10kV岭福线Ⅰ线#020杆20G1刀闸</cim:IdentifiedObject.name>
+<cim:IdentifiedObject.bianhao>20G1</cim:IdentifiedObject.bianhao>
+<cim:PowerSystemResource.Circuit rdf:resource="#10000100_55694" />
+<cim:ConductingEquipment.BaseVoltage rdf:resource="#BaseVoltage_5"/>
+<iescim:PowerSystemResource.SubType>6</iescim:PowerSystemResource.SubType>
+<iescim:PowerSystemResource.DeviceID>4785074604266960</iescim:PowerSystemResource.DeviceID>
+<iescim:PowerSystemResource.DeviceType>17</iescim:PowerSystemResource.DeviceType>
+<iescim:PowerSystemResource.Cxmc></iescim:PowerSystemResource.Cxmc>
+</cim:Disconnector>
+<cim:Disconnector rdf:ID="30600001_3871651">
+<cim:IdentifiedObject.name>9036接地刀闸</cim:IdentifiedObject.name>
+<cim:IdentifiedObject.bianhao>9036</cim:IdentifiedObject.bianhao>
+<cim:Equipment.EquipmentContainer rdf:resource="#30000006_1215151"/>
+<cim:PowerSystemResource.Circuit rdf:resource="#10000100_55694" />
+<cim:ConductingEquipment.BaseVoltage rdf:resource="#BaseVoltage_5"/>
+<iescim:PowerSystemResource.SubType>9</iescim:PowerSystemResource.SubType>
+<iescim:PowerSystemResource.DeviceID>4785074604276348</iescim:PowerSystemResource.DeviceID>
+<iescim:PowerSystemResource.DeviceType>17</iescim:PowerSystemResource.DeviceType>
+<iescim:PowerSystemResource.Cxmc></iescim:PowerSystemResource.Cxmc>
+</cim:Disconnector>
+<cim:Disconnector rdf:ID="30600001_3871610">
+<cim:IdentifiedObject.name>9026接地刀闸</cim:IdentifiedObject.name>
+<cim:IdentifiedObject.bianhao>9026</cim:IdentifiedObject.bianhao>
+<cim:Equipment.EquipmentContainer rdf:resource="#30000006_1215151"/>
+<cim:PowerSystemResource.Circuit rdf:resource="#10000100_55694" />
+<cim:ConductingEquipment.BaseVoltage rdf:resource="#BaseVoltage_5"/>
+<iescim:PowerSystemResource.SubType>9</iescim:PowerSystemResource.SubType>
+<iescim:PowerSystemResource.DeviceID>4785074604276349</iescim:PowerSystemResource.DeviceID>
+<iescim:PowerSystemResource.DeviceType>17</iescim:PowerSystemResource.DeviceType>
+<iescim:PowerSystemResource.Cxmc></iescim:PowerSystemResource.Cxmc>
+</cim:Disconnector>
+<cim:Disconnector rdf:ID="30600000_3871508">
+<cim:IdentifiedObject.name>9014手车刀闸</cim:IdentifiedObject.name>
+<cim:IdentifiedObject.bianhao>9014</cim:IdentifiedObject.bianhao>
+<cim:Equipment.EquipmentContainer rdf:resource="#30000006_1215151"/>
+<cim:PowerSystemResource.Circuit rdf:resource="#10000100_55694" />
+<cim:ConductingEquipment.BaseVoltage rdf:resource="#BaseVoltage_5"/>
+<iescim:PowerSystemResource.SubType>5</iescim:PowerSystemResource.SubType>
+<iescim:PowerSystemResource.DeviceID>4785074604276350</iescim:PowerSystemResource.DeviceID>
+<iescim:PowerSystemResource.DeviceType>17</iescim:PowerSystemResource.DeviceType>
+<iescim:PowerSystemResource.Cxmc></iescim:PowerSystemResource.Cxmc>
+</cim:Disconnector>
+<cim:Disconnector rdf:ID="11300000_1523640387">
+<cim:IdentifiedObject.name>10kV万古亭线#032杆321A刀闸</cim:IdentifiedObject.name>
+<cim:IdentifiedObject.bianhao>321A</cim:IdentifiedObject.bianhao>
+<cim:PowerSystemResource.Circuit rdf:resource="#10000100_55694" />
+<cim:ConductingEquipment.BaseVoltage rdf:resource="#BaseVoltage_5"/>
+<iescim:PowerSystemResource.SubType>6</iescim:PowerSystemResource.SubType>
+<iescim:PowerSystemResource.DeviceID>4785074604302868</iescim:PowerSystemResource.DeviceID>
+<iescim:PowerSystemResource.DeviceType>17</iescim:PowerSystemResource.DeviceType>
+<iescim:PowerSystemResource.Cxmc></iescim:PowerSystemResource.Cxmc>
+</cim:Disconnector>
+<cim:Fuse rdf:ID="11500000_676507">
+<cim:IdentifiedObject.name>10kV石雕厂支线#006M2跌落式熔断器</cim:IdentifiedObject.name>
+<cim:IdentifiedObject.bianhao>M2</cim:IdentifiedObject.bianhao>
+<cim:PowerSystemResource.Circuit rdf:resource="#10000100_55694" />
+<cim:ConductingEquipment.BaseVoltage rdf:resource="#BaseVoltage_5"/>
+<iescim:PowerSystemResource.SubType>1</iescim:PowerSystemResource.SubType>
+<iescim:PowerSystemResource.DeviceID>8162774324635346</iescim:PowerSystemResource.DeviceID>
+<iescim:PowerSystemResource.DeviceType>29</iescim:PowerSystemResource.DeviceType>
+<iescim:PowerSystemResource.Cxmc></iescim:PowerSystemResource.Cxmc>
+</cim:Fuse>
+<cim:Fuse rdf:ID="30900002_767282">
+<cim:IdentifiedObject.name>熔丝</cim:IdentifiedObject.name>
+<cim:IdentifiedObject.bianhao>_</cim:IdentifiedObject.bianhao>
+<cim:Equipment.EquipmentContainer rdf:resource="#30000006_1215151"/>
+<cim:PowerSystemResource.Circuit rdf:resource="#10000100_55694" />
+<cim:ConductingEquipment.BaseVoltage rdf:resource="#BaseVoltage_5"/>
+<iescim:PowerSystemResource.SubType>1</iescim:PowerSystemResource.SubType>
+<iescim:PowerSystemResource.DeviceID>8162774324804219</iescim:PowerSystemResource.DeviceID>
+<iescim:PowerSystemResource.DeviceType>29</iescim:PowerSystemResource.DeviceType>
+<iescim:PowerSystemResource.Cxmc></iescim:PowerSystemResource.Cxmc>
+</cim:Fuse>
+<cim:PowerTransformer rdf:ID="30200003_431349">
+<cim:IdentifiedObject.name>麦德龙Z007变</cim:IdentifiedObject.name>
+<cim:IdentifiedObject.bianhao></cim:IdentifiedObject.bianhao>
+<cim:Equipment.EquipmentContainer rdf:resource="#30000006_1215151"/>
+<cim:PowerSystemResource.Circuit rdf:resource="#10000100_55694" />
+<cim:ConductingEquipment.BaseVoltage rdf:resource="#BaseVoltage_5"/>
+<iescim:PowerSystemResource.SubType>1</iescim:PowerSystemResource.SubType>
+<iescim:PowerSystemResource.DeviceID>12384898975277054</iescim:PowerSystemResource.DeviceID>
+<iescim:PowerSystemResource.DeviceType>44</iescim:PowerSystemResource.DeviceType>
+<iescim:PowerSystemResource.UserType>4</iescim:PowerSystemResource.UserType>
+<iescim:PowerSystemResource.TaiQuHao>_</iescim:PowerSystemResource.TaiQuHao>
+</cim:PowerTransformer>
+<cim:PowerTransformer rdf:ID="11000001_648107">
+<cim:IdentifiedObject.name>石雕厂配变Z010</cim:IdentifiedObject.name>
+<cim:IdentifiedObject.bianhao></cim:IdentifiedObject.bianhao>
+<cim:PowerSystemResource.Circuit rdf:resource="#10000100_55694" />
+<cim:ConductingEquipment.BaseVoltage rdf:resource="#BaseVoltage_5"/>
+<iescim:PowerSystemResource.SubType>1</iescim:PowerSystemResource.SubType>
+<iescim:PowerSystemResource.DeviceID>12384898975277057</iescim:PowerSystemResource.DeviceID>
+<iescim:PowerSystemResource.DeviceType>44</iescim:PowerSystemResource.DeviceType>
+<iescim:PowerSystemResource.UserType>0</iescim:PowerSystemResource.UserType>
+<iescim:PowerSystemResource.TaiQuHao>_</iescim:PowerSystemResource.TaiQuHao>
+</cim:PowerTransformer>
+<cim:PowerTransformer rdf:ID="30200003_1704522">
+<cim:IdentifiedObject.name>麦德龙厂Z091变</cim:IdentifiedObject.name>
+<cim:IdentifiedObject.bianhao></cim:IdentifiedObject.bianhao>
+<cim:Equipment.EquipmentContainer rdf:resource="#30000006_1215151"/>
+<cim:PowerSystemResource.Circuit rdf:resource="#10000100_55694" />
+<cim:ConductingEquipment.BaseVoltage rdf:resource="#BaseVoltage_5"/>
+<iescim:PowerSystemResource.SubType>1</iescim:PowerSystemResource.SubType>
+<iescim:PowerSystemResource.DeviceID>12384898975308594</iescim:PowerSystemResource.DeviceID>
+<iescim:PowerSystemResource.DeviceType>44</iescim:PowerSystemResource.DeviceType>
+<iescim:PowerSystemResource.UserType>4</iescim:PowerSystemResource.UserType>
+<iescim:PowerSystemResource.TaiQuHao>_</iescim:PowerSystemResource.TaiQuHao>
+</cim:PowerTransformer>
+<cim:BusbarSection rdf:ID="31100000_399927">
+<cim:IdentifiedObject.name>Ⅰ母线</cim:IdentifiedObject.name>
+<cim:IdentifiedObject.bianhao></cim:IdentifiedObject.bianhao>
+<cim:Equipment.EquipmentContainer rdf:resource="#30000006_1215151"/>
+<cim:PowerSystemResource.Circuit rdf:resource="#10000100_55694" />
+<cim:ConductingEquipment.BaseVoltage rdf:resource="#BaseVoltage_5"/>
+<iescim:PowerSystemResource.SubType>0</iescim:PowerSystemResource.SubType>
+<iescim:PowerSystemResource.DeviceID>5348024557507455</iescim:PowerSystemResource.DeviceID>
+<iescim:PowerSystemResource.DeviceType>19</iescim:PowerSystemResource.DeviceType>
+</cim:BusbarSection>
+<cim:BusbarSection rdf:ID="31100000_1206464">
+<cim:IdentifiedObject.name>邦福变电站.10kV.Ⅰ段母线</cim:IdentifiedObject.name>
+<cim:IdentifiedObject.bianhao></cim:IdentifiedObject.bianhao>
+<cim:Equipment.EquipmentContainer rdf:resource="#30000000_5661174"/>
+<cim:PowerSystemResource.Circuit rdf:resource="#_" />
+<cim:ConductingEquipment.BaseVoltage rdf:resource="#BaseVoltage_5"/>
+<iescim:PowerSystemResource.SubType>0</iescim:PowerSystemResource.SubType>
+<iescim:PowerSystemResource.DeviceID>5348024557544154</iescim:PowerSystemResource.DeviceID>
+<iescim:PowerSystemResource.DeviceType>19</iescim:PowerSystemResource.DeviceType>
+</cim:BusbarSection>
+<cim:BusbarSection rdf:ID="31100000_1273126">
+<cim:IdentifiedObject.name>II母线</cim:IdentifiedObject.name>
+<cim:IdentifiedObject.bianhao></cim:IdentifiedObject.bianhao>
+<cim:Equipment.EquipmentContainer rdf:resource="#30000006_1215151"/>
+<cim:PowerSystemResource.Circuit rdf:resource="#10000100_55694" />
+<cim:ConductingEquipment.BaseVoltage rdf:resource="#BaseVoltage_5"/>
+<iescim:PowerSystemResource.SubType>0</iescim:PowerSystemResource.SubType>
+<iescim:PowerSystemResource.DeviceID>5348024557547925</iescim:PowerSystemResource.DeviceID>
+<iescim:PowerSystemResource.DeviceType>19</iescim:PowerSystemResource.DeviceType>
+</cim:BusbarSection>
+<cim:ACLineSegment rdf:ID="10100000_6164069">
+<cim:IdentifiedObject.name>10kV贯岭004线麦德龙新厂分支线02-10kV贯岭004线麦德龙新厂分支线03</cim:IdentifiedObject.name>
+<cim:IdentifiedObject.bianhao></cim:IdentifiedObject.bianhao>
+<cim:PowerSystemResource.Circuit rdf:resource="#10000100_55694" />
+<cim:ConductingEquipment.BaseVoltage rdf:resource="#BaseVoltage_5"/>
+<iescim:PowerSystemResource.SubType>2</iescim:PowerSystemResource.SubType>
+<iescim:PowerSystemResource.DeviceID>5629499534270384</iescim:PowerSystemResource.DeviceID>
+<iescim:PowerSystemResource.DeviceType>20</iescim:PowerSystemResource.DeviceType>
+</cim:ACLineSegment>
+<cim:ACLineSegment rdf:ID="10100000_6286123">
+<cim:IdentifiedObject.name>10kV贯岭004线石雕厂支线05-10kV贯岭004线石雕厂支线06</cim:IdentifiedObject.name>
+<cim:IdentifiedObject.bianhao></cim:IdentifiedObject.bianhao>
+<cim:PowerSystemResource.Circuit rdf:resource="#10000100_55694" />
+<cim:ConductingEquipment.BaseVoltage rdf:resource="#BaseVoltage_5"/>
+<iescim:PowerSystemResource.SubType>2</iescim:PowerSystemResource.SubType>
+<iescim:PowerSystemResource.DeviceID>5629499534270395</iescim:PowerSystemResource.DeviceID>
+<iescim:PowerSystemResource.DeviceType>20</iescim:PowerSystemResource.DeviceType>
+</cim:ACLineSegment>
+<cim:ACLineSegment rdf:ID="13000000_9201743">
+<cim:IdentifiedObject.name>站外-连接线</cim:IdentifiedObject.name>
+<cim:IdentifiedObject.bianhao></cim:IdentifiedObject.bianhao>
+<cim:PowerSystemResource.Circuit rdf:resource="#10000100_55694" />
+<cim:ConductingEquipment.BaseVoltage rdf:resource="#BaseVoltage_5"/>
+<iescim:PowerSystemResource.SubType>3</iescim:PowerSystemResource.SubType>
+<iescim:PowerSystemResource.DeviceID>5629499534270411</iescim:PowerSystemResource.DeviceID>
+<iescim:PowerSystemResource.DeviceType>20</iescim:PowerSystemResource.DeviceType>
+</cim:ACLineSegment>
+<cim:ACLineSegment rdf:ID="13000000_9210323">
+<cim:IdentifiedObject.name>未命名</cim:IdentifiedObject.name>
+<cim:IdentifiedObject.bianhao></cim:IdentifiedObject.bianhao>
+<cim:PowerSystemResource.Circuit rdf:resource="#10000100_55694" />
+<cim:ConductingEquipment.BaseVoltage rdf:resource="#BaseVoltage_5"/>
+<iescim:PowerSystemResource.SubType>3</iescim:PowerSystemResource.SubType>
+<iescim:PowerSystemResource.DeviceID>5629499534270416</iescim:PowerSystemResource.DeviceID>
+<iescim:PowerSystemResource.DeviceType>20</iescim:PowerSystemResource.DeviceType>
+</cim:ACLineSegment>
+<cim:ACLineSegment rdf:ID="13000000_9210773">
+<cim:IdentifiedObject.name>站外-连接线</cim:IdentifiedObject.name>
+<cim:IdentifiedObject.bianhao></cim:IdentifiedObject.bianhao>
+<cim:PowerSystemResource.Circuit rdf:resource="#10000100_55694" />
+<cim:ConductingEquipment.BaseVoltage rdf:resource="#BaseVoltage_5"/>
+<iescim:PowerSystemResource.SubType>3</iescim:PowerSystemResource.SubType>
+<iescim:PowerSystemResource.DeviceID>5629499534270417</iescim:PowerSystemResource.DeviceID>
+<iescim:PowerSystemResource.DeviceType>20</iescim:PowerSystemResource.DeviceType>
+</cim:ACLineSegment>
+<cim:ACLineSegment rdf:ID="13000000_9222288">
+<cim:IdentifiedObject.name>未命名</cim:IdentifiedObject.name>
+<cim:IdentifiedObject.bianhao></cim:IdentifiedObject.bianhao>
+<cim:PowerSystemResource.Circuit rdf:resource="#10000100_55694" />
+<cim:ConductingEquipment.BaseVoltage rdf:resource="#BaseVoltage_5"/>
+<iescim:PowerSystemResource.SubType>3</iescim:PowerSystemResource.SubType>
+<iescim:PowerSystemResource.DeviceID>5629499534270422</iescim:PowerSystemResource.DeviceID>
+<iescim:PowerSystemResource.DeviceType>20</iescim:PowerSystemResource.DeviceType>
+</cim:ACLineSegment>
+<cim:ACLineSegment rdf:ID="13000000_9256485">
+<cim:IdentifiedObject.name>未命名</cim:IdentifiedObject.name>
+<cim:IdentifiedObject.bianhao></cim:IdentifiedObject.bianhao>
+<cim:PowerSystemResource.Circuit rdf:resource="#10000100_55694" />
+<cim:ConductingEquipment.BaseVoltage rdf:resource="#BaseVoltage_5"/>
+<iescim:PowerSystemResource.SubType>3</iescim:PowerSystemResource.SubType>
+<iescim:PowerSystemResource.DeviceID>5629499534270435</iescim:PowerSystemResource.DeviceID>
+<iescim:PowerSystemResource.DeviceType>20</iescim:PowerSystemResource.DeviceType>
+</cim:ACLineSegment>
+<cim:ACLineSegment rdf:ID="13000000_9271713">
+<cim:IdentifiedObject.name>站外-连接线</cim:IdentifiedObject.name>
+<cim:IdentifiedObject.bianhao></cim:IdentifiedObject.bianhao>
+<cim:PowerSystemResource.Circuit rdf:resource="#10000100_55694" />
+<cim:ConductingEquipment.BaseVoltage rdf:resource="#BaseVoltage_5"/>
+<iescim:PowerSystemResource.SubType>3</iescim:PowerSystemResource.SubType>
+<iescim:PowerSystemResource.DeviceID>5629499534270443</iescim:PowerSystemResource.DeviceID>
+<iescim:PowerSystemResource.DeviceType>20</iescim:PowerSystemResource.DeviceType>
+</cim:ACLineSegment>
+<cim:ACLineSegment rdf:ID="20100000_499301">
+<cim:IdentifiedObject.name>麦德龙厂分支线#03-终端头</cim:IdentifiedObject.name>
+<cim:IdentifiedObject.bianhao></cim:IdentifiedObject.bianhao>
+<cim:PowerSystemResource.Circuit rdf:resource="#10000100_55694" />
+<cim:ConductingEquipment.BaseVoltage rdf:resource="#BaseVoltage_5"/>
+<iescim:PowerSystemResource.SubType>1</iescim:PowerSystemResource.SubType>
+<iescim:PowerSystemResource.DeviceID>5629499534270455</iescim:PowerSystemResource.DeviceID>
+<iescim:PowerSystemResource.DeviceType>20</iescim:PowerSystemResource.DeviceType>
+</cim:ACLineSegment>
+<cim:ACLineSegment rdf:ID="13000000_13383229">
+<cim:IdentifiedObject.name>-连接线-</cim:IdentifiedObject.name>
+<cim:IdentifiedObject.bianhao></cim:IdentifiedObject.bianhao>
+<cim:PowerSystemResource.Circuit rdf:resource="#10000100_55694" />
+<cim:ConductingEquipment.BaseVoltage rdf:resource="#BaseVoltage_5"/>
+<iescim:PowerSystemResource.SubType>3</iescim:PowerSystemResource.SubType>
+<iescim:PowerSystemResource.DeviceID>5629499534457119</iescim:PowerSystemResource.DeviceID>
+<iescim:PowerSystemResource.DeviceType>20</iescim:PowerSystemResource.DeviceType>
+</cim:ACLineSegment>
+<cim:ACLineSegment rdf:ID="10100000_6367643">
+<cim:IdentifiedObject.name>10kV贯岭004线石雕厂支线05-10kV贯岭004线石雕厂支线04</cim:IdentifiedObject.name>
+<cim:IdentifiedObject.bianhao></cim:IdentifiedObject.bianhao>
+<cim:PowerSystemResource.Circuit rdf:resource="#10000100_55694" />
+<cim:ConductingEquipment.BaseVoltage rdf:resource="#BaseVoltage_5"/>
+<iescim:PowerSystemResource.SubType>2</iescim:PowerSystemResource.SubType>
+<iescim:PowerSystemResource.DeviceID>5629499534457123</iescim:PowerSystemResource.DeviceID>
+<iescim:PowerSystemResource.DeviceType>20</iescim:PowerSystemResource.DeviceType>
+</cim:ACLineSegment>
+<cim:ACLineSegment rdf:ID="20100000_1531203">
+<cim:IdentifiedObject.name>电缆终端头2315249-电缆终端头2315250</cim:IdentifiedObject.name>
+<cim:IdentifiedObject.bianhao></cim:IdentifiedObject.bianhao>
+<cim:PowerSystemResource.Circuit rdf:resource="#10000100_55694" />
+<cim:ConductingEquipment.BaseVoltage rdf:resource="#BaseVoltage_5"/>
+<iescim:PowerSystemResource.SubType>1</iescim:PowerSystemResource.SubType>
+<iescim:PowerSystemResource.DeviceID>5629499536280546</iescim:PowerSystemResource.DeviceID>
+<iescim:PowerSystemResource.DeviceType>20</iescim:PowerSystemResource.DeviceType>
+</cim:ACLineSegment>
+<cim:ACLineSegment rdf:ID="13000000_16540955">
+<cim:IdentifiedObject.name>10kV岭福Ⅰ线#029杆-电缆终端头2315249</cim:IdentifiedObject.name>
+<cim:IdentifiedObject.bianhao></cim:IdentifiedObject.bianhao>
+<cim:PowerSystemResource.Circuit rdf:resource="#10000100_55694" />
+<cim:ConductingEquipment.BaseVoltage rdf:resource="#BaseVoltage_5"/>
+<iescim:PowerSystemResource.SubType>3</iescim:PowerSystemResource.SubType>
+<iescim:PowerSystemResource.DeviceID>5629499536280547</iescim:PowerSystemResource.DeviceID>
+<iescim:PowerSystemResource.DeviceType>20</iescim:PowerSystemResource.DeviceType>
+</cim:ACLineSegment>
+<cim:ACLineSegment rdf:ID="13000000_16540730">
+<cim:IdentifiedObject.name>-连接线-</cim:IdentifiedObject.name>
+<cim:IdentifiedObject.bianhao></cim:IdentifiedObject.bianhao>
+<cim:PowerSystemResource.Circuit rdf:resource="#10000100_55694" />
+<cim:ConductingEquipment.BaseVoltage rdf:resource="#BaseVoltage_5"/>
+<iescim:PowerSystemResource.SubType>3</iescim:PowerSystemResource.SubType>
+<iescim:PowerSystemResource.DeviceID>5629499536280548</iescim:PowerSystemResource.DeviceID>
+<iescim:PowerSystemResource.DeviceType>20</iescim:PowerSystemResource.DeviceType>
+</cim:ACLineSegment>
+<cim:ACLineSegment rdf:ID="10100000_12830320">
+<cim:IdentifiedObject.name>10kV岭福线Ⅰ线#028-10kV岭福Ⅰ线#029杆000导线</cim:IdentifiedObject.name>
+<cim:IdentifiedObject.bianhao></cim:IdentifiedObject.bianhao>
+<cim:PowerSystemResource.Circuit rdf:resource="#10000100_55694" />
+<cim:ConductingEquipment.BaseVoltage rdf:resource="#BaseVoltage_5"/>
+<iescim:PowerSystemResource.SubType>2</iescim:PowerSystemResource.SubType>
+<iescim:PowerSystemResource.DeviceID>5629499536280549</iescim:PowerSystemResource.DeviceID>
+<iescim:PowerSystemResource.DeviceType>20</iescim:PowerSystemResource.DeviceType>
+</cim:ACLineSegment>
+<cim:ACLineSegment rdf:ID="13000000_16580921">
+<cim:IdentifiedObject.name>-连接线-</cim:IdentifiedObject.name>
+<cim:IdentifiedObject.bianhao></cim:IdentifiedObject.bianhao>
+<cim:PowerSystemResource.Circuit rdf:resource="#10000100_55694" />
+<cim:ConductingEquipment.BaseVoltage rdf:resource="#BaseVoltage_5"/>
+<iescim:PowerSystemResource.SubType>3</iescim:PowerSystemResource.SubType>
+<iescim:PowerSystemResource.DeviceID>5629499536292712</iescim:PowerSystemResource.DeviceID>
+<iescim:PowerSystemResource.DeviceType>20</iescim:PowerSystemResource.DeviceType>
+</cim:ACLineSegment>
+<cim:ACLineSegment rdf:ID="13000000_16540969">
+<cim:IdentifiedObject.name>连接线</cim:IdentifiedObject.name>
+<cim:IdentifiedObject.bianhao></cim:IdentifiedObject.bianhao>
+<cim:PowerSystemResource.Circuit rdf:resource="#10000100_55694" />
+<cim:ConductingEquipment.BaseVoltage rdf:resource="#BaseVoltage_5"/>
+<iescim:PowerSystemResource.SubType>3</iescim:PowerSystemResource.SubType>
+<iescim:PowerSystemResource.DeviceID>5629499536292713</iescim:PowerSystemResource.DeviceID>
+<iescim:PowerSystemResource.DeviceType>20</iescim:PowerSystemResource.DeviceType>
+</cim:ACLineSegment>
+<cim:ACLineSegment rdf:ID="10100000_6184144">
+<cim:IdentifiedObject.name>10kV贯岭004线石雕厂支线03-10kV贯岭004线石雕厂支线02</cim:IdentifiedObject.name>
+<cim:IdentifiedObject.bianhao></cim:IdentifiedObject.bianhao>
+<cim:PowerSystemResource.Circuit rdf:resource="#10000100_55694" />
+<cim:ConductingEquipment.BaseVoltage rdf:resource="#BaseVoltage_5"/>
+<iescim:PowerSystemResource.SubType>2</iescim:PowerSystemResource.SubType>
+<iescim:PowerSystemResource.DeviceID>5629499536292714</iescim:PowerSystemResource.DeviceID>
+<iescim:PowerSystemResource.DeviceType>20</iescim:PowerSystemResource.DeviceType>
+</cim:ACLineSegment>
+<cim:ACLineSegment rdf:ID="10100000_12858682">
+<cim:IdentifiedObject.name>10kV岭福线Ⅰ线#030-10kV石雕厂支线#001导线</cim:IdentifiedObject.name>
+<cim:IdentifiedObject.bianhao></cim:IdentifiedObject.bianhao>
+<cim:PowerSystemResource.Circuit rdf:resource="#10000100_55694" />
+<cim:ConductingEquipment.BaseVoltage rdf:resource="#BaseVoltage_5"/>
+<iescim:PowerSystemResource.SubType>2</iescim:PowerSystemResource.SubType>
+<iescim:PowerSystemResource.DeviceID>5629499536292715</iescim:PowerSystemResource.DeviceID>
+<iescim:PowerSystemResource.DeviceType>20</iescim:PowerSystemResource.DeviceType>
+</cim:ACLineSegment>
+<cim:ACLineSegment rdf:ID="20100000_1650332">
+<cim:IdentifiedObject.name>110kV邦福变10kV备用九913开关单元-电缆终端头2514813</cim:IdentifiedObject.name>
+<cim:IdentifiedObject.bianhao></cim:IdentifiedObject.bianhao>
+<cim:PowerSystemResource.Circuit rdf:resource="#10000100_55694" />
+<cim:ConductingEquipment.BaseVoltage rdf:resource="#BaseVoltage_5"/>
+<iescim:PowerSystemResource.SubType>1</iescim:PowerSystemResource.SubType>
+<iescim:PowerSystemResource.DeviceID>5629499537044775</iescim:PowerSystemResource.DeviceID>
+<iescim:PowerSystemResource.DeviceType>20</iescim:PowerSystemResource.DeviceType>
+</cim:ACLineSegment>
+<cim:ACLineSegment rdf:ID="14000000_7772439">
+<cim:IdentifiedObject.name>备用九913线路_起始设备</cim:IdentifiedObject.name>
+<cim:IdentifiedObject.bianhao></cim:IdentifiedObject.bianhao>
+<cim:PowerSystemResource.Circuit rdf:resource="#10000100_55694" />
+<cim:ConductingEquipment.BaseVoltage rdf:resource="#BaseVoltage_5"/>
+<iescim:PowerSystemResource.SubType>1</iescim:PowerSystemResource.SubType>
+<iescim:PowerSystemResource.DeviceID>5629499537044781</iescim:PowerSystemResource.DeviceID>
+<iescim:PowerSystemResource.DeviceType>20</iescim:PowerSystemResource.DeviceType>
+</cim:ACLineSegment>
+<cim:ACLineSegment rdf:ID="13000000_17174269">
+<cim:IdentifiedObject.name>连接线</cim:IdentifiedObject.name>
+<cim:IdentifiedObject.bianhao></cim:IdentifiedObject.bianhao>
+<cim:PowerSystemResource.Circuit rdf:resource="#10000100_55694" />
+<cim:ConductingEquipment.BaseVoltage rdf:resource="#BaseVoltage_5"/>
+<iescim:PowerSystemResource.SubType>3</iescim:PowerSystemResource.SubType>
+<iescim:PowerSystemResource.DeviceID>5629499537044794</iescim:PowerSystemResource.DeviceID>
+<iescim:PowerSystemResource.DeviceType>20</iescim:PowerSystemResource.DeviceType>
+</cim:ACLineSegment>
+<cim:ACLineSegment rdf:ID="10100000_10293426">
+<cim:IdentifiedObject.name>10kV岭福线Ⅰ线#020-10kV岭福线Ⅰ线#021导线</cim:IdentifiedObject.name>
+<cim:IdentifiedObject.bianhao></cim:IdentifiedObject.bianhao>
+<cim:PowerSystemResource.Circuit rdf:resource="#10000100_55694" />
+<cim:ConductingEquipment.BaseVoltage rdf:resource="#BaseVoltage_5"/>
+<iescim:PowerSystemResource.SubType>2</iescim:PowerSystemResource.SubType>
+<iescim:PowerSystemResource.DeviceID>5629499537044800</iescim:PowerSystemResource.DeviceID>
+<iescim:PowerSystemResource.DeviceType>20</iescim:PowerSystemResource.DeviceType>
+</cim:ACLineSegment>
+<cim:ACLineSegment rdf:ID="13000000_17187774">
+<cim:IdentifiedObject.name>连接线</cim:IdentifiedObject.name>
+<cim:IdentifiedObject.bianhao></cim:IdentifiedObject.bianhao>
+<cim:PowerSystemResource.Circuit rdf:resource="#10000100_55694" />
+<cim:ConductingEquipment.BaseVoltage rdf:resource="#BaseVoltage_5"/>
+<iescim:PowerSystemResource.SubType>3</iescim:PowerSystemResource.SubType>
+<iescim:PowerSystemResource.DeviceID>5629499537051905</iescim:PowerSystemResource.DeviceID>
+<iescim:PowerSystemResource.DeviceType>20</iescim:PowerSystemResource.DeviceType>
+</cim:ACLineSegment>
+<cim:ACLineSegment rdf:ID="13000000_17187773">
+<cim:IdentifiedObject.name>连接线</cim:IdentifiedObject.name>
+<cim:IdentifiedObject.bianhao></cim:IdentifiedObject.bianhao>
+<cim:PowerSystemResource.Circuit rdf:resource="#10000100_55694" />
+<cim:ConductingEquipment.BaseVoltage rdf:resource="#BaseVoltage_5"/>
+<iescim:PowerSystemResource.SubType>3</iescim:PowerSystemResource.SubType>
+<iescim:PowerSystemResource.DeviceID>5629499537051906</iescim:PowerSystemResource.DeviceID>
+<iescim:PowerSystemResource.DeviceType>20</iescim:PowerSystemResource.DeviceType>
+</cim:ACLineSegment>
+<cim:ACLineSegment rdf:ID="13000000_17258173">
+<cim:IdentifiedObject.name>-连接线-</cim:IdentifiedObject.name>
+<cim:IdentifiedObject.bianhao></cim:IdentifiedObject.bianhao>
+<cim:PowerSystemResource.Circuit rdf:resource="#10000100_55694" />
+<cim:ConductingEquipment.BaseVoltage rdf:resource="#BaseVoltage_5"/>
+<iescim:PowerSystemResource.SubType>3</iescim:PowerSystemResource.SubType>
+<iescim:PowerSystemResource.DeviceID>5629499537102643</iescim:PowerSystemResource.DeviceID>
+<iescim:PowerSystemResource.DeviceType>20</iescim:PowerSystemResource.DeviceType>
+</cim:ACLineSegment>
+<cim:ACLineSegment rdf:ID="36000000_25356609">
+<cim:IdentifiedObject.name>点设备的连接线</cim:IdentifiedObject.name>
+<cim:IdentifiedObject.bianhao></cim:IdentifiedObject.bianhao>
+<cim:Equipment.EquipmentContainer rdf:resource="#30000006_1215151"/>
+<cim:PowerSystemResource.Circuit rdf:resource="#10000100_55694" />
+<cim:ConductingEquipment.BaseVoltage rdf:resource="#BaseVoltage_5"/>
+<iescim:PowerSystemResource.SubType>3</iescim:PowerSystemResource.SubType>
+<iescim:PowerSystemResource.DeviceID>5629499537239313</iescim:PowerSystemResource.DeviceID>
+<iescim:PowerSystemResource.DeviceType>20</iescim:PowerSystemResource.DeviceType>
+</cim:ACLineSegment>
+<cim:ACLineSegment rdf:ID="14000000_7853041">
+<cim:IdentifiedObject.name>连接线</cim:IdentifiedObject.name>
+<cim:IdentifiedObject.bianhao></cim:IdentifiedObject.bianhao>
+<cim:PowerSystemResource.Circuit rdf:resource="#10000100_55694" />
+<cim:ConductingEquipment.BaseVoltage rdf:resource="#BaseVoltage_5"/>
+<iescim:PowerSystemResource.SubType>1</iescim:PowerSystemResource.SubType>
+<iescim:PowerSystemResource.DeviceID>5629499537239314</iescim:PowerSystemResource.DeviceID>
+<iescim:PowerSystemResource.DeviceType>20</iescim:PowerSystemResource.DeviceType>
+</cim:ACLineSegment>
+<cim:ACLineSegment rdf:ID="10100000_10294571">
+<cim:IdentifiedObject.name>10kV麦龙支线#001-10kV麦龙支线#002导线</cim:IdentifiedObject.name>
+<cim:IdentifiedObject.bianhao></cim:IdentifiedObject.bianhao>
+<cim:PowerSystemResource.Circuit rdf:resource="#10000100_55694" />
+<cim:ConductingEquipment.BaseVoltage rdf:resource="#BaseVoltage_5"/>
+<iescim:PowerSystemResource.SubType>2</iescim:PowerSystemResource.SubType>
+<iescim:PowerSystemResource.DeviceID>5629499537524486</iescim:PowerSystemResource.DeviceID>
+<iescim:PowerSystemResource.DeviceType>20</iescim:PowerSystemResource.DeviceType>
+</cim:ACLineSegment>
+<cim:ACLineSegment rdf:ID="13000000_1523647642">
+<cim:IdentifiedObject.name>站外-连接线</cim:IdentifiedObject.name>
+<cim:IdentifiedObject.bianhao></cim:IdentifiedObject.bianhao>
+<cim:PowerSystemResource.Circuit rdf:resource="#10000100_55694" />
+<cim:ConductingEquipment.BaseVoltage rdf:resource="#BaseVoltage_5"/>
+<iescim:PowerSystemResource.SubType>3</iescim:PowerSystemResource.SubType>
+<iescim:PowerSystemResource.DeviceID>5629499537589313</iescim:PowerSystemResource.DeviceID>
+<iescim:PowerSystemResource.DeviceType>20</iescim:PowerSystemResource.DeviceType>
+</cim:ACLineSegment>
+<cim:ACLineSegment rdf:ID="10100000_1523649098">
+<cim:IdentifiedObject.name>10kV万古亭线#032杆32开关-10kV麦龙支线#001杆</cim:IdentifiedObject.name>
+<cim:IdentifiedObject.bianhao></cim:IdentifiedObject.bianhao>
+<cim:PowerSystemResource.Circuit rdf:resource="#10000100_55694" />
+<cim:ConductingEquipment.BaseVoltage rdf:resource="#BaseVoltage_5"/>
+<iescim:PowerSystemResource.SubType>2</iescim:PowerSystemResource.SubType>
+<iescim:PowerSystemResource.DeviceID>5629499537589314</iescim:PowerSystemResource.DeviceID>
+<iescim:PowerSystemResource.DeviceType>20</iescim:PowerSystemResource.DeviceType>
+</cim:ACLineSegment>
+<cim:Pole rdf:ID="10200001_6272407">
+<cim:IdentifiedObject.name>10kV石雕厂支线#006杆</cim:IdentifiedObject.name>
+<cim:IdentifiedObject.bianhao></cim:IdentifiedObject.bianhao>
+<cim:PowerSystemResource.Circuit rdf:resource="#10000100_55694" />
+<cim:ConductingEquipment.BaseVoltage rdf:resource="#BaseVoltage_5"/>
+<iescim:PowerSystemResource.DeviceType>43</iescim:PowerSystemResource.DeviceType>
+<iescim:PowerSystemResource.SubType>1</iescim:PowerSystemResource.SubType>
+<iescim:PowerSystemResource.DeviceID>12103423998567246</iescim:PowerSystemResource.DeviceID>
+</cim:Pole>
+<cim:Pole rdf:ID="10200001_6326627">
+<cim:IdentifiedObject.name>10kV石雕厂支线#001杆</cim:IdentifiedObject.name>
+<cim:IdentifiedObject.bianhao></cim:IdentifiedObject.bianhao>
+<cim:PowerSystemResource.Circuit rdf:resource="#10000100_55694" />
+<cim:ConductingEquipment.BaseVoltage rdf:resource="#BaseVoltage_5"/>
+<iescim:PowerSystemResource.DeviceType>43</iescim:PowerSystemResource.DeviceType>
+<iescim:PowerSystemResource.SubType>1</iescim:PowerSystemResource.SubType>
+<iescim:PowerSystemResource.DeviceID>12103423998567255</iescim:PowerSystemResource.DeviceID>
+</cim:Pole>
+<cim:Pole rdf:ID="10200001_6342003">
+<cim:IdentifiedObject.name>10kV麦德龙支线#003杆</cim:IdentifiedObject.name>
+<cim:IdentifiedObject.bianhao></cim:IdentifiedObject.bianhao>
+<cim:PowerSystemResource.Circuit rdf:resource="#10000100_55694" />
+<cim:ConductingEquipment.BaseVoltage rdf:resource="#BaseVoltage_5"/>
+<iescim:PowerSystemResource.DeviceType>43</iescim:PowerSystemResource.DeviceType>
+<iescim:PowerSystemResource.SubType>1</iescim:PowerSystemResource.SubType>
+<iescim:PowerSystemResource.DeviceID>12103423998567259</iescim:PowerSystemResource.DeviceID>
+</cim:Pole>
+<cim:Pole rdf:ID="10200001_6371423">
+<cim:IdentifiedObject.name>10kV石雕厂支线005杆</cim:IdentifiedObject.name>
+<cim:IdentifiedObject.bianhao></cim:IdentifiedObject.bianhao>
+<cim:PowerSystemResource.Circuit rdf:resource="#10000100_55694" />
+<cim:ConductingEquipment.BaseVoltage rdf:resource="#BaseVoltage_5"/>
+<iescim:PowerSystemResource.DeviceType>43</iescim:PowerSystemResource.DeviceType>
+<iescim:PowerSystemResource.SubType>1</iescim:PowerSystemResource.SubType>
+<iescim:PowerSystemResource.DeviceID>12103423998567265</iescim:PowerSystemResource.DeviceID>
+</cim:Pole>
+<cim:Pole rdf:ID="10200001_10381134">
+<cim:IdentifiedObject.name>10kV岭福线Ⅰ线#028杆</cim:IdentifiedObject.name>
+<cim:IdentifiedObject.bianhao></cim:IdentifiedObject.bianhao>
+<cim:PowerSystemResource.Circuit rdf:resource="#10000100_55694" />
+<cim:ConductingEquipment.BaseVoltage rdf:resource="#BaseVoltage_5"/>
+<iescim:PowerSystemResource.DeviceType>43</iescim:PowerSystemResource.DeviceType>
+<iescim:PowerSystemResource.SubType>1</iescim:PowerSystemResource.SubType>
+<iescim:PowerSystemResource.DeviceID>12103423998609978</iescim:PowerSystemResource.DeviceID>
+</cim:Pole>
+<cim:Pole rdf:ID="10200001_6326626">
+<cim:IdentifiedObject.name>10kV石雕厂支线#004杆</cim:IdentifiedObject.name>
+<cim:IdentifiedObject.bianhao></cim:IdentifiedObject.bianhao>
+<cim:PowerSystemResource.Circuit rdf:resource="#10000100_55694" />
+<cim:ConductingEquipment.BaseVoltage rdf:resource="#BaseVoltage_5"/>
+<iescim:PowerSystemResource.DeviceType>43</iescim:PowerSystemResource.DeviceType>
+<iescim:PowerSystemResource.SubType>1</iescim:PowerSystemResource.SubType>
+<iescim:PowerSystemResource.DeviceID>12103423998609980</iescim:PowerSystemResource.DeviceID>
+</cim:Pole>
+<cim:Pole rdf:ID="10200001_12864779">
+<cim:IdentifiedObject.name>10kV岭福线Ⅰ线#029杆</cim:IdentifiedObject.name>
+<cim:IdentifiedObject.bianhao></cim:IdentifiedObject.bianhao>
+<cim:PowerSystemResource.Circuit rdf:resource="#10000100_55694" />
+<cim:ConductingEquipment.BaseVoltage rdf:resource="#BaseVoltage_5"/>
+<iescim:PowerSystemResource.DeviceType>43</iescim:PowerSystemResource.DeviceType>
+<iescim:PowerSystemResource.SubType>1</iescim:PowerSystemResource.SubType>
+<iescim:PowerSystemResource.DeviceID>12103423998626127</iescim:PowerSystemResource.DeviceID>
+</cim:Pole>
+<cim:Pole rdf:ID="10200001_12864780">
+<cim:IdentifiedObject.name>10kV岭福线Ⅰ线#030杆</cim:IdentifiedObject.name>
+<cim:IdentifiedObject.bianhao></cim:IdentifiedObject.bianhao>
+<cim:PowerSystemResource.Circuit rdf:resource="#10000100_55694" />
+<cim:ConductingEquipment.BaseVoltage rdf:resource="#BaseVoltage_5"/>
+<iescim:PowerSystemResource.DeviceType>43</iescim:PowerSystemResource.DeviceType>
+<iescim:PowerSystemResource.SubType>1</iescim:PowerSystemResource.SubType>
+<iescim:PowerSystemResource.DeviceID>12103423998626308</iescim:PowerSystemResource.DeviceID>
+</cim:Pole>
+<cim:Pole rdf:ID="10200001_10381080">
+<cim:IdentifiedObject.name>10kV岭福线Ⅰ线#020杆</cim:IdentifiedObject.name>
+<cim:IdentifiedObject.bianhao></cim:IdentifiedObject.bianhao>
+<cim:PowerSystemResource.Circuit rdf:resource="#10000100_55694" />
+<cim:ConductingEquipment.BaseVoltage rdf:resource="#BaseVoltage_5"/>
+<iescim:PowerSystemResource.DeviceType>43</iescim:PowerSystemResource.DeviceType>
+<iescim:PowerSystemResource.SubType>1</iescim:PowerSystemResource.SubType>
+<iescim:PowerSystemResource.DeviceID>12103423998630168</iescim:PowerSystemResource.DeviceID>
+</cim:Pole>
+<cim:Pole rdf:ID="10200001_10382253">
+<cim:IdentifiedObject.name>10kV麦龙支线#001杆</cim:IdentifiedObject.name>
+<cim:IdentifiedObject.bianhao></cim:IdentifiedObject.bianhao>
+<cim:PowerSystemResource.Circuit rdf:resource="#10000100_55694" />
+<cim:ConductingEquipment.BaseVoltage rdf:resource="#BaseVoltage_5"/>
+<iescim:PowerSystemResource.DeviceType>43</iescim:PowerSystemResource.DeviceType>
+<iescim:PowerSystemResource.SubType>1</iescim:PowerSystemResource.SubType>
+<iescim:PowerSystemResource.DeviceID>12103423998637093</iescim:PowerSystemResource.DeviceID>
+</cim:Pole>
+<cim:ConnectivityNode rdf:ID="0">
+<iescim:PowerSystemResource.SubType>0</iescim:PowerSystemResource.SubType>
+<iescim:PowerSystemResource.DeviceID>0</iescim:PowerSystemResource.DeviceID>
+<iescim:PowerSystemResource.DeviceType>33</iescim:PowerSystemResource.DeviceType>
+</cim:ConnectivityNode>
+<cim:ConnectivityNode rdf:ID="9288674231457723">
+<iescim:PowerSystemResource.SubType>0</iescim:PowerSystemResource.SubType>
+<iescim:PowerSystemResource.DeviceID>9288674231457723</iescim:PowerSystemResource.DeviceID>
+<iescim:PowerSystemResource.DeviceType>33</iescim:PowerSystemResource.DeviceType>
+</cim:ConnectivityNode>
+<cim:ConnectivityNode rdf:ID="9288674231462763">
+<iescim:PowerSystemResource.SubType>0</iescim:PowerSystemResource.SubType>
+<iescim:PowerSystemResource.DeviceID>9288674231462763</iescim:PowerSystemResource.DeviceID>
+<iescim:PowerSystemResource.DeviceType>33</iescim:PowerSystemResource.DeviceType>
+</cim:ConnectivityNode>
+<cim:ConnectivityNode rdf:ID="9288674231485935">
+<iescim:PowerSystemResource.SubType>0</iescim:PowerSystemResource.SubType>
+<iescim:PowerSystemResource.DeviceID>9288674231485935</iescim:PowerSystemResource.DeviceID>
+<iescim:PowerSystemResource.DeviceType>33</iescim:PowerSystemResource.DeviceType>
+</cim:ConnectivityNode>
+<cim:ConnectivityNode rdf:ID="9288674231489592">
+<iescim:PowerSystemResource.SubType>0</iescim:PowerSystemResource.SubType>
+<iescim:PowerSystemResource.DeviceID>9288674231489592</iescim:PowerSystemResource.DeviceID>
+<iescim:PowerSystemResource.DeviceType>33</iescim:PowerSystemResource.DeviceType>
+</cim:ConnectivityNode>
+<cim:ConnectivityNode rdf:ID="9288674231490438">
+<iescim:PowerSystemResource.SubType>0</iescim:PowerSystemResource.SubType>
+<iescim:PowerSystemResource.DeviceID>9288674231490438</iescim:PowerSystemResource.DeviceID>
+<iescim:PowerSystemResource.DeviceType>33</iescim:PowerSystemResource.DeviceType>
+</cim:ConnectivityNode>
+<cim:ConnectivityNode rdf:ID="9288674231491015">
+<iescim:PowerSystemResource.SubType>0</iescim:PowerSystemResource.SubType>
+<iescim:PowerSystemResource.DeviceID>9288674231491015</iescim:PowerSystemResource.DeviceID>
+<iescim:PowerSystemResource.DeviceType>33</iescim:PowerSystemResource.DeviceType>
+</cim:ConnectivityNode>
+<cim:ConnectivityNode rdf:ID="9288674231500116">
+<iescim:PowerSystemResource.SubType>0</iescim:PowerSystemResource.SubType>
+<iescim:PowerSystemResource.DeviceID>9288674231500116</iescim:PowerSystemResource.DeviceID>
+<iescim:PowerSystemResource.DeviceType>33</iescim:PowerSystemResource.DeviceType>
+</cim:ConnectivityNode>
+<cim:ConnectivityNode rdf:ID="9288674231506526">
+<iescim:PowerSystemResource.SubType>0</iescim:PowerSystemResource.SubType>
+<iescim:PowerSystemResource.DeviceID>9288674231506526</iescim:PowerSystemResource.DeviceID>
+<iescim:PowerSystemResource.DeviceType>33</iescim:PowerSystemResource.DeviceType>
+</cim:ConnectivityNode>
+<cim:ConnectivityNode rdf:ID="9288674231530551">
+<iescim:PowerSystemResource.SubType>0</iescim:PowerSystemResource.SubType>
+<iescim:PowerSystemResource.DeviceID>9288674231530551</iescim:PowerSystemResource.DeviceID>
+<iescim:PowerSystemResource.DeviceType>33</iescim:PowerSystemResource.DeviceType>
+</cim:ConnectivityNode>
+<cim:ConnectivityNode rdf:ID="9288674231534299">
+<iescim:PowerSystemResource.SubType>0</iescim:PowerSystemResource.SubType>
+<iescim:PowerSystemResource.DeviceID>9288674231534299</iescim:PowerSystemResource.DeviceID>
+<iescim:PowerSystemResource.DeviceType>33</iescim:PowerSystemResource.DeviceType>
+</cim:ConnectivityNode>
+<cim:ConnectivityNode rdf:ID="9288674231535146">
+<iescim:PowerSystemResource.SubType>0</iescim:PowerSystemResource.SubType>
+<iescim:PowerSystemResource.DeviceID>9288674231535146</iescim:PowerSystemResource.DeviceID>
+<iescim:PowerSystemResource.DeviceType>33</iescim:PowerSystemResource.DeviceType>
+</cim:ConnectivityNode>
+<cim:ConnectivityNode rdf:ID="9288674231535723">
+<iescim:PowerSystemResource.SubType>0</iescim:PowerSystemResource.SubType>
+<iescim:PowerSystemResource.DeviceID>9288674231535723</iescim:PowerSystemResource.DeviceID>
+<iescim:PowerSystemResource.DeviceType>33</iescim:PowerSystemResource.DeviceType>
+</cim:ConnectivityNode>
+<cim:ConnectivityNode rdf:ID="9288674231544889">
+<iescim:PowerSystemResource.SubType>0</iescim:PowerSystemResource.SubType>
+<iescim:PowerSystemResource.DeviceID>9288674231544889</iescim:PowerSystemResource.DeviceID>
+<iescim:PowerSystemResource.DeviceType>33</iescim:PowerSystemResource.DeviceType>
+</cim:ConnectivityNode>
+<cim:ConnectivityNode rdf:ID="9288674231558755">
+<iescim:PowerSystemResource.SubType>0</iescim:PowerSystemResource.SubType>
+<iescim:PowerSystemResource.DeviceID>9288674231558755</iescim:PowerSystemResource.DeviceID>
+<iescim:PowerSystemResource.DeviceType>33</iescim:PowerSystemResource.DeviceType>
+</cim:ConnectivityNode>
+<cim:ConnectivityNode rdf:ID="9288674231558789">
+<iescim:PowerSystemResource.SubType>0</iescim:PowerSystemResource.SubType>
+<iescim:PowerSystemResource.DeviceID>9288674231558789</iescim:PowerSystemResource.DeviceID>
+<iescim:PowerSystemResource.DeviceType>33</iescim:PowerSystemResource.DeviceType>
+</cim:ConnectivityNode>
+<cim:ConnectivityNode rdf:ID="9288674231558818">
+<iescim:PowerSystemResource.SubType>0</iescim:PowerSystemResource.SubType>
+<iescim:PowerSystemResource.DeviceID>9288674231558818</iescim:PowerSystemResource.DeviceID>
+<iescim:PowerSystemResource.DeviceType>33</iescim:PowerSystemResource.DeviceType>
+</cim:ConnectivityNode>
+<cim:ConnectivityNode rdf:ID="9288674231592951">
+<iescim:PowerSystemResource.SubType>0</iescim:PowerSystemResource.SubType>
+<iescim:PowerSystemResource.DeviceID>9288674231592951</iescim:PowerSystemResource.DeviceID>
+<iescim:PowerSystemResource.DeviceType>33</iescim:PowerSystemResource.DeviceType>
+</cim:ConnectivityNode>
+<cim:ConnectivityNode rdf:ID="9288674231619766">
+<iescim:PowerSystemResource.SubType>0</iescim:PowerSystemResource.SubType>
+<iescim:PowerSystemResource.DeviceID>9288674231619766</iescim:PowerSystemResource.DeviceID>
+<iescim:PowerSystemResource.DeviceType>33</iescim:PowerSystemResource.DeviceType>
+</cim:ConnectivityNode>
+<cim:ConnectivityNode rdf:ID="9288674231628186">
+<iescim:PowerSystemResource.SubType>0</iescim:PowerSystemResource.SubType>
+<iescim:PowerSystemResource.DeviceID>9288674231628186</iescim:PowerSystemResource.DeviceID>
+<iescim:PowerSystemResource.DeviceType>33</iescim:PowerSystemResource.DeviceType>
+</cim:ConnectivityNode>
+<cim:ConnectivityNode rdf:ID="9288674231650490">
+<iescim:PowerSystemResource.SubType>0</iescim:PowerSystemResource.SubType>
+<iescim:PowerSystemResource.DeviceID>9288674231650490</iescim:PowerSystemResource.DeviceID>
+<iescim:PowerSystemResource.DeviceType>33</iescim:PowerSystemResource.DeviceType>
+</cim:ConnectivityNode>
+<cim:ConnectivityNode rdf:ID="9288674231662339">
+<iescim:PowerSystemResource.SubType>0</iescim:PowerSystemResource.SubType>
+<iescim:PowerSystemResource.DeviceID>9288674231662339</iescim:PowerSystemResource.DeviceID>
+<iescim:PowerSystemResource.DeviceType>33</iescim:PowerSystemResource.DeviceType>
+</cim:ConnectivityNode>
+<cim:ConnectivityNode rdf:ID="9288674231662373">
+<iescim:PowerSystemResource.SubType>0</iescim:PowerSystemResource.SubType>
+<iescim:PowerSystemResource.DeviceID>9288674231662373</iescim:PowerSystemResource.DeviceID>
+<iescim:PowerSystemResource.DeviceType>33</iescim:PowerSystemResource.DeviceType>
+</cim:ConnectivityNode>
+<cim:ConnectivityNode rdf:ID="9288674231662402">
+<iescim:PowerSystemResource.SubType>0</iescim:PowerSystemResource.SubType>
+<iescim:PowerSystemResource.DeviceID>9288674231662402</iescim:PowerSystemResource.DeviceID>
+<iescim:PowerSystemResource.DeviceType>33</iescim:PowerSystemResource.DeviceType>
+</cim:ConnectivityNode>
+<cim:ConnectivityNode rdf:ID="9288674231693519">
+<iescim:PowerSystemResource.SubType>0</iescim:PowerSystemResource.SubType>
+<iescim:PowerSystemResource.DeviceID>9288674231693519</iescim:PowerSystemResource.DeviceID>
+<iescim:PowerSystemResource.DeviceType>33</iescim:PowerSystemResource.DeviceType>
+</cim:ConnectivityNode>
+<cim:ConnectivityNode rdf:ID="9288674231712077">
+<iescim:PowerSystemResource.SubType>0</iescim:PowerSystemResource.SubType>
+<iescim:PowerSystemResource.DeviceID>9288674231712077</iescim:PowerSystemResource.DeviceID>
+<iescim:PowerSystemResource.DeviceType>33</iescim:PowerSystemResource.DeviceType>
+</cim:ConnectivityNode>
+<cim:ConnectivityNode rdf:ID="9288674231717595">
+<iescim:PowerSystemResource.SubType>0</iescim:PowerSystemResource.SubType>
+<iescim:PowerSystemResource.DeviceID>9288674231717595</iescim:PowerSystemResource.DeviceID>
+<iescim:PowerSystemResource.DeviceType>33</iescim:PowerSystemResource.DeviceType>
+</cim:ConnectivityNode>
+<cim:ConnectivityNode rdf:ID="9288674231732206">
+<iescim:PowerSystemResource.SubType>0</iescim:PowerSystemResource.SubType>
+<iescim:PowerSystemResource.DeviceID>9288674231732206</iescim:PowerSystemResource.DeviceID>
+<iescim:PowerSystemResource.DeviceType>33</iescim:PowerSystemResource.DeviceType>
+</cim:ConnectivityNode>
+<cim:ConnectivityNode rdf:ID="9288674231738614">
+<iescim:PowerSystemResource.SubType>0</iescim:PowerSystemResource.SubType>
+<iescim:PowerSystemResource.DeviceID>9288674231738614</iescim:PowerSystemResource.DeviceID>
+<iescim:PowerSystemResource.DeviceType>33</iescim:PowerSystemResource.DeviceType>
+</cim:ConnectivityNode>
+<cim:ConnectivityNode rdf:ID="9288674231738615">
+<iescim:PowerSystemResource.SubType>0</iescim:PowerSystemResource.SubType>
+<iescim:PowerSystemResource.DeviceID>9288674231738615</iescim:PowerSystemResource.DeviceID>
+<iescim:PowerSystemResource.DeviceType>33</iescim:PowerSystemResource.DeviceType>
+</cim:ConnectivityNode>
+<cim:ConnectivityNode rdf:ID="9288674231777212">
+<iescim:PowerSystemResource.SubType>0</iescim:PowerSystemResource.SubType>
+<iescim:PowerSystemResource.DeviceID>9288674231777212</iescim:PowerSystemResource.DeviceID>
+<iescim:PowerSystemResource.DeviceType>33</iescim:PowerSystemResource.DeviceType>
+</cim:ConnectivityNode>
+<cim:ConnectivityNode rdf:ID="9288674231777217">
+<iescim:PowerSystemResource.SubType>0</iescim:PowerSystemResource.SubType>
+<iescim:PowerSystemResource.DeviceID>9288674231777217</iescim:PowerSystemResource.DeviceID>
+<iescim:PowerSystemResource.DeviceType>33</iescim:PowerSystemResource.DeviceType>
+</cim:ConnectivityNode>
+<cim:ConnectivityNode rdf:ID="9288674231777226">
+<iescim:PowerSystemResource.SubType>0</iescim:PowerSystemResource.SubType>
+<iescim:PowerSystemResource.DeviceID>9288674231777226</iescim:PowerSystemResource.DeviceID>
+<iescim:PowerSystemResource.DeviceType>33</iescim:PowerSystemResource.DeviceType>
+</cim:ConnectivityNode>
+<cim:ConnectivityNode rdf:ID="9288674231777229">
+<iescim:PowerSystemResource.SubType>0</iescim:PowerSystemResource.SubType>
+<iescim:PowerSystemResource.DeviceID>9288674231777229</iescim:PowerSystemResource.DeviceID>
+<iescim:PowerSystemResource.DeviceType>33</iescim:PowerSystemResource.DeviceType>
+</cim:ConnectivityNode>
+<cim:ConnectivityNode rdf:ID="9288674231812209">
+<iescim:PowerSystemResource.SubType>0</iescim:PowerSystemResource.SubType>
+<iescim:PowerSystemResource.DeviceID>9288674231812209</iescim:PowerSystemResource.DeviceID>
+<iescim:PowerSystemResource.DeviceType>33</iescim:PowerSystemResource.DeviceType>
+</cim:ConnectivityNode>
+<cim:ConnectivityNode rdf:ID="9288674231851141">
+<iescim:PowerSystemResource.SubType>0</iescim:PowerSystemResource.SubType>
+<iescim:PowerSystemResource.DeviceID>9288674231851141</iescim:PowerSystemResource.DeviceID>
+<iescim:PowerSystemResource.DeviceType>33</iescim:PowerSystemResource.DeviceType>
+</cim:ConnectivityNode>
+<cim:ConnectivityNode rdf:ID="9288674231851142">
+<iescim:PowerSystemResource.SubType>0</iescim:PowerSystemResource.SubType>
+<iescim:PowerSystemResource.DeviceID>9288674231851142</iescim:PowerSystemResource.DeviceID>
+<iescim:PowerSystemResource.DeviceType>33</iescim:PowerSystemResource.DeviceType>
+</cim:ConnectivityNode>
+<cim:ConnectivityNode rdf:ID="9288674231851589">
+<iescim:PowerSystemResource.SubType>0</iescim:PowerSystemResource.SubType>
+<iescim:PowerSystemResource.DeviceID>9288674231851589</iescim:PowerSystemResource.DeviceID>
+<iescim:PowerSystemResource.DeviceType>33</iescim:PowerSystemResource.DeviceType>
+</cim:ConnectivityNode>
+<cim:ConnectivityNode rdf:ID="9288674231851590">
+<iescim:PowerSystemResource.SubType>0</iescim:PowerSystemResource.SubType>
+<iescim:PowerSystemResource.DeviceID>9288674231851590</iescim:PowerSystemResource.DeviceID>
+<iescim:PowerSystemResource.DeviceType>33</iescim:PowerSystemResource.DeviceType>
+</cim:ConnectivityNode>
+<cim:ConnectivityNode rdf:ID="9288674231851591">
+<iescim:PowerSystemResource.SubType>0</iescim:PowerSystemResource.SubType>
+<iescim:PowerSystemResource.DeviceID>9288674231851591</iescim:PowerSystemResource.DeviceID>
+<iescim:PowerSystemResource.DeviceType>33</iescim:PowerSystemResource.DeviceType>
+</cim:ConnectivityNode>
+<cim:ConnectivityNode rdf:ID="9288674231864624">
+<iescim:PowerSystemResource.SubType>0</iescim:PowerSystemResource.SubType>
+<iescim:PowerSystemResource.DeviceID>9288674231864624</iescim:PowerSystemResource.DeviceID>
+<iescim:PowerSystemResource.DeviceType>33</iescim:PowerSystemResource.DeviceType>
+</cim:ConnectivityNode>
+<cim:ConnectivityNode rdf:ID="9288674231864629">
+<iescim:PowerSystemResource.SubType>0</iescim:PowerSystemResource.SubType>
+<iescim:PowerSystemResource.DeviceID>9288674231864629</iescim:PowerSystemResource.DeviceID>
+<iescim:PowerSystemResource.DeviceType>33</iescim:PowerSystemResource.DeviceType>
+</cim:ConnectivityNode>
+<cim:ConnectivityNode rdf:ID="9288674231871342">
+<iescim:PowerSystemResource.SubType>0</iescim:PowerSystemResource.SubType>
+<iescim:PowerSystemResource.DeviceID>9288674231871342</iescim:PowerSystemResource.DeviceID>
+<iescim:PowerSystemResource.DeviceType>33</iescim:PowerSystemResource.DeviceType>
+</cim:ConnectivityNode>
+<cim:ConnectivityNode rdf:ID="9288674231890139">
+<iescim:PowerSystemResource.SubType>0</iescim:PowerSystemResource.SubType>
+<iescim:PowerSystemResource.DeviceID>9288674231890139</iescim:PowerSystemResource.DeviceID>
+<iescim:PowerSystemResource.DeviceType>33</iescim:PowerSystemResource.DeviceType>
+</cim:ConnectivityNode>
+<cim:ConnectivityNode rdf:ID="9288674231901683">
+<iescim:PowerSystemResource.SubType>0</iescim:PowerSystemResource.SubType>
+<iescim:PowerSystemResource.DeviceID>9288674231901683</iescim:PowerSystemResource.DeviceID>
+<iescim:PowerSystemResource.DeviceType>33</iescim:PowerSystemResource.DeviceType>
+</cim:ConnectivityNode>
+<cim:ConnectivityNode rdf:ID="9288674231901688">
+<iescim:PowerSystemResource.SubType>0</iescim:PowerSystemResource.SubType>
+<iescim:PowerSystemResource.DeviceID>9288674231901688</iescim:PowerSystemResource.DeviceID>
+<iescim:PowerSystemResource.DeviceType>33</iescim:PowerSystemResource.DeviceType>
+</cim:ConnectivityNode>
+<cim:ConnectivityNode rdf:ID="9288674231920484">
+<iescim:PowerSystemResource.SubType>0</iescim:PowerSystemResource.SubType>
+<iescim:PowerSystemResource.DeviceID>9288674231920484</iescim:PowerSystemResource.DeviceID>
+<iescim:PowerSystemResource.DeviceType>33</iescim:PowerSystemResource.DeviceType>
+</cim:ConnectivityNode>
+<cim:Terminal rdf:ID="11100000_848625_1">
+<cim:Terminal.ConductingEquipment rdf:resource="#11100000_848625"/>
+<cim:Terminal.ConnectivityNode rdf:resource="#9288674231485935"/>
+</cim:Terminal>
+<cim:Terminal rdf:ID="11100000_848625_2">
+<cim:Terminal.ConductingEquipment rdf:resource="#11100000_848625"/>
+<cim:Terminal.ConnectivityNode rdf:resource="#9288674231530551"/>
+</cim:Terminal>
+<cim:Terminal rdf:ID="20200000_391477_1">
+<cim:Terminal.ConductingEquipment rdf:resource="#20200000_391477"/>
+<cim:Terminal.ConnectivityNode rdf:resource="#9288674231777229"/>
+</cim:Terminal>
+<cim:Terminal rdf:ID="20200000_558003_1">
+<cim:Terminal.ConductingEquipment rdf:resource="#20200000_558003"/>
+<cim:Terminal.ConnectivityNode rdf:resource="#9288674231901688"/>
+</cim:Terminal>
+<cim:Terminal rdf:ID="5132472">
+<cim:Terminal.ConductingEquipment rdf:resource="#30500000_2317796"/>
+<cim:Terminal.ConnectivityNode rdf:resource="#9288674231489592"/>
+</cim:Terminal>
+<cim:Terminal rdf:ID="5132473">
+<cim:Terminal.ConductingEquipment rdf:resource="#30500000_2317796"/>
+<cim:Terminal.ConnectivityNode rdf:resource="#9288674231534299"/>
+</cim:Terminal>
+<cim:Terminal rdf:ID="11100000_929160_1">
+<cim:Terminal.ConductingEquipment rdf:resource="#11100000_929160"/>
+<cim:Terminal.ConnectivityNode rdf:resource="#9288674231490438"/>
+</cim:Terminal>
+<cim:Terminal rdf:ID="11100000_929160_2">
+<cim:Terminal.ConductingEquipment rdf:resource="#11100000_929160"/>
+<cim:Terminal.ConnectivityNode rdf:resource="#9288674231535146"/>
+</cim:Terminal>
+<cim:Terminal rdf:ID="11100000_215866_1">
+<cim:Terminal.ConductingEquipment rdf:resource="#11100000_215866"/>
+<cim:Terminal.ConnectivityNode rdf:resource="#9288674231462763"/>
+</cim:Terminal>
+<cim:Terminal rdf:ID="11100000_215866_2">
+<cim:Terminal.ConductingEquipment rdf:resource="#11100000_215866"/>
+<cim:Terminal.ConnectivityNode rdf:resource="#9288674231506526"/>
+</cim:Terminal>
+<cim:Terminal rdf:ID="11100000_940834_1">
+<cim:Terminal.ConductingEquipment rdf:resource="#11100000_940834"/>
+<cim:Terminal.ConnectivityNode rdf:resource="#9288674231491015"/>
+</cim:Terminal>
+<cim:Terminal rdf:ID="11100000_940834_2">
+<cim:Terminal.ConductingEquipment rdf:resource="#11100000_940834"/>
+<cim:Terminal.ConnectivityNode rdf:resource="#9288674231535723"/>
+</cim:Terminal>
+<cim:Terminal rdf:ID="11300000_3648300_1">
+<cim:Terminal.ConductingEquipment rdf:resource="#11300000_3648300"/>
+<cim:Terminal.ConnectivityNode rdf:resource="#9288674231619766"/>
+</cim:Terminal>
+<cim:Terminal rdf:ID="11300000_3648300_2">
+<cim:Terminal.ConductingEquipment rdf:resource="#11300000_3648300"/>
+<cim:Terminal.ConnectivityNode rdf:resource="#9288674231712077"/>
+</cim:Terminal>
+<cim:Terminal rdf:ID="5132480">
+<cim:Terminal.ConductingEquipment rdf:resource="#30600001_3627963"/>
+<cim:Terminal.ConnectivityNode rdf:resource="#9288674231534299"/>
+</cim:Terminal>
+<cim:Terminal rdf:ID="5132476">
+<cim:Terminal.ConductingEquipment rdf:resource="#5132474"/>
+<cim:Terminal.ConnectivityNode rdf:resource="#9288674231457723"/>
+</cim:Terminal>
+<cim:Terminal rdf:ID="5132477">
+<cim:Terminal.ConductingEquipment rdf:resource="#5132474"/>
+<cim:Terminal.ConnectivityNode rdf:resource="#9288674231489592"/>
+</cim:Terminal>
+<cim:Terminal rdf:ID="11300000_3864510_1">
+<cim:Terminal.ConductingEquipment rdf:resource="#11300000_3864510"/>
+<cim:Terminal.ConnectivityNode rdf:resource="#9288674231628186"/>
+</cim:Terminal>
+<cim:Terminal rdf:ID="11300000_3864510_2">
+<cim:Terminal.ConductingEquipment rdf:resource="#11300000_3864510"/>
+<cim:Terminal.ConnectivityNode rdf:resource="#9288674231717595"/>
+</cim:Terminal>
+<cim:Terminal rdf:ID="20200000_2315250_1">
+<cim:Terminal.ConductingEquipment rdf:resource="#20200000_2315250"/>
+<cim:Terminal.ConnectivityNode rdf:resource="#9288674231851589"/>
+</cim:Terminal>
+<cim:Terminal rdf:ID="20200000_2315249_1">
+<cim:Terminal.ConductingEquipment rdf:resource="#20200000_2315249"/>
+<cim:Terminal.ConnectivityNode rdf:resource="#9288674231851141"/>
+</cim:Terminal>
+<cim:Terminal rdf:ID="20100000_1531203_1">
+<cim:Terminal.ConductingEquipment rdf:resource="#20100000_1531203"/>
+<cim:Terminal.ConnectivityNode rdf:resource="#9288674231851141"/>
+</cim:Terminal>
+<cim:Terminal rdf:ID="20100000_1531203_2">
+<cim:Terminal.ConductingEquipment rdf:resource="#20100000_1531203"/>
+<cim:Terminal.ConnectivityNode rdf:resource="#9288674231851589"/>
+</cim:Terminal>
+<cim:Terminal rdf:ID="13000000_16540955_1">
+<cim:Terminal.ConductingEquipment rdf:resource="#13000000_16540955"/>
+<cim:Terminal.ConnectivityNode rdf:resource="#9288674231851142"/>
+</cim:Terminal>
+<cim:Terminal rdf:ID="13000000_16540955_2">
+<cim:Terminal.ConductingEquipment rdf:resource="#13000000_16540955"/>
+<cim:Terminal.ConnectivityNode rdf:resource="#9288674231851141"/>
+</cim:Terminal>
+<cim:Terminal rdf:ID="13000000_16540730_1">
+<cim:Terminal.ConductingEquipment rdf:resource="#13000000_16540730"/>
+<cim:Terminal.ConnectivityNode rdf:resource="#9288674231693519"/>
+</cim:Terminal>
+<cim:Terminal rdf:ID="13000000_16540730_2">
+<cim:Terminal.ConductingEquipment rdf:resource="#13000000_16540730"/>
+<cim:Terminal.ConnectivityNode rdf:resource="#9288674231485935"/>
+</cim:Terminal>
+<cim:Terminal rdf:ID="10100000_12830320_1">
+<cim:Terminal.ConductingEquipment rdf:resource="#10100000_12830320"/>
+<cim:Terminal.ConnectivityNode rdf:resource="#9288674231530551"/>
+</cim:Terminal>
+<cim:Terminal rdf:ID="10100000_12830320_2">
+<cim:Terminal.ConductingEquipment rdf:resource="#10100000_12830320"/>
+<cim:Terminal.ConnectivityNode rdf:resource="#9288674231851142"/>
+</cim:Terminal>
+<cim:Terminal rdf:ID="13000000_16580921_1">
+<cim:Terminal.ConductingEquipment rdf:resource="#13000000_16580921"/>
+<cim:Terminal.ConnectivityNode rdf:resource="#9288674231777212"/>
+</cim:Terminal>
+<cim:Terminal rdf:ID="13000000_16580921_2">
+<cim:Terminal.ConductingEquipment rdf:resource="#13000000_16580921"/>
+<cim:Terminal.ConnectivityNode rdf:resource="#9288674231712077"/>
+</cim:Terminal>
+<cim:Terminal rdf:ID="13000000_16540969_1">
+<cim:Terminal.ConductingEquipment rdf:resource="#13000000_16540969"/>
+<cim:Terminal.ConnectivityNode rdf:resource="#9288674231851589"/>
+</cim:Terminal>
+<cim:Terminal rdf:ID="13000000_16540969_2">
+<cim:Terminal.ConductingEquipment rdf:resource="#13000000_16540969"/>
+<cim:Terminal.ConnectivityNode rdf:resource="#9288674231851591"/>
+</cim:Terminal>
+<cim:Terminal rdf:ID="10100000_6184144_1">
+<cim:Terminal.ConductingEquipment rdf:resource="#10100000_6184144"/>
+<cim:Terminal.ConnectivityNode rdf:resource="#9288674231851590"/>
+</cim:Terminal>
+<cim:Terminal rdf:ID="10100000_6184144_2">
+<cim:Terminal.ConductingEquipment rdf:resource="#10100000_6184144"/>
+<cim:Terminal.ConnectivityNode rdf:resource="#9288674231777212"/>
+</cim:Terminal>
+<cim:Terminal rdf:ID="10100000_12858682_1">
+<cim:Terminal.ConductingEquipment rdf:resource="#10100000_12858682"/>
+<cim:Terminal.ConnectivityNode rdf:resource="#9288674231851591"/>
+</cim:Terminal>
+<cim:Terminal rdf:ID="10100000_12858682_2">
+<cim:Terminal.ConductingEquipment rdf:resource="#10100000_12858682"/>
+<cim:Terminal.ConnectivityNode rdf:resource="#9288674231619766"/>
+</cim:Terminal>
+<cim:Terminal rdf:ID="11300000_1523640387_1">
+<cim:Terminal.ConductingEquipment rdf:resource="#11300000_1523640387"/>
+<cim:Terminal.ConnectivityNode rdf:resource="#9288674231650490"/>
+</cim:Terminal>
+<cim:Terminal rdf:ID="11300000_1523640387_2">
+<cim:Terminal.ConductingEquipment rdf:resource="#11300000_1523640387"/>
+<cim:Terminal.ConnectivityNode rdf:resource="#9288674231732206"/>
+</cim:Terminal>
+<cim:Terminal rdf:ID="11100000_1518220480_1">
+<cim:Terminal.ConductingEquipment rdf:resource="#11100000_1518220480"/>
+<cim:Terminal.ConnectivityNode rdf:resource="#9288674231500116"/>
+</cim:Terminal>
+<cim:Terminal rdf:ID="11100000_1518220480_2">
+<cim:Terminal.ConductingEquipment rdf:resource="#11100000_1518220480"/>
+<cim:Terminal.ConnectivityNode rdf:resource="#9288674231544889"/>
+</cim:Terminal>
+<cim:Terminal rdf:ID="32000000_5594277_1">
+<cim:Terminal.ConductingEquipment rdf:resource="#32000000_5594277"/>
+<cim:Terminal.ConnectivityNode rdf:resource="#9288674231534299"/>
+</cim:Terminal>
+<cim:Terminal rdf:ID="20200000_2514813_1">
+<cim:Terminal.ConductingEquipment rdf:resource="#20200000_2514813"/>
+<cim:Terminal.ConnectivityNode rdf:resource="#9288674231920484"/>
+</cim:Terminal>
+<cim:Terminal rdf:ID="20200000_2514812_1">
+<cim:Terminal.ConductingEquipment rdf:resource="#20200000_2514812"/>
+<cim:Terminal.ConnectivityNode rdf:resource="#9288674231864624"/>
+</cim:Terminal>
+<cim:Terminal rdf:ID="13000000_13383229_1">
+<cim:Terminal.ConductingEquipment rdf:resource="#13000000_13383229"/>
+<cim:Terminal.ConnectivityNode rdf:resource="#9288674231812209"/>
+</cim:Terminal>
+<cim:Terminal rdf:ID="13000000_13383229_2">
+<cim:Terminal.ConductingEquipment rdf:resource="#13000000_13383229"/>
+<cim:Terminal.ConnectivityNode rdf:resource="#9288674231592951"/>
+</cim:Terminal>
+<cim:Terminal rdf:ID="10100000_6367643_1">
+<cim:Terminal.ConductingEquipment rdf:resource="#10100000_6367643"/>
+<cim:Terminal.ConnectivityNode rdf:resource="#9288674231777226"/>
+</cim:Terminal>
+<cim:Terminal rdf:ID="10100000_6367643_2">
+<cim:Terminal.ConductingEquipment rdf:resource="#10100000_6367643"/>
+<cim:Terminal.ConnectivityNode rdf:resource="#9288674231851590"/>
+</cim:Terminal>
+<cim:Terminal rdf:ID="32000000_5850678_1">
+<cim:Terminal.ConductingEquipment rdf:resource="#32000000_5850678"/>
+<cim:Terminal.ConnectivityNode rdf:resource="#9288674231871342"/>
+</cim:Terminal>
+<cim:Terminal rdf:ID="11300000_1264414_1">
+<cim:Terminal.ConductingEquipment rdf:resource="#11300000_1264414"/>
+<cim:Terminal.ConnectivityNode rdf:resource="#9288674231558755"/>
+</cim:Terminal>
+<cim:Terminal rdf:ID="11300000_1264414_2">
+<cim:Terminal.ConductingEquipment rdf:resource="#11300000_1264414"/>
+<cim:Terminal.ConnectivityNode rdf:resource="#9288674231662339"/>
+</cim:Terminal>
+<cim:Terminal rdf:ID="11300000_1268499_1">
+<cim:Terminal.ConductingEquipment rdf:resource="#11300000_1268499"/>
+<cim:Terminal.ConnectivityNode rdf:resource="#9288674231558789"/>
+</cim:Terminal>
+<cim:Terminal rdf:ID="11300000_1268499_2">
+<cim:Terminal.ConductingEquipment rdf:resource="#11300000_1268499"/>
+<cim:Terminal.ConnectivityNode rdf:resource="#9288674231662373"/>
+</cim:Terminal>
+<cim:Terminal rdf:ID="11500000_676507_1">
+<cim:Terminal.ConductingEquipment rdf:resource="#11500000_676507"/>
+<cim:Terminal.ConnectivityNode rdf:resource="#9288674231558818"/>
+</cim:Terminal>
+<cim:Terminal rdf:ID="11500000_676507_2">
+<cim:Terminal.ConductingEquipment rdf:resource="#11500000_676507"/>
+<cim:Terminal.ConnectivityNode rdf:resource="#9288674231662402"/>
+</cim:Terminal>
+<cim:Terminal rdf:ID="20100000_1650332_1">
+<cim:Terminal.ConductingEquipment rdf:resource="#20100000_1650332"/>
+<cim:Terminal.ConnectivityNode rdf:resource="#9288674231864624"/>
+</cim:Terminal>
+<cim:Terminal rdf:ID="20100000_1650332_2">
+<cim:Terminal.ConductingEquipment rdf:resource="#20100000_1650332"/>
+<cim:Terminal.ConnectivityNode rdf:resource="#9288674231920484"/>
+</cim:Terminal>
+<cim:Terminal rdf:ID="14000000_7772439_1">
+<cim:Terminal.ConductingEquipment rdf:resource="#14000000_7772439"/>
+<cim:Terminal.ConnectivityNode rdf:resource="#9288674231534299"/>
+</cim:Terminal>
+<cim:Terminal rdf:ID="14000000_7772439_2">
+<cim:Terminal.ConductingEquipment rdf:resource="#14000000_7772439"/>
+<cim:Terminal.ConnectivityNode rdf:resource="#9288674231864624"/>
+</cim:Terminal>
+<cim:Terminal rdf:ID="13000000_17174269_1">
+<cim:Terminal.ConductingEquipment rdf:resource="#13000000_17174269"/>
+<cim:Terminal.ConnectivityNode rdf:resource="#9288674231535146"/>
+</cim:Terminal>
+<cim:Terminal rdf:ID="13000000_17174269_2">
+<cim:Terminal.ConductingEquipment rdf:resource="#13000000_17174269"/>
+<cim:Terminal.ConnectivityNode rdf:resource="#9288674231920484"/>
+</cim:Terminal>
+<cim:Terminal rdf:ID="10100000_10293426_1">
+<cim:Terminal.ConductingEquipment rdf:resource="#10100000_10293426"/>
+<cim:Terminal.ConnectivityNode rdf:resource="#9288674231864629"/>
+</cim:Terminal>
+<cim:Terminal rdf:ID="10100000_10293426_2">
+<cim:Terminal.ConductingEquipment rdf:resource="#10100000_10293426"/>
+<cim:Terminal.ConnectivityNode rdf:resource="#9288674231812209"/>
+</cim:Terminal>
+<cim:Terminal rdf:ID="13000000_17187774_1">
+<cim:Terminal.ConductingEquipment rdf:resource="#13000000_17187774"/>
+<cim:Terminal.ConnectivityNode rdf:resource="#9288674231717595"/>
+</cim:Terminal>
+<cim:Terminal rdf:ID="13000000_17187774_2">
+<cim:Terminal.ConductingEquipment rdf:resource="#13000000_17187774"/>
+<cim:Terminal.ConnectivityNode rdf:resource="#9288674231864629"/>
+</cim:Terminal>
+<cim:Terminal rdf:ID="13000000_17187773_1">
+<cim:Terminal.ConductingEquipment rdf:resource="#13000000_17187773"/>
+<cim:Terminal.ConnectivityNode rdf:resource="#9288674231490438"/>
+</cim:Terminal>
+<cim:Terminal rdf:ID="13000000_17187773_2">
+<cim:Terminal.ConductingEquipment rdf:resource="#13000000_17187773"/>
+<cim:Terminal.ConnectivityNode rdf:resource="#9288674231628186"/>
+</cim:Terminal>
+<cim:Terminal rdf:ID="13000000_17258173_1">
+<cim:Terminal.ConductingEquipment rdf:resource="#13000000_17258173"/>
+<cim:Terminal.ConnectivityNode rdf:resource="#9288674231662339"/>
+</cim:Terminal>
+<cim:Terminal rdf:ID="13000000_17258173_2">
+<cim:Terminal.ConductingEquipment rdf:resource="#13000000_17258173"/>
+<cim:Terminal.ConnectivityNode rdf:resource="#9288674231491015"/>
+</cim:Terminal>
+<cim:Terminal rdf:ID="36000000_25356609_1">
+<cim:Terminal.ConductingEquipment rdf:resource="#36000000_25356609"/>
+<cim:Terminal.ConnectivityNode rdf:resource="#9288674231738614"/>
+</cim:Terminal>
+<cim:Terminal rdf:ID="36000000_25356609_2">
+<cim:Terminal.ConductingEquipment rdf:resource="#36000000_25356609"/>
+<cim:Terminal.ConnectivityNode rdf:resource="#9288674231871342"/>
+</cim:Terminal>
+<cim:Terminal rdf:ID="14000000_7853041_1">
+<cim:Terminal.ConductingEquipment rdf:resource="#14000000_7853041"/>
+<cim:Terminal.ConnectivityNode rdf:resource="#9288674231871342"/>
+</cim:Terminal>
+<cim:Terminal rdf:ID="14000000_7853041_2">
+<cim:Terminal.ConductingEquipment rdf:resource="#14000000_7853041"/>
+<cim:Terminal.ConnectivityNode rdf:resource="#9288674231901688"/>
+</cim:Terminal>
+<cim:Terminal rdf:ID="10100000_10294571_1">
+<cim:Terminal.ConductingEquipment rdf:resource="#10100000_10294571"/>
+<cim:Terminal.ConnectivityNode rdf:resource="#9288674231890139"/>
+</cim:Terminal>
+<cim:Terminal rdf:ID="10100000_10294571_2">
+<cim:Terminal.ConductingEquipment rdf:resource="#10100000_10294571"/>
+<cim:Terminal.ConnectivityNode rdf:resource="#9288674231851590"/>
+</cim:Terminal>
+<cim:Terminal rdf:ID="13000000_1523647642_1">
+<cim:Terminal.ConductingEquipment rdf:resource="#13000000_1523647642"/>
+<cim:Terminal.ConnectivityNode rdf:resource="#9288674231890139"/>
+</cim:Terminal>
+<cim:Terminal rdf:ID="13000000_1523647642_2">
+<cim:Terminal.ConductingEquipment rdf:resource="#13000000_1523647642"/>
+<cim:Terminal.ConnectivityNode rdf:resource="#9288674231650490"/>
+</cim:Terminal>
+<cim:Terminal rdf:ID="10100000_1523649098_1">
+<cim:Terminal.ConductingEquipment rdf:resource="#10100000_1523649098"/>
+<cim:Terminal.ConnectivityNode rdf:resource="#9288674231544889"/>
+</cim:Terminal>
+<cim:Terminal rdf:ID="10100000_1523649098_2">
+<cim:Terminal.ConductingEquipment rdf:resource="#10100000_1523649098"/>
+<cim:Terminal.ConnectivityNode rdf:resource="#9288674231732206"/>
+</cim:Terminal>
+<cim:Terminal rdf:ID="30200003_170452201">
+<cim:Terminal.ConductingEquipment rdf:resource="#30200003_1704522"/>
+<cim:Terminal.ConnectivityNode rdf:resource="#9288674231738614"/>
+</cim:Terminal>
+<cim:Terminal rdf:ID="5132263">
+<cim:Terminal.ConductingEquipment rdf:resource="#31100000_1206464"/>
+<cim:Terminal.ConnectivityNode rdf:resource="#9288674231457723"/>
+</cim:Terminal>
+<cim:Terminal rdf:ID="10200001_10381134_1">
+<cim:Terminal.ConductingEquipment rdf:resource="#10200001_10381134"/>
+<cim:Terminal.ConnectivityNode rdf:resource="#9288674231812209"/>
+</cim:Terminal>
+<cim:Terminal rdf:ID="10200001_6326626_1">
+<cim:Terminal.ConductingEquipment rdf:resource="#10200001_6326626"/>
+<cim:Terminal.ConnectivityNode rdf:resource="#9288674231851590"/>
+</cim:Terminal>
+<cim:Terminal rdf:ID="10100000_6164069_1">
+<cim:Terminal.ConductingEquipment rdf:resource="#10100000_6164069"/>
+<cim:Terminal.ConnectivityNode rdf:resource="#9288674231777212"/>
+</cim:Terminal>
+<cim:Terminal rdf:ID="10100000_6164069_2">
+<cim:Terminal.ConductingEquipment rdf:resource="#10100000_6164069"/>
+<cim:Terminal.ConnectivityNode rdf:resource="#9288674231901683"/>
+</cim:Terminal>
+<cim:Terminal rdf:ID="10100000_6286123_1">
+<cim:Terminal.ConductingEquipment rdf:resource="#10100000_6286123"/>
+<cim:Terminal.ConnectivityNode rdf:resource="#9288674231535723"/>
+</cim:Terminal>
+<cim:Terminal rdf:ID="10100000_6286123_2">
+<cim:Terminal.ConductingEquipment rdf:resource="#10100000_6286123"/>
+<cim:Terminal.ConnectivityNode rdf:resource="#9288674231777217"/>
+</cim:Terminal>
+<cim:Terminal rdf:ID="13000000_9201743_1">
+<cim:Terminal.ConductingEquipment rdf:resource="#13000000_9201743"/>
+<cim:Terminal.ConnectivityNode rdf:resource="#9288674231777217"/>
+</cim:Terminal>
+<cim:Terminal rdf:ID="13000000_9201743_2">
+<cim:Terminal.ConductingEquipment rdf:resource="#13000000_9201743"/>
+<cim:Terminal.ConnectivityNode rdf:resource="#9288674231558818"/>
+</cim:Terminal>
+<cim:Terminal rdf:ID="13000000_9210323_1">
+<cim:Terminal.ConductingEquipment rdf:resource="#13000000_9210323"/>
+<cim:Terminal.ConnectivityNode rdf:resource="#9288674231662402"/>
+</cim:Terminal>
+<cim:Terminal rdf:ID="13000000_9210323_2">
+<cim:Terminal.ConductingEquipment rdf:resource="#13000000_9210323"/>
+<cim:Terminal.ConnectivityNode rdf:resource="#9288674231738615"/>
+</cim:Terminal>
+<cim:Terminal rdf:ID="13000000_9210773_1">
+<cim:Terminal.ConductingEquipment rdf:resource="#13000000_9210773"/>
+<cim:Terminal.ConnectivityNode rdf:resource="#9288674231558789"/>
+</cim:Terminal>
+<cim:Terminal rdf:ID="13000000_9210773_2">
+<cim:Terminal.ConductingEquipment rdf:resource="#13000000_9210773"/>
+<cim:Terminal.ConnectivityNode rdf:resource="#9288674231901683"/>
+</cim:Terminal>
+<cim:Terminal rdf:ID="13000000_9222288_1">
+<cim:Terminal.ConductingEquipment rdf:resource="#13000000_9222288"/>
+<cim:Terminal.ConnectivityNode rdf:resource="#9288674231506526"/>
+</cim:Terminal>
+<cim:Terminal rdf:ID="13000000_9222288_2">
+<cim:Terminal.ConductingEquipment rdf:resource="#13000000_9222288"/>
+<cim:Terminal.ConnectivityNode rdf:resource="#9288674231662373"/>
+</cim:Terminal>
+<cim:Terminal rdf:ID="13000000_9256485_1">
+<cim:Terminal.ConductingEquipment rdf:resource="#13000000_9256485"/>
+<cim:Terminal.ConnectivityNode rdf:resource="#9288674231777226"/>
+</cim:Terminal>
+<cim:Terminal rdf:ID="13000000_9256485_2">
+<cim:Terminal.ConductingEquipment rdf:resource="#13000000_9256485"/>
+<cim:Terminal.ConnectivityNode rdf:resource="#9288674231558755"/>
+</cim:Terminal>
+<cim:Terminal rdf:ID="13000000_9271713_1">
+<cim:Terminal.ConductingEquipment rdf:resource="#13000000_9271713"/>
+<cim:Terminal.ConnectivityNode rdf:resource="#9288674231777229"/>
+</cim:Terminal>
+<cim:Terminal rdf:ID="13000000_9271713_2">
+<cim:Terminal.ConductingEquipment rdf:resource="#13000000_9271713"/>
+<cim:Terminal.ConnectivityNode rdf:resource="#9288674231462763"/>
+</cim:Terminal>
+<cim:Terminal rdf:ID="20100000_499301_1">
+<cim:Terminal.ConductingEquipment rdf:resource="#20100000_499301"/>
+<cim:Terminal.ConnectivityNode rdf:resource="#9288674231777229"/>
+</cim:Terminal>
+<cim:Terminal rdf:ID="20100000_499301_2">
+<cim:Terminal.ConductingEquipment rdf:resource="#20100000_499301"/>
+<cim:Terminal.ConnectivityNode rdf:resource="#9288674231901688"/>
+</cim:Terminal>
+<cim:Terminal rdf:ID="10200001_12864779_1">
+<cim:Terminal.ConductingEquipment rdf:resource="#10200001_12864779"/>
+<cim:Terminal.ConnectivityNode rdf:resource="#0"/>
+</cim:Terminal>
+<cim:Terminal rdf:ID="10200001_12864780_1">
+<cim:Terminal.ConductingEquipment rdf:resource="#10200001_12864780"/>
+<cim:Terminal.ConnectivityNode rdf:resource="#0"/>
+</cim:Terminal>
+<cim:Terminal rdf:ID="10200001_10381080_1">
+<cim:Terminal.ConductingEquipment rdf:resource="#10200001_10381080"/>
+<cim:Terminal.ConnectivityNode rdf:resource="#0"/>
+</cim:Terminal>
+<cim:Terminal rdf:ID="10200001_10382253_1">
+<cim:Terminal.ConductingEquipment rdf:resource="#10200001_10382253"/>
+<cim:Terminal.ConnectivityNode rdf:resource="#0"/>
+</cim:Terminal>
+<cim:Terminal rdf:ID="11300000_2573760_1">
+<cim:Terminal.ConductingEquipment rdf:resource="#11300000_2573760"/>
+<cim:Terminal.ConnectivityNode rdf:resource="#9288674231592951"/>
+</cim:Terminal>
+<cim:Terminal rdf:ID="11300000_2573760_2">
+<cim:Terminal.ConductingEquipment rdf:resource="#11300000_2573760"/>
+<cim:Terminal.ConnectivityNode rdf:resource="#9288674231693519"/>
+</cim:Terminal>
+<cim:Terminal rdf:ID="30200003_43134901">
+<cim:Terminal.ConductingEquipment rdf:resource="#30200003_431349"/>
+<cim:Terminal.ConnectivityNode rdf:resource="#9288674231738614"/>
+</cim:Terminal>
+<cim:Terminal rdf:ID="11000001_648107_1">
+<cim:Terminal.ConductingEquipment rdf:resource="#11000001_648107"/>
+<cim:Terminal.ConnectivityNode rdf:resource="#9288674231738615"/>
+</cim:Terminal>
+<cim:Terminal rdf:ID="10200001_6272407_1">
+<cim:Terminal.ConductingEquipment rdf:resource="#10200001_6272407"/>
+<cim:Terminal.ConnectivityNode rdf:resource="#9288674231777217"/>
+</cim:Terminal>
+<cim:Terminal rdf:ID="10200001_6326627_1">
+<cim:Terminal.ConductingEquipment rdf:resource="#10200001_6326627"/>
+<cim:Terminal.ConnectivityNode rdf:resource="#0"/>
+</cim:Terminal>
+<cim:Terminal rdf:ID="10200001_6342003_1">
+<cim:Terminal.ConductingEquipment rdf:resource="#10200001_6342003"/>
+<cim:Terminal.ConnectivityNode rdf:resource="#9288674231901683"/>
+</cim:Terminal>
+<cim:Terminal rdf:ID="10200001_6371423_1">
+<cim:Terminal.ConductingEquipment rdf:resource="#10200001_6371423"/>
+<cim:Terminal.ConnectivityNode rdf:resource="#9288674231777226"/>
+</cim:Terminal>
+</rdf:RDF>
