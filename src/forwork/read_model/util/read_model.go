@@ -275,15 +275,15 @@ func GetTopoMap(rdf *RDF) (map[string][]string, map[string][]string, map[string]
 	}
 	for _, segment := range rdf.ACLineSegments {
 		existDevice[segment.ID] = true
-		deviceFeederMap[segment.ID] = segment.ID
+		deviceFeederMap[segment.ID] = segment.Circuit.Resource
 	}
 	for _, fus := range rdf.Fuses {
 		existDevice[fus.ID] = true
-		deviceFeederMap[fus.ID] = fus.ID
+		deviceFeederMap[fus.ID] = fus.Circuit.Resource
 	}
 	for _, disconnector := range rdf.Disconnectors {
 		existDevice[disconnector.ID] = true
-		deviceFeederMap[disconnector.ID] = disconnector.ID
+		deviceFeederMap[disconnector.ID] = disconnector.Circuit.Resource
 	}
 	for _, transformer := range rdf.PowerTransformers {
 		existDevice[transformer.ID] = true
@@ -291,15 +291,15 @@ func GetTopoMap(rdf *RDF) (map[string][]string, map[string][]string, map[string]
 	}
 	for _, section := range rdf.BusbarSections {
 		existDevice[section.ID] = true
-		deviceFeederMap[section.ID] = section.ID
+		deviceFeederMap[section.ID] = section.Circuit.Resource
 	}
 	for _, pole := range rdf.Poles {
 		existDevice[pole.ID] = true
-		deviceFeederMap[pole.ID] = pole.ID
+		deviceFeederMap[pole.ID] = pole.Circuit.Resource
 	}
 	for _, faultIndicator := range rdf.FaultIndicators {
 		existDevice[faultIndicator.ID] = true
-		deviceFeederMap[faultIndicator.ID] = faultIndicator.ID
+		deviceFeederMap[faultIndicator.ID] = faultIndicator.Circuit.Resource
 	}
 
 	for _, terminal := range rdf.Terminals {
@@ -376,12 +376,23 @@ func HandleTopo(idNodeMap, nodeIDMap map[string][]string, topoList []Topo, rdfDC
 			fmt.Println("ID:", dbTopo.ID, " Cannot Convert!")
 			groupNodeList = []string{}
 			for _, node := range nodeList {
-				newNodeID := GetNoUseNodeInFeeder(deviceFeederMap[id], config, db)
+				newNodeID := ""
+				{ // 先查是否有
+					var entity NodeMap
+					if res := db.Table(config.DB.Database+".NODE_MAP").Where("ID = ?", owner+node).Find(&entity); res.Error != nil {
+						log.Fatalln(res.Error)
+					}
+					if entity.NodeID != "" { // 不为空用数据库的
+						newNodeID = entity.NodeID
+					} else { // 为空生成
+						newNodeID = GetNoUseNodeInFeeder(deviceFeederMap[id], db)
+						db.Table(config.DB.Database + ".NODE_MAP").Create(map[string]interface{}{
+							"ID":      owner + node,
+							"NODE_ID": newNodeID,
+						})
+					}
+				}
 				groupNodeList = append(groupNodeList, newNodeID)
-				db.Table(config.DB.Database + ".NODE_MAP").Create(map[string]interface{}{
-					"ID":      owner + node,
-					"NODE_ID": newNodeID,
-				})
 			}
 			if dbTopo.ID == "" { // 表里没数据就新增
 				insertMap := map[string]interface{}{
