@@ -13,25 +13,25 @@ import (
 	"gorm.io/gorm"
 )
 
-var config util.Config
 var db *gorm.DB
 var owner string
 
 // 主函数
 func main() {
-	newConfig, err := util.ReadAppConfig("app.yaml")
-	config = *newConfig
+	newConfig, err := data.ReadAppConfig("app.yaml")
+	data.Config = *newConfig
 	if err != nil {
 		log.Fatalf("读取配置失败: %v", err)
 	}
 
 	// 连接达梦数据库
-	dsn := fmt.Sprintf("dm://%s:%s@%s:%s", config.DB.Username, config.DB.Password, config.DB.IP, config.DB.Port)
+	dsn := fmt.Sprintf("dm://%s:%s@%s:%s", data.Config.DB.Username, data.Config.DB.Password, data.Config.DB.IP, data.Config.DB.Port)
 	db, err = gorm.Open(dameng.Open(dsn), &gorm.Config{})
 	if err != nil {
 		log.Fatal("连接数据库失败:", err)
 		return
 	}
+	data.DB = db
 
 	args := os.Args
 	fmt.Println("args:", args)
@@ -93,22 +93,15 @@ func ReadOneFileAndDeal(sourcePath string) error {
 	fmt.Println("nodeIdMap:", len(nodeIdMap))
 	fmt.Println(nodeIdMap)
 
-	// 获取ID对应的云ID
-	rdfDCloudMap, dcloudList := util.GetDCloudIDList(config, db, idNodeMap)
-	nodeMap := util.GetDCloudNodeIDList(config, db, nodeIdMap, owner)
-	// 获取馈线id和主馈线标识todo:转换配网id中应该连接主网的部分
+	// 获取馈线id和主馈线标识
 	for _, circuit := range simpleRdf.Circuits {
 		var feeder util.FeederC
-		if result := db.Table(config.DB.Database+".SG_CON_FEEDERLINE_C").
+		if result := db.Table(data.Config.DB.Database+".SG_CON_FEEDERLINE_C").
 			Where("PMS_RDF_ID = ?", circuit.ID).
 			Find(&feeder); result.Error != nil {
 			log.Fatal(result.Error)
 		}
 		data.CircuitFeederMap[circuit.ID] = feeder.DCloudID
-		if feeder.DCloudID != "" {
-			// todo: feat
-			//modelJoin := util.GetFeederJoin(db, config, feeder.DCloudID)
-		}
 		if circuit.IsCurrentFeeder == "1" { // 主馈线
 			owner = feeder.Owner
 			data.CircuitMainFeederMap[circuit.ID] = true
@@ -116,9 +109,13 @@ func ReadOneFileAndDeal(sourcePath string) error {
 			break
 		}
 	}
+
+	// 获取ID对应的云ID
+	rdfDCloudMap, dcloudList := util.GetDCloudIDList(data.Config, db, idNodeMap)
+	nodeMap := util.GetDCloudNodeIDList(data.Config, db, nodeIdMap, owner) // 云对应的NodeID
 	// 获取ID相关的Topo
 	var topoList []util.Topo
-	result := db.Table(config.DB.Database+".SG_CON_DPWRGRID_R_TOPO").
+	result := db.Table(data.Config.DB.Database+".SG_CON_DPWRGRID_R_TOPO").
 		Where("ID in ?", dcloudList).
 		Find(&topoList)
 	if result.Error != nil {
@@ -127,7 +124,8 @@ func ReadOneFileAndDeal(sourcePath string) error {
 
 	fmt.Println("topoList:", len(topoList))
 
-	util.HandleTopo(idNodeMap, nodeIdMap, topoList, rdfDCloudMap, nodeMap, deviceFeederMap, db, config, owner)
+	util.HandleTopo(idNodeMap, nodeIdMap, topoList, rdfDCloudMap, nodeMap, deviceFeederMap, db, data.Config, owner)
+	util.MainSubConnect()
 
 	return nil
 }

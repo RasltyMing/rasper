@@ -6,6 +6,7 @@ import (
 	"io"
 	"log"
 	"os"
+	"raselper/src/forwork/read_model/data"
 	"strings"
 
 	"gorm.io/gorm"
@@ -323,7 +324,7 @@ func GetTopoMap(rdf *RDF) (map[string][]string, map[string][]string, map[string]
 	return idNodeMap, nodeIdMap, deviceFeederMap
 }
 
-func HandleTopo(idNodeMap, nodeIDMap map[string][]string, topoList []Topo, rdfDCloudMap map[string]IdMap, nodeMap map[string]NodeMap, deviceFeederMap map[string]string, db *gorm.DB, config Config, owner string) {
+func HandleTopo(idNodeMap, nodeIDMap map[string][]string, topoList []Topo, rdfDCloudMap map[string]IdMap, nodeMap map[string]NodeMap, deviceFeederMap map[string]string, db *gorm.DB, config data.AppConfig, owner string) {
 	// DCloud的ID-topo Map
 	topoMap := make(map[string]Topo)
 	for _, topo := range topoList {

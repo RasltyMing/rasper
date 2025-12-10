@@ -3,6 +3,7 @@ package util
 import (
 	"fmt"
 	"log"
+	"raselper/src/forwork/read_model/data"
 	"strconv"
 	"strings"
 
@@ -47,14 +48,17 @@ type FeederC struct {
 }
 
 type ModelFeederJoin struct {
-	ID          string `gorm:"column:ID"`
-	PmsRdfID    string `gorm:"column:IS_JOIN"`
-	MainNdValue string `gorm:"column:MIAN_ND_VALUE"`
-	FileNdValue string `gorm:"column:FILE_ND_VALUE"`
+	ID                string `gorm:"column:ID"`
+	PmsRdfID          string `gorm:"column:IS_JOIN"`
+	MainNdValue       string `gorm:"column:MIAN_ND_VALUE"`
+	FileNdValue       string `gorm:"column:FILE_ND_VALUE"`
+	IsJoin            string `gorm:"column:IS_JOIN"`
+	CIBDDCloudID      string `gorm:"column:CIBD_DCLOUD_ID"`       // 主网连接设备
+	SubDeviceDCloudID string `gorm:"column:SUB_DEVICE_DCLOUD_ID"` // 配网连接设备
 }
 
-func GetFeederJoin(db *gorm.DB, config *Config, feederID string) []ModelFeederJoin {
-	var entity []ModelFeederJoin
+func GetFeederJoin(db *gorm.DB, config data.AppConfig, feederID string) ModelFeederJoin {
+	var entity ModelFeederJoin
 	result := db.Table(config.DB.Database+".MODEL_FEEDER_JOIN").
 		Where("FEEDER_ID = ?", feederID).
 		Find(&entity)
@@ -65,7 +69,7 @@ func GetFeederJoin(db *gorm.DB, config *Config, feederID string) []ModelFeederJo
 	return entity
 }
 
-func GetDCloudIDList(config Config, db *gorm.DB, idNodeMap map[string][]string) (map[string]IdMap, []string) {
+func GetDCloudIDList(config data.AppConfig, db *gorm.DB, idNodeMap map[string][]string) (map[string]IdMap, []string) {
 	resultMap := make(map[string]IdMap)
 	var rdfList []string
 	var dcloudList []string
@@ -90,7 +94,7 @@ func GetDCloudIDList(config Config, db *gorm.DB, idNodeMap map[string][]string) 
 	return resultMap, dcloudList
 }
 
-func GetDCloudNodeIDList(config Config, db *gorm.DB, nodeIDMap map[string][]string, owner string) map[string]NodeMap {
+func GetDCloudNodeIDList(config data.AppConfig, db *gorm.DB, nodeIDMap map[string][]string, owner string) map[string]NodeMap {
 	resultMap := make(map[string]NodeMap)
 	var rdfList []string
 	for id, _ := range nodeIDMap {
@@ -114,7 +118,8 @@ func GetDCloudNodeIDList(config Config, db *gorm.DB, nodeIDMap map[string][]stri
 	return resultMap
 }
 
-func GetNoUseNodeInFeeder(pmsFeederID string, config Config, db *gorm.DB) string {
+func GetNoUseNodeInFeeder(pmsFeederID string, db *gorm.DB) string {
+	config := data.Config
 	var feederC FeederC
 	if res := db.Table(config.DB.Database+".SG_CON_FEEDERLINE_C").Where("PMS_RDF_ID = ?", pmsFeederID).Find(&feederC); res.Error != nil {
 		log.Fatalln(res.Error)
@@ -137,4 +142,75 @@ func GetNoUseNodeInFeeder(pmsFeederID string, config Config, db *gorm.DB) string
 	}
 
 	return ""
+}
+
+func MainSubConnect() {
+	db := data.DB
+
+	for _, cloudID := range data.CircuitFeederMap {
+		var modelModelJoin ModelFeederJoin
+		result := db.Table(data.Config.DB.Database+".MODEL_FEEDER_JOIN").
+			Where("ID = ?", cloudID).
+			Find(&modelModelJoin)
+		if result.Error != nil {
+			log.Printf("查询MODEL_FEEDER_JOIN失败: %v", result.Error)
+		}
+
+		if modelModelJoin.IsJoin == "0" || modelModelJoin.CIBDDCloudID == "" {
+			log.Println(cloudID, "未拼接!")
+			continue
+		}
+
+		var topo Topo
+		var mainNode string
+		result = db.Table(data.Config.DB.Database+".SG_CON_PWRGRID_R_TOPO").
+			Where("ID = ?", modelModelJoin.CIBDDCloudID).
+			Find(&topo)
+		if result.Error != nil {
+			log.Fatalln("查询SG_CON_PWRGRID_R_TOPO失败:", result.Error)
+		}
+		mainNode = topo.SecondNodeID
+		if topo.SecondNodeID == "" { // 末端为空连首端
+			mainNode = topo.FirstNodeID
+		}
+
+		// 查配网节点, 并连接到主网节点
+		result = db.Table(data.Config.DB.Database+".SG_CON_DPWRGRID_R_TOPO").
+			Where("ID = ?", modelModelJoin.SubDeviceDCloudID).
+			Find(&topo)
+		if result.Error != nil {
+			log.Fatalln("查询SG_CON_DPWRGRID_R_TOPO失败:", result.Error)
+		}
+		var topoList []Topo
+		{ // 首节点判断
+			result = db.Table(data.Config.DB.Database+".SG_CON_DPWRGRID_R_TOPO").
+				Where("FIRST_NODE_ID = ?", topo.FirstNodeID).
+				Find(&topoList)
+			if result.Error != nil {
+				log.Fatalln("查询SG_CON_DPWRGRID_R_TOPO失败:", result.Error)
+			}
+			if len(topoList) == 1 { // 未连接其他设备就连上主网设备
+				db.Table(data.Config.DB.Database+".SG_CON_DPWRGRID_R_TOPO").
+					Where("FIRST_NODE_ID = ?", topo.FirstNodeID).
+					Updates(map[string]interface{}{
+						"FIRST_NODE_ID": mainNode,
+					})
+			}
+		}
+		{ // 末端节点判断
+			result = db.Table(data.Config.DB.Database+".SG_CON_DPWRGRID_R_TOPO").
+				Where("SECOND_NODE_ID = ?", topo.SecondNodeID).
+				Find(&topoList)
+			if result.Error != nil {
+				log.Fatalln("查询SG_CON_DPWRGRID_R_TOPO失败:", result.Error)
+			}
+			if len(topoList) == 1 { // 未连接其他设备就连上主网设备
+				db.Table(data.Config.DB.Database+".SG_CON_DPWRGRID_R_TOPO").
+					Where("SECOND_NODE_ID = ?", topo.SecondNodeID).
+					Updates(map[string]interface{}{
+						"SECOND_NODE_ID": mainNode,
+					})
+			}
+		}
+	}
 }

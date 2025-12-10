@@ -1,4 +1,4 @@
-package util
+package data
 
 import (
 	"fmt"
@@ -7,8 +7,8 @@ import (
 	"gopkg.in/yaml.v3"
 )
 
-// Config 结构体用于映射 yaml 配置
-type Config struct {
+// AppConfig 结构体用于映射 yaml 配置
+type AppConfig struct {
 	DB DBConfig `yaml:"db"`
 }
 type DBConfig struct {
@@ -20,8 +20,8 @@ type DBConfig struct {
 }
 
 // ReadAppConfig 读取 app.yaml 配置文件
-func ReadAppConfig(filePath string) (*Config, error) {
-	config := &Config{}
+func ReadAppConfig(filePath string) (*AppConfig, error) {
+	config := &AppConfig{}
 
 	// 读取文件内容
 	data, err := ioutil.ReadFile(filePath)
