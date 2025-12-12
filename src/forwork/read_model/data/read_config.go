@@ -9,7 +9,8 @@ import (
 
 // AppConfig 结构体用于映射 yaml 配置
 type AppConfig struct {
-	DB DBConfig `yaml:"db"`
+	DB        DBConfig `yaml:"db"`
+	UpdateUrl string   `yaml:"update-url"`
 }
 type DBConfig struct {
 	Username string `yaml:"username"`

@@ -2,7 +2,9 @@ package main
 
 import (
 	"fmt"
+	"io"
 	"log"
+	"net/http"
 	"os"
 	"path/filepath"
 	"raselper/src/forwork/read_model/data"
@@ -127,5 +129,42 @@ func ReadOneFileAndDeal(sourcePath string) error {
 	util.HandleTopo(idNodeMap, nodeIdMap, topoList, rdfDCloudMap, nodeMap, deviceFeederMap, db, data.Config, owner)
 	util.MainSubConnect()
 
+	// 提示图库程序更新图库馈线
+	for _, circuit := range simpleRdf.Circuits {
+		var feeder util.FeederC
+		if result := db.Table(data.Config.DB.Database+".SG_CON_FEEDERLINE_C").
+			Where("PMS_RDF_ID = ?", circuit.ID).
+			Find(&feeder); result.Error != nil {
+			log.Fatal(result.Error)
+		}
+		data.CircuitFeederMap[circuit.ID] = feeder.DCloudID
+		if circuit.IsCurrentFeeder == "1" { // 主馈线
+			owner = feeder.Owner
+			data.CircuitMainFeederMap[circuit.ID] = true
+			log.Println("Update Feeder: " + sourcePath + ", owner:" + owner)
+			feederID := data.CircuitFeederMap[circuit.ID]
+			if _, err := httpGet(data.Config.UpdateUrl + "/" + feederID + "/" + owner); err == nil {
+				log.Fatalln(err)
+			}
+			break
+		}
+	}
+
 	return nil
+}
+
+// 请求http
+func httpGet(url string) (string, error) {
+	resp, err := http.Get(url)
+	if err != nil {
+		return "", err
+	}
+	defer resp.Body.Close()
+
+	body, err := io.ReadAll(resp.Body)
+	if err != nil {
+		return "", err
+	}
+
+	return string(body), nil
 }

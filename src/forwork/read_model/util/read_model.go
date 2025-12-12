@@ -340,9 +340,6 @@ func HandleTopo(idNodeMap, nodeIDMap map[string][]string, topoList []Topo, rdfDC
 			groupNodeMap[nodeMap[node].NodeID] = true
 			groupNodeList = append(groupNodeList, nodeMap[node].NodeID)
 		}
-		if dbTopo.ID == infoDCloud.ID && groupNodeMap[dbTopo.FirstNodeID] && groupNodeMap[dbTopo.SecondNodeID] && len(nodeList) == 2 {
-			continue
-		}
 
 		fmt.Println("--------------------------------------------")
 		fmt.Print("Source:")
@@ -361,6 +358,25 @@ func HandleTopo(idNodeMap, nodeIDMap map[string][]string, topoList []Topo, rdfDC
 
 		fmt.Print("DB:")
 		fmt.Printf("ID: %s First: %s Second: %s\n", dbTopo.ID, dbTopo.FirstNodeID, dbTopo.SecondNodeID)
+
+		// 源端和数据库FeederID不一致
+		if data.CircuitFeederMap[strings.ReplaceAll(deviceFeederMap[id], "#", "")] != dbTopo.FeederID {
+			// 更新feeder_id
+			fmt.Println("FEEDER_ID:", dbTopo.ID, " Not Compare!")
+			updateMap := make(map[string]interface{})
+			updateMap["FEEDER_ID"] = data.CircuitFeederMap[strings.ReplaceAll(deviceFeederMap[id], "#", "")]
+			if result := db.Table(config.DB.Database+".SG_CON_DPWRGRID_R_TOPO").
+				Where("ID = ?", dbTopo.ID).
+				Updates(updateMap); result.Error != nil {
+				log.Fatalln(result.Error)
+			} else {
+				log.Println(result.RowsAffected)
+			}
+		}
+		if dbTopo.ID == infoDCloud.ID && groupNodeMap[dbTopo.FirstNodeID] && groupNodeMap[dbTopo.SecondNodeID] && len(nodeList) == 2 {
+			fmt.Println("ID compare!")
+			continue
+		}
 
 		if len(nodeList) > 2 {
 			fmt.Println("ID:", infoDCloud.ID, " has multiply node")
@@ -430,7 +446,7 @@ func HandleTopo(idNodeMap, nodeIDMap map[string][]string, topoList []Topo, rdfDC
 			fmt.Println("ID:", dbTopo.ID, " Not Exist!")
 			insertMap := map[string]interface{}{
 				"ID":            infoDCloud.ID,
-				"FEEDER_ID":     groupNodeList[0][0:18],
+				"FEEDER_ID":     data.CircuitFeederMap[strings.ReplaceAll(deviceFeederMap[id], "#", "")],
 				"OWNER":         owner,
 				"FIRST_NODE_ID": groupNodeList[0],
 			}

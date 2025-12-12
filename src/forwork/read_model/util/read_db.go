@@ -191,30 +191,32 @@ func MainSubConnect() {
 		{ // 首节点判断
 			log.Printf("%s 开始处理首节点，FirstNodeID: %s", logPrefix, subTopo.FirstNodeID)
 
-			result = db.Table(data.Config.DB.Database+".SG_CON_DPWRGRID_R_TOPO").
-				Where("FIRST_NODE_ID = ?", subTopo.FirstNodeID).
-				Find(&topoList)
-			if result.Error != nil {
-				log.Fatalf("%s 查询SG_CON_DPWRGRID_R_TOPO失败 - FirstNodeID: %s, 错误: %v",
-					logPrefix, subTopo.FirstNodeID, result.Error)
-			}
-			log.Printf("%s 首节点查询完成 - FirstNodeID: %s, 查询到 %d 条记录",
-				logPrefix, subTopo.FirstNodeID, len(topoList))
+			if subTopo.FirstNodeID != "" {
+				result = db.Table(data.Config.DB.Database+".SG_CON_DPWRGRID_R_TOPO").
+					Where("FIRST_NODE_ID = ? or SECOND_NODE_ID = ?", subTopo.FirstNodeID, subTopo.FirstNodeID).
+					Find(&topoList)
+				if result.Error != nil {
+					log.Fatalf("%s 查询SG_CON_DPWRGRID_R_TOPO失败 - FirstNodeID: %s, 错误: %v",
+						logPrefix, subTopo.FirstNodeID, result.Error)
+				}
+				log.Printf("%s 首节点查询完成 - FirstNodeID: %s, 查询到 %d 条记录",
+					logPrefix, subTopo.FirstNodeID, len(topoList))
 
-			if len(topoList) == 1 { // 未连接其他设备就连上主网设备
-				log.Printf("%s 首节点为孤立节点，开始更新为主网节点 - FirstNodeID: %s → MainNode: %s",
-					logPrefix, subTopo.FirstNodeID, mainNode)
-				updateResult := db.Table(data.Config.DB.Database+".SG_CON_DPWRGRID_R_TOPO").
-					Where("FIRST_NODE_ID = ?", subTopo.FirstNodeID).
-					Updates(map[string]interface{}{
-						"FIRST_NODE_ID": mainNode,
-					})
-				if updateResult.Error != nil {
-					log.Printf("%s 首节点更新失败 - FirstNodeID: %s, 错误: %v",
-						logPrefix, subTopo.FirstNodeID, updateResult.Error)
-				} else {
-					log.Printf("%s 首节点更新成功 - FirstNodeID: %s → MainNode: %s, 影响行数: %d",
-						logPrefix, subTopo.FirstNodeID, mainNode, updateResult.RowsAffected)
+				if len(topoList) == 1 { // 未连接其他设备就连上主网设备
+					log.Printf("%s 首节点为孤立节点，开始更新为主网节点 - FirstNodeID: %s → MainNode: %s",
+						logPrefix, subTopo.FirstNodeID, mainNode)
+					updateResult := db.Table(data.Config.DB.Database+".SG_CON_DPWRGRID_R_TOPO").
+						Where("FIRST_NODE_ID = ?", subTopo.FirstNodeID).
+						Updates(map[string]interface{}{
+							"FIRST_NODE_ID": mainNode,
+						})
+					if updateResult.Error != nil {
+						log.Printf("%s 首节点更新失败 - FirstNodeID: %s, 错误: %v",
+							logPrefix, subTopo.FirstNodeID, updateResult.Error)
+					} else {
+						log.Printf("%s 首节点更新成功 - FirstNodeID: %s → MainNode: %s, 影响行数: %d",
+							logPrefix, subTopo.FirstNodeID, mainNode, updateResult.RowsAffected)
+					}
 				}
 			}
 		}
@@ -222,34 +224,36 @@ func MainSubConnect() {
 		{ // 末端节点判断
 			log.Printf("%s 开始处理末端节点，SecondNodeID: %s", logPrefix, subTopo.SecondNodeID)
 
-			result = db.Table(data.Config.DB.Database+".SG_CON_DPWRGRID_R_TOPO").
-				Where("SECOND_NODE_ID = ?", subTopo.SecondNodeID).
-				Find(&topoList)
+			if subTopo.SecondNodeID != "" {
+				result = db.Table(data.Config.DB.Database+".SG_CON_DPWRGRID_R_TOPO").
+					Where("FIRST_NODE_ID = ? or SECOND_NODE_ID = ?", subTopo.SecondNodeID, subTopo.SecondNodeID).
+					Find(&topoList)
 
-			if result.Error != nil {
-				log.Fatalf("%s 查询SG_CON_DPWRGRID_R_TOPO失败 - SecondNodeID: %s, 错误: %v",
-					logPrefix, subTopo.SecondNodeID, result.Error)
-			}
+				if result.Error != nil {
+					log.Fatalf("%s 查询SG_CON_DPWRGRID_R_TOPO失败 - SecondNodeID: %s, 错误: %v",
+						logPrefix, subTopo.SecondNodeID, result.Error)
+				}
 
-			log.Printf("%s 末端节点查询完成 - SecondNodeID: %s, 查询到 %d 条记录",
-				logPrefix, subTopo.SecondNodeID, len(topoList))
+				log.Printf("%s 末端节点查询完成 - SecondNodeID: %s, 查询到 %d 条记录",
+					logPrefix, subTopo.SecondNodeID, len(topoList))
 
-			if len(topoList) == 1 { // 未连接其他设备就连上主网设备
-				log.Printf("%s 末端节点为孤立节点，开始更新为主网节点 - SecondNodeID: %s → MainNode: %s",
-					logPrefix, subTopo.SecondNodeID, mainNode)
+				if len(topoList) == 1 { // 未连接其他设备就连上主网设备
+					log.Printf("%s 末端节点为孤立节点，开始更新为主网节点 - SecondNodeID: %s → MainNode: %s",
+						logPrefix, subTopo.SecondNodeID, mainNode)
 
-				updateResult := db.Table(data.Config.DB.Database+".SG_CON_DPWRGRID_R_TOPO").
-					Where("SECOND_NODE_ID = ?", subTopo.SecondNodeID).
-					Updates(map[string]interface{}{
-						"SECOND_NODE_ID": mainNode,
-					})
+					updateResult := db.Table(data.Config.DB.Database+".SG_CON_DPWRGRID_R_TOPO").
+						Where("SECOND_NODE_ID = ?", subTopo.SecondNodeID).
+						Updates(map[string]interface{}{
+							"SECOND_NODE_ID": mainNode,
+						})
 
-				if updateResult.Error != nil {
-					log.Printf("%s 末端节点更新失败 - SecondNodeID: %s, 错误: %v",
-						logPrefix, subTopo.SecondNodeID, updateResult.Error)
-				} else {
-					log.Printf("%s 末端节点更新成功 - SecondNodeID: %s → MainNode: %s, 影响行数: %d",
-						logPrefix, subTopo.SecondNodeID, mainNode, updateResult.RowsAffected)
+					if updateResult.Error != nil {
+						log.Printf("%s 末端节点更新失败 - SecondNodeID: %s, 错误: %v",
+							logPrefix, subTopo.SecondNodeID, updateResult.Error)
+					} else {
+						log.Printf("%s 末端节点更新成功 - SecondNodeID: %s → MainNode: %s, 影响行数: %d",
+							logPrefix, subTopo.SecondNodeID, mainNode, updateResult.RowsAffected)
+					}
 				}
 			}
 		}
