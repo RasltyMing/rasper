@@ -11,6 +11,7 @@ import (
 type AppConfig struct {
 	DB        DBConfig `yaml:"db"`
 	UpdateUrl string   `yaml:"update-url"`
+	Delete    bool     `yaml:"delete"`
 }
 type DBConfig struct {
 	Username string `yaml:"username"`

@@ -53,7 +53,7 @@ func main() {
 			}
 
 			if err = ReadOneFileAndDeal(path); err != nil {
-				log.Fatal(err)
+				log.Println(err)
 				return nil
 			}
 			return nil
@@ -71,6 +71,13 @@ func main() {
 }
 
 func ReadOneFileAndDeal(sourcePath string) error {
+	defer func() {
+		err := recover()
+		if err != nil {
+			log.Println(err)
+		}
+	}()
+
 	// 方法1: 使用解析
 	fmt.Println("=== 方法1: 解析 ===")
 	simpleRdf, err := util.ParseCIMXML(sourcePath)
@@ -126,7 +133,7 @@ func ReadOneFileAndDeal(sourcePath string) error {
 
 	fmt.Println("topoList:", len(topoList))
 
-	util.HandleTopo(idNodeMap, nodeIdMap, topoList, rdfDCloudMap, nodeMap, deviceFeederMap, db, data.Config, owner)
+	util.HandleTopo(idNodeMap, nodeIdMap, topoList, rdfDCloudMap, nodeMap, deviceFeederMap, db, data.Config, owner, simpleRdf)
 	util.MainSubConnect()
 
 	// 提示图库程序更新图库馈线
@@ -143,11 +150,20 @@ func ReadOneFileAndDeal(sourcePath string) error {
 			data.CircuitMainFeederMap[circuit.ID] = true
 			log.Println("Update Feeder: " + sourcePath + ", owner:" + owner)
 			feederID := data.CircuitFeederMap[circuit.ID]
-			if _, err := httpGet(data.Config.UpdateUrl + "/" + feederID + "/" + owner); err == nil {
-				log.Fatalln(err)
+			if _, err := httpGet(data.Config.UpdateUrl + "/" + feederID + "/" + owner); err != nil {
+				log.Println(err)
 			}
 			break
 		}
+	}
+
+	log.Println("ReadFileDone: ", sourcePath)
+
+	if data.Config.Delete {
+		if err := os.Remove(sourcePath); err != nil {
+			log.Fatal(err)
+		}
+		log.Println("Remove File: " + sourcePath)
 	}
 
 	return nil

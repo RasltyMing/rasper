@@ -1,11 +1,13 @@
 package util
 
 import (
+	"errors"
 	"fmt"
 	"log"
 	"raselper/src/forwork/read_model/data"
 	"strconv"
 	"strings"
+	"time"
 
 	"gorm.io/gorm"
 )
@@ -123,7 +125,8 @@ func GetNoUseNodeInFeeder(pmsFeederID string, db *gorm.DB) string {
 	config := data.Config
 	var feederC FeederC
 	if res := db.Table(config.DB.Database+".SG_CON_FEEDERLINE_C").Where("PMS_RDF_ID = ?", pmsFeederID).Find(&feederC); res.Error != nil {
-		log.Fatalln(res.Error)
+		log.Println(res.Error)
+		return ""
 	} else {
 		log.Println("查询feederC:", pmsFeederID)
 	}
@@ -134,6 +137,9 @@ func GetNoUseNodeInFeeder(pmsFeederID string, db *gorm.DB) string {
 	}
 	nodeHit := make([]bool, 10000)
 	for _, node := range nodeMap {
+		if len(node.NodeID) < 18 {
+			return ""
+		}
 		num, _ := strconv.Atoi(node.NodeID[18:])
 		nodeHit[num] = true
 	}
@@ -261,4 +267,86 @@ func MainSubConnect() {
 		log.Printf("%s 拓扑处理完成 - FirstNodeID: %s, SecondNodeID: %s",
 			logPrefix, subTopo.FirstNodeID, subTopo.SecondNodeID)
 	}
+}
+
+func NewDevice(id string, rdf *RDF, owner string, feederDCloudID string) (string, error) {
+	config := data.Config
+	db := data.DB
+	if strings.HasPrefix(id, "10100000") {
+		fmt.Println("Lost ACLine, fix...")
+		var idFromSeq string
+		if result := db.Raw("select " + config.DB.Database + ".SG_DEV_LOWVOLLINE_B_" + data.OwnerOrganMap[owner] + "_SEQ.NEXTVAL as ID;").Scan(&idFromSeq); result.Error != nil {
+			return "", result.Error
+		}
+		var segmentFind ACLineSegment
+		for _, segment := range rdf.ACLineSegments { // 找对应的设备信息
+			if segment.ID == id {
+				segmentFind = segment
+				break
+			}
+		}
+		// 新增设备
+		if segmentFind.ID != id {
+			return "", errors.New("Device Not Found?")
+		}
+		// 使用事务，并优化时间格式化和错误处理
+		err := db.Transaction(func(tx *gorm.DB) error {
+			// 在事务外部计算时间，确保两个记录使用相同的时间戳
+			currentTime := time.Now()
+			stamp := "350000_00613500000001_" + currentTime.Format("2006-01-02 15:04:05")
+			updateTime := currentTime.Format("2006-01-02 15:04:05")
+
+			// ID_MAP插入
+			if err := tx.Table(config.DB.Database + ".ID_MAP").
+				Create(map[string]interface{}{
+					"ID":        idFromSeq,
+					"RDF_ID":    id,
+					"TBNAME":    "aclinesegment",
+					"REGION_ID": owner,
+				}).Error; err != nil {
+				return fmt.Errorf("插入SG_DEV_LOWVOLLINE_B失败: %w", err)
+			}
+			// 第一个表插入
+			if err := tx.Table(config.DB.Database + ".SG_DEV_LOWVOLLINE_B").
+				Create(map[string]interface{}{
+					"ID":            idFromSeq,
+					"FEEDER_ID":     feederDCloudID,
+					"NAME":          segmentFind.Name,
+					"OWNER":         owner,
+					"STAMP":         stamp,
+					"ABBREVIATION":  segmentFind.Name,
+					"DCC_ID":        "0021" + owner,
+					"RUNNING_STATE": "1003",
+					"VOLTAGE_TYPE":  "1010",
+					"WIRE_TYPE":     "1001",
+				}).Error; err != nil {
+				return fmt.Errorf("插入SG_DEV_LOWVOLLINE_B失败: %w", err)
+			}
+
+			// 第二个表插入
+			if err := tx.Table(config.DB.Database + ".SG_DEV_LOWVOLLINE_C").
+				Create(map[string]interface{}{
+					"DATASOURCE_ID": "0021" + owner,
+					"DCLOUD_ID":     idFromSeq,
+					"EMS_ID":        id,
+					"OWNER":         owner,
+					"PMS_RDF_ID":    id,
+					"STAMP":         stamp,
+					"UPDATE_TIME":   updateTime,
+				}).Error; err != nil {
+				return fmt.Errorf("插入SG_DEV_LOWVOLLINE_C失败: %w", err)
+			}
+
+			return nil
+		})
+		// 处理事务结果
+		if err != nil {
+			// 可以根据错误类型进行不同的处理
+			log.Printf("数据插入失败: %v", err)
+		}
+		log.Println("数据插入成功")
+		return idFromSeq, nil
+	}
+
+	return "", errors.New(id + ": Device Type Not Found")
 }
