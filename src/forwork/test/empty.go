@@ -1,8 +1,11 @@
 package main
 
-import "fmt"
+import (
+	"fmt"
+	"time"
+)
 
 func main() {
-	str := "1701350900000151300021"[0:18]
+	str := "17013" + fmt.Sprintf("%d", time.Now().UnixMilli())
 	fmt.Println(str)
 }

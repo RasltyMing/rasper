@@ -120,7 +120,7 @@ func GetDCloudNodeIDList(config data.AppConfig, db *gorm.DB, nodeIDMap map[strin
 	return resultMap
 }
 
-func GetNoUseNodeInFeeder(pmsFeederID string, db *gorm.DB) string {
+func GetNoUseNodeInFeeder(pmsFeederID string, db *gorm.DB, owner string) string {
 	pmsFeederID = strings.Replace(pmsFeederID, "#", "", -1)
 	config := data.Config
 	var feederC FeederC
@@ -132,6 +132,12 @@ func GetNoUseNodeInFeeder(pmsFeederID string, db *gorm.DB) string {
 	}
 	var nodeMap []NodeMap
 	log.Println("select feederNode:", feederC.DCloudID, " source feederID:", pmsFeederID)
+	if owner == "" {
+		owner = "350000"
+	}
+	if feederC.DCloudID == "" {
+		feederC.DCloudID = "17013" + fmt.Sprintf("%d", time.Now().UnixMilli())
+	}
 	if res := db.Table(config.DB.Database+".NODE_MAP").Where("NODE_ID like ?", feederC.DCloudID+"%").Find(&nodeMap); res.Error != nil {
 		log.Fatalln(res.Error)
 	}
@@ -157,7 +163,9 @@ func GetNoUseNodeInFeeder(pmsFeederID string, db *gorm.DB) string {
 func MainSubConnect() {
 	db := data.DB
 
-	for _, cloudID := range data.CircuitFeederMap {
+	for key, cloudID := range data.CircuitFeederMap {
+		log.Println("handle circuit connect: ", key, ":", cloudID)
+
 		var modelModelJoin ModelFeederJoin
 		result := db.Table(data.Config.DB.Database+".MODEL_FEEDER_JOIN").
 			Where("ID = ?", cloudID).
@@ -264,8 +272,9 @@ func MainSubConnect() {
 			}
 		}
 
-		log.Printf("%s 拓扑处理完成 - FirstNodeID: %s, SecondNodeID: %s",
-			logPrefix, subTopo.FirstNodeID, subTopo.SecondNodeID)
+		log.Printf("%s: %s 拓扑处理完成 - FirstNodeID: %s, SecondNodeID: %s",
+			key, logPrefix, subTopo.FirstNodeID, subTopo.SecondNodeID)
+		delete(data.CircuitFeederMap, key)
 	}
 }
 

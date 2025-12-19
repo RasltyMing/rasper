@@ -416,7 +416,7 @@ func HandleTopo(idNodeMap, nodeIDMap map[string][]string, topoList []Topo, rdfDC
 					if entity.NodeID != "" { // 不为空用数据库的
 						newNodeID = entity.NodeID
 					} else { // 为空生成
-						newNodeID = GetNoUseNodeInFeeder(deviceFeederMap[id], db)
+						newNodeID = GetNoUseNodeInFeeder(deviceFeederMap[id], db, owner)
 						if newNodeID == "" {
 							newNodeID = node // 没生成成功先用源端ID
 						}
