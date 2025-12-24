@@ -23,14 +23,14 @@ func main() {
 	newConfig, err := data.ReadAppConfig("app.yaml")
 	data.Config = *newConfig
 	if err != nil {
-		log.Fatalf("读取配置失败: %v", err)
+		log.Printf("读取配置失败: %v", err)
 	}
 
 	// 连接达梦数据库
 	dsn := fmt.Sprintf("dm://%s:%s@%s:%s", data.Config.DB.Username, data.Config.DB.Password, data.Config.DB.IP, data.Config.DB.Port)
 	db, err = gorm.Open(dameng.Open(dsn), &gorm.Config{})
 	if err != nil {
-		log.Fatal("连接数据库失败:", err)
+		log.Print("连接数据库失败:", err)
 		return
 	}
 	data.DB = db
@@ -83,7 +83,7 @@ func ReadOneFileAndDeal(sourcePath string) error {
 	simpleRdf, err := util.ParseCIMXML(sourcePath)
 
 	if simpleRdf == nil {
-		log.Fatal("xml read fail!")
+		log.Println("xml read fail!")
 		return err
 	}
 
@@ -108,7 +108,7 @@ func ReadOneFileAndDeal(sourcePath string) error {
 		if result := db.Table(data.Config.DB.Database+".SG_CON_FEEDERLINE_C").
 			Where("PMS_RDF_ID = ?", circuit.ID).
 			Find(&feeder); result.Error != nil {
-			log.Fatal(result.Error)
+			log.Print(result.Error)
 		}
 		data.CircuitFeederMap[circuit.ID] = feeder.DCloudID
 		if circuit.IsCurrentFeeder == "1" { // 主馈线
@@ -135,6 +135,7 @@ func ReadOneFileAndDeal(sourcePath string) error {
 
 	util.HandleTopo(idNodeMap, nodeIdMap, topoList, rdfDCloudMap, nodeMap, deviceFeederMap, db, data.Config, owner, simpleRdf)
 	util.MainSubConnect()
+	util.ConnectMultiplyNode(simpleRdf, owner)
 
 	// 提示图库程序更新图库馈线
 	for _, circuit := range simpleRdf.Circuits {
@@ -142,18 +143,17 @@ func ReadOneFileAndDeal(sourcePath string) error {
 		if result := db.Table(data.Config.DB.Database+".SG_CON_FEEDERLINE_C").
 			Where("PMS_RDF_ID = ?", circuit.ID).
 			Find(&feeder); result.Error != nil {
-			log.Fatal(result.Error)
+			log.Print(result.Error)
 		}
 		data.CircuitFeederMap[circuit.ID] = feeder.DCloudID
 		if circuit.IsCurrentFeeder == "1" { // 主馈线
 			owner = feeder.Owner
 			data.CircuitMainFeederMap[circuit.ID] = true
-			log.Println("Update Feeder: " + sourcePath + ", owner:" + owner)
+			log.Println("Update Feeder: " + sourcePath + ", owner:" + owner + ", feeder:" + circuit.ID)
 			feederID := data.CircuitFeederMap[circuit.ID]
 			if _, err := httpGet(data.Config.UpdateUrl + "/" + feederID + "/" + owner); err != nil {
 				log.Println(err)
 			}
-			break
 		}
 	}
 
@@ -161,7 +161,7 @@ func ReadOneFileAndDeal(sourcePath string) error {
 
 	if data.Config.Delete {
 		if err := os.Remove(sourcePath); err != nil {
-			log.Fatal(err)
+			log.Print(err)
 		}
 		log.Println("Remove File: " + sourcePath)
 	}

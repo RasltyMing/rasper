@@ -262,12 +262,12 @@ func ParseCIMXML(filePath string) (*RDF, error) {
 	return &rdf, nil
 }
 
-func GetTopoMap(rdf *RDF) (map[string][]string, map[string][]string, map[string]string) {
+func GetTopoMap(rdf *RDF) (idNodeMap map[string][]string, nodeIdMap map[string][]string, deviceFeederMap map[string]string) {
 	existDevice := make(map[string]bool)
 
-	idNodeMap := make(map[string][]string)
-	nodeIdMap := make(map[string][]string)
-	deviceFeederMap := make(map[string]string)
+	idNodeMap = make(map[string][]string)
+	nodeIdMap = make(map[string][]string)
+	deviceFeederMap = make(map[string]string)
 
 	for _, breaker := range rdf.Breakers {
 		existDevice[breaker.ID] = true
@@ -388,7 +388,7 @@ func HandleTopo(idNodeMap, nodeIDMap map[string][]string, topoList []Topo, rdfDC
 			if result := db.Table(config.DB.Database+".SG_CON_DPWRGRID_R_TOPO").
 				Where("ID = ?", topoMap[rdfDCloudMap[id].ID].ID).
 				Updates(updateMap); result.Error != nil {
-				log.Fatalln(result.Error)
+				log.Println(result.Error)
 			} else {
 				log.Println(result.RowsAffected)
 			}
@@ -411,7 +411,7 @@ func HandleTopo(idNodeMap, nodeIDMap map[string][]string, topoList []Topo, rdfDC
 				{ // 先查是否有
 					var entity NodeMap
 					if res := db.Table(config.DB.Database+".NODE_MAP").Where("ID = ?", owner+node).Find(&entity); res.Error != nil {
-						log.Fatalln(res.Error)
+						log.Println(res.Error)
 					}
 					if entity.NodeID != "" { // 不为空用数据库的
 						newNodeID = entity.NodeID
@@ -439,7 +439,7 @@ func HandleTopo(idNodeMap, nodeIDMap map[string][]string, topoList []Topo, rdfDC
 					insertMap["SECOND_NODE_ID"] = groupNodeList[1]
 				}
 				if result := db.Table(config.DB.Database + ".SG_CON_DPWRGRID_R_TOPO").Create(insertMap); result.Error != nil {
-					log.Fatalln(result.Error)
+					log.Println(result.Error)
 				} else {
 					log.Println(result.RowsAffected)
 				}
@@ -452,7 +452,7 @@ func HandleTopo(idNodeMap, nodeIDMap map[string][]string, topoList []Topo, rdfDC
 				if result := db.Table(config.DB.Database+".SG_CON_DPWRGRID_R_TOPO").
 					Where("ID = ?", topoMap[rdfDCloudMap[id].ID].ID).
 					Updates(updateMap); result.Error != nil {
-					log.Fatalln(result.Error)
+					log.Println(result.Error)
 				} else {
 					log.Println(result.RowsAffected)
 				}
@@ -472,7 +472,7 @@ func HandleTopo(idNodeMap, nodeIDMap map[string][]string, topoList []Topo, rdfDC
 				insertMap["SECOND_NODE_ID"] = groupNodeList[1]
 			}
 			if result := db.Table(config.DB.Database + ".SG_CON_DPWRGRID_R_TOPO").Create(insertMap); result.Error != nil {
-				log.Fatalln(result.Error)
+				log.Println(result.Error)
 			} else {
 				log.Println(result.RowsAffected)
 			}
@@ -486,11 +486,13 @@ func HandleTopo(idNodeMap, nodeIDMap map[string][]string, topoList []Topo, rdfDC
 			updateMap["FIRST_NODE_ID"] = groupNodeList[0]
 			if len(groupNodeList) > 1 {
 				updateMap["SECOND_NODE_ID"] = groupNodeList[1]
+			} else {
+				updateMap["SECOND_NODE_ID"] = nil
 			}
 			if result := db.Table(config.DB.Database+".SG_CON_DPWRGRID_R_TOPO").
 				Where("ID = ?", topoMap[rdfDCloudMap[id].ID].ID).
 				Updates(updateMap); result.Error != nil {
-				log.Fatalln(result.Error)
+				log.Println(result.Error)
 			} else {
 				log.Println(result.RowsAffected)
 			}
@@ -507,4 +509,91 @@ func listContainID(list []string, item string) bool {
 		}
 	}
 	return false
+}
+
+// 处理大于2个的节点
+func ConnectMultiplyNode(rdf *RDF, owner string) {
+	if owner == "" {
+		fmt.Println("Owner Not Exist!")
+		return
+	}
+
+	nodeMap, nodeIDMap, _ := GetTopoMap(rdf)
+	fmt.Println("nodeIDMap:", len(nodeIDMap))
+	for id, nodeList := range nodeMap {
+		if len(nodeList) <= 2 {
+			continue
+		}
+
+		// 出现大于2的
+		fmt.Println("ID:", id, ", nodeList: ", len(nodeList))
+		var idEntity IdMap
+		data.DB.Table(data.Config.DB.Database+".ID_MAP").
+			Where("RDF_ID = ?", id).
+			Find(&idEntity)
+		if idEntity.ID == "" {
+			fmt.Println("ID:", idEntity.ID, " DCloud Not Exist!")
+			continue
+		}
+		// 获取所有node对应的DCloudID
+		var nodeListEntity []NodeMap
+		sourceDCloudNodeMap := make(map[string]string)
+		{
+			var cloudNodeList []string
+			for _, node := range nodeList {
+				cloudNodeList = append(cloudNodeList, owner+node)
+			}
+			data.DB.Table(data.Config.DB.Database+".NODE_MAP").
+				Where("ID in ?", cloudNodeList).
+				Find(&nodeListEntity)
+			for _, node := range nodeListEntity {
+				sourceDCloudNodeMap[node.ID] = node.NodeID
+			}
+			fmt.Println("sourceDCloudNodeMap:", sourceDCloudNodeMap)
+		}
+
+		{ // 更新超2个连接点的设备的首节点和末节点为0和1号节点
+			data.DB.Table(data.Config.DB.Database+".SG_CON_DPWRGRID_R_TOPO").
+				Where("ID = ?", idEntity.ID).
+				Updates(map[string]interface{}{
+					"FIRST_NODE_ID":  sourceDCloudNodeMap[owner+nodeList[0]],
+					"SECOND_NODE_ID": sourceDCloudNodeMap[owner+nodeList[1]],
+				})
+			fmt.Print("DCloudID:", idEntity.ID, ", nodeList:", nodeList)
+			fmt.Println(", sourceDCloudNodeMap:", sourceDCloudNodeMap)
+		}
+
+		for i, node := range nodeList[2:] { // 第二个以后的节点都连到0号节点
+			updateID := sourceDCloudNodeMap[owner+nodeList[0]]
+			if i > 6 {
+				updateID = sourceDCloudNodeMap[owner+nodeList[1]]
+			}
+
+			nodeID := sourceDCloudNodeMap[owner+node]
+			idList := nodeIDMap[node]
+			fmt.Println("Node: ", node, "DCloud Node: ", nodeID)
+
+			var idEntityList []IdMap
+			data.DB.Table(data.Config.DB.Database+".ID_MAP").
+				Where("RDF_ID in ?", idList).
+				Find(&idEntityList)
+			for _, idMap := range idEntityList { // 首节点或尾节点的node更新为0号节点的node
+				fmt.Println("ID:", idMap.ID, " RDF : ", idMap.RdfID)
+				data.DB.Table(data.Config.DB.Database+".SG_CON_DPWRGRID_R_TOPO").
+					Where("FIRST_NODE_ID = ?", nodeID).
+					Updates(map[string]interface{}{
+						"FIRST_NODE_ID": updateID,
+					})
+				data.DB.Table(data.Config.DB.Database+".SG_CON_DPWRGRID_R_TOPO").
+					Where("SECOND_NODE_ID = ?", nodeID).
+					Updates(map[string]interface{}{
+						"SECOND_NODE_ID": updateID,
+					})
+
+			}
+		}
+		//if len(nodeList) > 8 { // 超过8个以后的节点都连到1号节点
+		//
+		//}
+	}
 }

@@ -665,7 +665,7 @@ func main() {
 	// 从配置文件读取配置
 	config, err := LoadConfigFromFile("config.yaml")
 	if err != nil {
-		log.Fatal("加载配置文件失败:", err)
+		log.Print("加载配置文件失败:", err)
 	}
 
 	// 创建同步器并执行同步

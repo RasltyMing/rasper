@@ -139,7 +139,7 @@ func GetNoUseNodeInFeeder(pmsFeederID string, db *gorm.DB, owner string) string 
 		feederC.DCloudID = "17013" + fmt.Sprintf("%d", time.Now().UnixMilli())
 	}
 	if res := db.Table(config.DB.Database+".NODE_MAP").Where("NODE_ID like ?", feederC.DCloudID+"%").Find(&nodeMap); res.Error != nil {
-		log.Fatalln(res.Error)
+		log.Println(res.Error)
 	}
 	nodeHit := make([]bool, 10000)
 	for _, node := range nodeMap {
@@ -185,7 +185,7 @@ func MainSubConnect() {
 			Where("ID = ?", modelModelJoin.CIBDDCloudID).
 			Find(&topo)
 		if result.Error != nil {
-			log.Fatalln("查询SG_CON_PWRGRID_R_TOPO失败:", result.Error)
+			log.Println("查询SG_CON_PWRGRID_R_TOPO失败:", result.Error)
 		}
 		mainNode = topo.SecondNodeID
 		if topo.SecondNodeID == "" { // 末端为空连首端
@@ -198,7 +198,7 @@ func MainSubConnect() {
 			Where("ID = ?", modelModelJoin.SubDeviceDCloudID).
 			Find(&subTopo)
 		if result.Error != nil {
-			log.Fatalln("查询", modelModelJoin.SubDeviceDCloudID, "SG_CON_DPWRGRID_R_TOPO失败:", result.Error)
+			log.Println("查询", modelModelJoin.SubDeviceDCloudID, "SG_CON_DPWRGRID_R_TOPO失败:", result.Error)
 		}
 		var topoList []Topo
 		logPrefix := "[拓扑处理]"
@@ -210,7 +210,7 @@ func MainSubConnect() {
 					Where("FIRST_NODE_ID = ? or SECOND_NODE_ID = ?", subTopo.FirstNodeID, subTopo.FirstNodeID).
 					Find(&topoList)
 				if result.Error != nil {
-					log.Fatalf("%s 查询SG_CON_DPWRGRID_R_TOPO失败 - FirstNodeID: %s, 错误: %v",
+					log.Printf("%s 查询SG_CON_DPWRGRID_R_TOPO失败 - FirstNodeID: %s, 错误: %v",
 						logPrefix, subTopo.FirstNodeID, result.Error)
 				}
 				log.Printf("%s 首节点查询完成 - FirstNodeID: %s, 查询到 %d 条记录",
@@ -244,7 +244,7 @@ func MainSubConnect() {
 					Find(&topoList)
 
 				if result.Error != nil {
-					log.Fatalf("%s 查询SG_CON_DPWRGRID_R_TOPO失败 - SecondNodeID: %s, 错误: %v",
+					log.Printf("%s 查询SG_CON_DPWRGRID_R_TOPO失败 - SecondNodeID: %s, 错误: %v",
 						logPrefix, subTopo.SecondNodeID, result.Error)
 				}
 

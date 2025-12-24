@@ -1,15 +1,16 @@
 db:
   username: SYSDBA
   password: SYSDBA001
-  port: 5238
+  port: 5237
   ip: 127.0.0.1
-  database: DKYPW
+  database: DKYPW_TEST
+db2:
+  username: SYSDBA
+  password: SYSDBA001
+  port: 5237
+  ip: 127.0.0.1
+  database: DKYPW_TEST
 update-url: http://localhost:8080/
-#feeder: 170135030000001912
-#feeder: 170135030000001703
-#feeder: 170135030000002014
-#feeder: 170135030000001093
-feeder: 170135010000012353
-#feeder: 170135030000026594
-owner: 350100
+feeder: 170135090000015732
+owner: 350900
 delete: false
