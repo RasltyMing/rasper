@@ -1,9 +1,9 @@
 db:
   username: SYSDBA
   password: SYSDBA001
-  port: 5237
+  port: 5238
   ip: 127.0.0.1
-  database: DKYPW_TEST
+  database: DKYPW
 db2:
   username: SYSDBA
   password: SYSDBA001

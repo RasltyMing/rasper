@@ -103,19 +103,21 @@ func ReadOneFileAndDeal(sourcePath string) error {
 	fmt.Println(nodeIdMap)
 
 	// 获取馈线id和主馈线标识
-	for _, circuit := range simpleRdf.Circuits {
+	fmt.Println("circuit length:", len(simpleRdf.Circuits))
+	for i, circuit := range simpleRdf.Circuits {
+		fmt.Println("Feeder:", i, ":", circuit.ID)
 		var feeder util.FeederC
 		if result := db.Table(data.Config.DB.Database+".SG_CON_FEEDERLINE_C").
 			Where("PMS_RDF_ID = ?", circuit.ID).
 			Find(&feeder); result.Error != nil {
-			log.Print(result.Error)
+			log.Println(result.Error)
 		}
 		data.CircuitFeederMap[circuit.ID] = feeder.DCloudID
+		fmt.Println("Feeder:", circuit.ID, ", DCloud:", feeder.DCloudID)
 		if circuit.IsCurrentFeeder == "1" { // 主馈线
 			owner = feeder.Owner
 			data.CircuitMainFeederMap[circuit.ID] = true
 			log.Println("Read File: " + sourcePath + ", owner:" + owner)
-			break
 		}
 	}
 

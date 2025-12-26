@@ -48,6 +48,11 @@ type FeederC struct {
 	PmsRdfID string `gorm:"column:PMS_RDF_ID"`
 	Owner    string `gorm:"column:OWNER"`
 }
+type FeederIDMapTest struct {
+	DCloudID string `gorm:"column:DCLOUD_ID"`
+	PmsRdfID string `gorm:"column:PMS_RDF_ID"`
+	Owner    string `gorm:"column:OWNER"`
+}
 
 type ModelFeederJoin struct {
 	ID                string `gorm:"column:ID"`

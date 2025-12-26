@@ -334,16 +334,26 @@ func HandleTopo(idNodeMap, nodeIDMap map[string][]string, topoList []Topo, rdfDC
 	for id, nodeList := range idNodeMap {
 		groupNodeMap := make(map[string]bool)
 		feederDCloudID := data.CircuitFeederMap[strings.ReplaceAll(deviceFeederMap[id], "#", "")]
+		deviceDCloudID := rdfDCloudMap[id].ID
+
+		if feederDCloudID == "" {
+			fmt.Println("Feeder ID Not Get:", id)
+			continue
+		}
+
 		isMainFeeder := data.CircuitMainFeederMap[strings.ReplaceAll(deviceFeederMap[id], "#", "")]
 		var groupNodeList []string
 		for _, node := range nodeList {
+			if nodeMap[node].NodeID == "" {
+				continue
+			}
 			groupNodeMap[nodeMap[node].NodeID] = true
 			groupNodeList = append(groupNodeList, nodeMap[node].NodeID)
 		}
 
 		fmt.Println("--------------------------------------------")
 		// 源端设备没有录入
-		if rdfDCloudMap[id].ID == "" {
+		if deviceDCloudID == "" {
 			fmt.Println("ID:", id, " Device Lost!")
 			if isMainFeeder {
 				if newID, err := NewDevice(id, rdf, owner, feederDCloudID); err != nil {
@@ -362,6 +372,7 @@ func HandleTopo(idNodeMap, nodeIDMap map[string][]string, topoList []Topo, rdfDC
 			}
 		}
 
+		fmt.Println("DCloud Feeder:" + feederDCloudID)
 		fmt.Print("Source:")
 		fmt.Printf("ID: %s", id)
 		for _, node := range nodeList {
@@ -370,41 +381,63 @@ func HandleTopo(idNodeMap, nodeIDMap map[string][]string, topoList []Topo, rdfDC
 		fmt.Println()
 
 		fmt.Print("Trans:")
-		fmt.Printf("ID: %s", rdfDCloudMap[id].ID)
+		fmt.Printf("ID: %s", deviceDCloudID)
 		for _, node := range nodeList {
 			fmt.Printf("\t%s", nodeMap[node].NodeID)
 		}
 		fmt.Println()
 
 		fmt.Print("DB:")
-		fmt.Printf("ID: %s First: %s Second: %s\n", topoMap[rdfDCloudMap[id].ID].ID, topoMap[rdfDCloudMap[id].ID].FirstNodeID, topoMap[rdfDCloudMap[id].ID].SecondNodeID)
+		fmt.Printf("ID: %s First: %s Second: %s\n", topoMap[deviceDCloudID].ID, topoMap[deviceDCloudID].FirstNodeID, topoMap[deviceDCloudID].SecondNodeID)
 
 		// 源端和数据库FeederID不一致
-		if rdfDCloudMap[id].ID != "" && feederDCloudID != topoMap[rdfDCloudMap[id].ID].FeederID {
+		if deviceDCloudID != "" && feederDCloudID != topoMap[deviceDCloudID].FeederID {
 			// 更新feeder_id
-			fmt.Println("FEEDER_ID:", topoMap[rdfDCloudMap[id].ID].ID, " Not Compare!")
+			fmt.Println("FEEDER_ID:", topoMap[deviceDCloudID].ID, " Not Compare!")
 			updateMap := make(map[string]interface{})
 			updateMap["FEEDER_ID"] = feederDCloudID
 			if result := db.Table(config.DB.Database+".SG_CON_DPWRGRID_R_TOPO").
-				Where("ID = ?", topoMap[rdfDCloudMap[id].ID].ID).
+				Where("ID = ?", topoMap[deviceDCloudID].ID).
 				Updates(updateMap); result.Error != nil {
 				log.Println(result.Error)
 			} else {
 				log.Println(result.RowsAffected)
 			}
 		}
-		if topoMap[rdfDCloudMap[id].ID].ID == rdfDCloudMap[id].ID && groupNodeMap[topoMap[rdfDCloudMap[id].ID].FirstNodeID] && groupNodeMap[topoMap[rdfDCloudMap[id].ID].SecondNodeID] && len(nodeList) == 2 {
+		if topoMap[deviceDCloudID].ID == deviceDCloudID &&
+			groupNodeMap[topoMap[deviceDCloudID].FirstNodeID] &&
+			groupNodeMap[topoMap[deviceDCloudID].SecondNodeID] &&
+			(topoMap[deviceDCloudID].SecondNodeID != topoMap[deviceDCloudID].FirstNodeID) &&
+			len(nodeList) == 2 {
 			fmt.Println("ID compare!")
 			continue
 		}
 
+		if topoMap[deviceDCloudID].SecondNodeID == topoMap[deviceDCloudID].FirstNodeID { // 数据库里首位拓扑相同的刷新一次
+			updateMap := map[string]interface{}{
+				"FIRST_NODE_ID": groupNodeList[0],
+			}
+			if len(groupNodeList) > 1 {
+				updateMap["SECOND_NODE_ID"] = groupNodeList[1]
+			} else {
+				updateMap["SECOND_NODE_ID"] = nil
+			}
+			if result := db.Table(config.DB.Database+".SG_CON_DPWRGRID_R_TOPO").
+				Where("ID = ?", topoMap[deviceDCloudID].ID).
+				Updates(updateMap); result.Error != nil {
+				log.Println(result.Error)
+			} else {
+				log.Println(result.RowsAffected)
+			}
+		}
+
 		if len(nodeList) > 2 {
-			fmt.Println("ID:", rdfDCloudMap[id].ID, " has multiply node")
+			fmt.Println("ID:", deviceDCloudID, " has multiply node")
 			continue
 		}
 		// 源端没有映射到数据库节点或ID
 		if len(groupNodeList) == 0 || listContainID(groupNodeList, "") {
-			fmt.Println("ID:", topoMap[rdfDCloudMap[id].ID].ID, " Cannot Convert!")
+			fmt.Println("ID:", topoMap[deviceDCloudID].ID, " Cannot Convert!")
 			groupNodeList = []string{}
 			for _, node := range nodeList {
 				newNodeID := ""
@@ -428,10 +461,10 @@ func HandleTopo(idNodeMap, nodeIDMap map[string][]string, topoList []Topo, rdfDC
 				}
 				groupNodeList = append(groupNodeList, newNodeID)
 			}
-			if topoMap[rdfDCloudMap[id].ID].ID == "" { // 表里没数据就新增
+			if topoMap[deviceDCloudID].ID == "" { // 表里没数据就新增
 				insertMap := map[string]interface{}{
-					"ID":            rdfDCloudMap[id].ID,
-					"FEEDER_ID":     groupNodeList[0][0:18],
+					"ID":            deviceDCloudID,
+					"FEEDER_ID":     feederDCloudID,
 					"OWNER":         owner,
 					"FIRST_NODE_ID": groupNodeList[0],
 				}
@@ -450,7 +483,7 @@ func HandleTopo(idNodeMap, nodeIDMap map[string][]string, topoList []Topo, rdfDC
 					updateMap["SECOND_NODE_ID"] = groupNodeList[1]
 				}
 				if result := db.Table(config.DB.Database+".SG_CON_DPWRGRID_R_TOPO").
-					Where("ID = ?", topoMap[rdfDCloudMap[id].ID].ID).
+					Where("ID = ?", topoMap[deviceDCloudID].ID).
 					Updates(updateMap); result.Error != nil {
 					log.Println(result.Error)
 				} else {
@@ -460,10 +493,10 @@ func HandleTopo(idNodeMap, nodeIDMap map[string][]string, topoList []Topo, rdfDC
 			continue
 		}
 		// 源端有数据库没有
-		if topoMap[rdfDCloudMap[id].ID].ID == "" {
-			fmt.Println("ID:", topoMap[rdfDCloudMap[id].ID].ID, " Topo Not Exist!")
+		if topoMap[deviceDCloudID].ID == "" {
+			fmt.Println("ID:", topoMap[deviceDCloudID].ID, " Topo Not Exist!")
 			insertMap := map[string]interface{}{
-				"ID":            rdfDCloudMap[id].ID,
+				"ID":            deviceDCloudID,
 				"FEEDER_ID":     feederDCloudID,
 				"OWNER":         owner,
 				"FIRST_NODE_ID": groupNodeList[0],
@@ -479,9 +512,9 @@ func HandleTopo(idNodeMap, nodeIDMap map[string][]string, topoList []Topo, rdfDC
 			continue
 		}
 		// 源端和数据库节点不一致, FirstNode或SecondNode不存在
-		if (topoMap[rdfDCloudMap[id].ID].FirstNodeID != "" && !listContainID(groupNodeList, topoMap[rdfDCloudMap[id].ID].FirstNodeID)) ||
-			topoMap[rdfDCloudMap[id].ID].SecondNodeID != "" && !listContainID(groupNodeList, topoMap[rdfDCloudMap[id].ID].SecondNodeID) {
-			fmt.Println("ID:", topoMap[rdfDCloudMap[id].ID].ID, " Not Compare!")
+		if (topoMap[deviceDCloudID].FirstNodeID != "" && !listContainID(groupNodeList, topoMap[deviceDCloudID].FirstNodeID)) ||
+			topoMap[deviceDCloudID].SecondNodeID != "" && !listContainID(groupNodeList, topoMap[deviceDCloudID].SecondNodeID) {
+			fmt.Println("ID:", topoMap[deviceDCloudID].ID, " Not Compare!")
 			updateMap := make(map[string]interface{})
 			updateMap["FIRST_NODE_ID"] = groupNodeList[0]
 			if len(groupNodeList) > 1 {
@@ -490,7 +523,7 @@ func HandleTopo(idNodeMap, nodeIDMap map[string][]string, topoList []Topo, rdfDC
 				updateMap["SECOND_NODE_ID"] = nil
 			}
 			if result := db.Table(config.DB.Database+".SG_CON_DPWRGRID_R_TOPO").
-				Where("ID = ?", topoMap[rdfDCloudMap[id].ID].ID).
+				Where("ID = ?", topoMap[deviceDCloudID].ID).
 				Updates(updateMap); result.Error != nil {
 				log.Println(result.Error)
 			} else {

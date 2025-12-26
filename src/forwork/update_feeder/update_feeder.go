@@ -35,23 +35,12 @@ func main() {
 	}
 
 	var db1FeederCList []util.FeederC
-	data.DB.Table(data.Config.DB.Database + ".SG_CON_FEEDERLINE_B").
+	data.DB.Table(data.Config.DB.Database + ".FEEDERID_MAP_TEST").
 		Find(&db1FeederCList)
-	var db2FeederCList []util.FeederC
-	data.DB2.Table(data.Config.DB2.Database + ".SG_CON_FEEDERLINE_B").
-		Find(&db2FeederCList)
 
-	var db1FeederMap map[string]string
-	for _, feederC := range db1FeederCList {
-		db1FeederMap[feederC.PmsRdfID] = feederC.DCloudID
-	}
-	var db2FeederMap map[string]string
-	for _, feederC := range db2FeederCList {
-		db2FeederMap[feederC.PmsRdfID] = feederC.DCloudID
+	if !data.Config.Delete {
+		return
 	}
 
-	var db2Db1Map map[string]string
-	for rdf, cloud := range db2FeederMap {
-		db2Db1Map[cloud] = db1FeederMap[rdf]
-	}
+	db1Db2Map
 }
