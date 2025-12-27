@@ -9,10 +9,15 @@ import (
 
 // AppConfig 结构体用于映射 yaml 配置
 type AppConfig struct {
-	DB        DBConfig `yaml:"db"`
-	DB2       DBConfig `yaml:"db2"`
-	UpdateUrl string   `yaml:"update-url"`
-	Delete    bool     `yaml:"delete"`
+	DB     DBConfig `yaml:"db"`
+	DB2    DBConfig `yaml:"db2"`
+	Server struct {
+		Port string `yaml:"port"`
+		Host string `yaml:"host"`
+	} `yaml:"server"`
+	TargetURL string `yaml:"target_url"`
+	UpdateUrl string `yaml:"update-url"`
+	Delete    bool   `yaml:"delete"`
 }
 type DBConfig struct {
 	Username string `yaml:"username"`
