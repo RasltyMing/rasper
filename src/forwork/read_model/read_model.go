@@ -16,7 +16,6 @@ import (
 )
 
 var db *gorm.DB
-var owner string
 
 // 主函数
 func main() {
@@ -71,6 +70,8 @@ func main() {
 }
 
 func ReadOneFileAndDeal(sourcePath string) error {
+	var owner string
+
 	defer func() {
 		err := recover()
 		if err != nil {
@@ -96,13 +97,8 @@ func ReadOneFileAndDeal(sourcePath string) error {
 		fmt.Printf("Terminal: %d\n", len(simpleRdf.Terminals))
 	}
 
-	idNodeMap, nodeIdMap, deviceFeederMap := util.GetTopoMap(simpleRdf)
-	fmt.Println("idNodeMap:", len(idNodeMap))
-	fmt.Println(idNodeMap)
-	fmt.Println("nodeIdMap:", len(nodeIdMap))
-	fmt.Println(nodeIdMap)
-
 	// 获取馈线id和主馈线标识
+	var circuitDCloudMap = make(map[string]string)
 	fmt.Println("circuit length:", len(simpleRdf.Circuits))
 	for i, circuit := range simpleRdf.Circuits {
 		fmt.Println("Feeder:", i, ":", circuit.ID)
@@ -112,7 +108,7 @@ func ReadOneFileAndDeal(sourcePath string) error {
 			Find(&feeder); result.Error != nil {
 			log.Println(result.Error)
 		}
-		data.CircuitFeederMap[circuit.ID] = feeder.DCloudID
+		circuitDCloudMap[circuit.ID] = feeder.DCloudID
 		fmt.Println("Feeder:", circuit.ID, ", DCloud:", feeder.DCloudID)
 		if circuit.IsCurrentFeeder == "1" { // 主馈线
 			owner = feeder.Owner
@@ -121,23 +117,16 @@ func ReadOneFileAndDeal(sourcePath string) error {
 		}
 	}
 
-	// 获取ID对应的云ID
-	rdfDCloudMap, dcloudList := util.GetDCloudIDList(data.Config, db, idNodeMap)
-	nodeMap := util.GetDCloudNodeIDList(data.Config, db, nodeIdMap, owner) // 云对应的NodeID
-	// 获取ID相关的Topo
-	var topoList []util.Topo
-	result := db.Table(data.Config.DB.Database+".SG_CON_DPWRGRID_R_TOPO").
-		Where("ID in ?", dcloudList).
-		Find(&topoList)
-	if result.Error != nil {
-		log.Printf("❌ 查询拓扑数据失败: error=%v", result.Error)
-	}
+	topoList := util.GetDeviceTopoMap(simpleRdf)
+	fmt.Println("topoMap:", len(topoList))
 
-	fmt.Println("topoList:", len(topoList))
+	cloud := util.GetTopoInfoInDCloud(topoList, circuitDCloudMap, owner)
+	fmt.Println("topoInfo:", len(cloud))
 
-	util.HandleTopo(idNodeMap, nodeIdMap, topoList, rdfDCloudMap, nodeMap, deviceFeederMap, db, data.Config, owner, simpleRdf)
-	util.MainSubConnect()
-	util.ConnectMultiplyNode(simpleRdf, owner)
+	//util.HandleTopo(idNodeMap, nodeIdMap, topoList, rdfDCloudMap, nodeMap, deviceFeederMap, db, data.Config, owner, simpleRdf, circuitDCloudMap)
+	util.HandleDBTopo(cloud, circuitDCloudMap, owner, simpleRdf)
+	util.MainSubConnect(circuitDCloudMap)
+	//util.ConnectMultiplyNode(simpleRdf, owner)
 
 	// 提示图库程序更新图库馈线
 	for _, circuit := range simpleRdf.Circuits {
@@ -147,13 +136,15 @@ func ReadOneFileAndDeal(sourcePath string) error {
 			Find(&feeder); result.Error != nil {
 			log.Print(result.Error)
 		}
-		data.CircuitFeederMap[circuit.ID] = feeder.DCloudID
 		if circuit.IsCurrentFeeder == "1" { // 主馈线
 			owner = feeder.Owner
 			data.CircuitMainFeederMap[circuit.ID] = true
 			log.Println("Update Feeder: " + sourcePath + ", owner:" + owner + ", feeder:" + circuit.ID)
-			feederID := data.CircuitFeederMap[circuit.ID]
-			if _, err := httpGet(data.Config.UpdateUrl + "/" + feederID + "/" + owner); err != nil {
+			res := data.DB.Exec("update " + data.Config.DB.Database + ".SG_CON_DPWRGRID_R_TOPO set FIRST_NODE_ID = null where FIRST_NODE_ID = '' and FEEDER_ID = " + feeder.DCloudID)
+			log.Println("res: ", res)
+			res = data.DB.Exec("update " + data.Config.DB.Database + ".SG_CON_DPWRGRID_R_TOPO set SECOND_NODE_ID = null where SECOND_NODE_ID = '' and FEEDER_ID = " + feeder.DCloudID)
+			log.Println("res: ", res)
+			if _, err := httpGet(data.Config.UpdateUrl + "/" + feeder.DCloudID + "/" + owner); err != nil {
 				log.Println(err)
 			}
 		}

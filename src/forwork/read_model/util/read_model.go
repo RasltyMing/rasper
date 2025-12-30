@@ -324,7 +324,153 @@ func GetTopoMap(rdf *RDF) (idNodeMap map[string][]string, nodeIdMap map[string][
 	return idNodeMap, nodeIdMap, deviceFeederMap
 }
 
-func HandleTopo(idNodeMap, nodeIDMap map[string][]string, topoList []Topo, rdfDCloudMap map[string]IdMap, nodeMap map[string]NodeMap, deviceFeederMap map[string]string, db *gorm.DB, config data.AppConfig, owner string, rdf *RDF) {
+func GetDeviceTopoMap(rdf *RDF) (resultList []TopoBO) {
+	topoCacheMap := make(map[string][]Terminal)
+	mainFeederCacheMap := make(map[string]bool)
+
+	for _, terminal := range rdf.Terminals {
+		topoCacheMap[terminal.ConductingEquipment.Resource] = append(topoCacheMap[terminal.ConductingEquipment.Resource], terminal)
+	}
+
+	for _, circuit := range rdf.Circuits {
+		if circuit.IsCurrentFeeder == "1" {
+			mainFeederCacheMap["#"+circuit.ID] = true // 特殊处理, 设备里的带#号
+		}
+	}
+	for _, entity := range rdf.Breakers {
+		terminals := topoCacheMap["#"+entity.ID]
+		if len(terminals) == 0 {
+			fmt.Println("topo not found!:", entity.ID)
+			continue
+		}
+		if mainFeederCacheMap[entity.Circuit.Resource] == false {
+			fmt.Println("not in main feeder pass id:", entity.ID)
+			continue
+		}
+		resultList = append(resultList, TopoBO{
+			SourceID:     entity.ID,
+			SourceNode:   terminals,
+			SourceFeeder: strings.ReplaceAll(entity.Circuit.Resource, "#", ""),
+		})
+	}
+	for _, entity := range rdf.Disconnectors {
+		terminals := topoCacheMap["#"+entity.ID]
+		if len(terminals) == 0 {
+			fmt.Println("topo not found!:", entity.ID)
+			continue
+		}
+		if mainFeederCacheMap[entity.Circuit.Resource] == false {
+			fmt.Println("not in main feeder pass id:", entity.ID)
+			continue
+		}
+		resultList = append(resultList, TopoBO{
+			SourceID:     entity.ID,
+			SourceNode:   terminals,
+			SourceFeeder: strings.ReplaceAll(entity.Circuit.Resource, "#", ""),
+		})
+	}
+	for _, entity := range rdf.Fuses {
+		terminals := topoCacheMap["#"+entity.ID]
+		if len(terminals) == 0 {
+			fmt.Println("topo not found!:", entity.ID)
+			continue
+		}
+		if mainFeederCacheMap[entity.Circuit.Resource] == false {
+			fmt.Println("not in main feeder pass id:", entity.ID)
+			continue
+		}
+		resultList = append(resultList, TopoBO{
+			SourceID:     entity.ID,
+			SourceNode:   terminals,
+			SourceFeeder: strings.ReplaceAll(entity.Circuit.Resource, "#", ""),
+		})
+	}
+	for _, entity := range rdf.PowerTransformers {
+		terminals := topoCacheMap["#"+entity.ID]
+		if len(terminals) == 0 {
+			fmt.Println("topo not found!:", entity.ID)
+			continue
+		}
+		if mainFeederCacheMap[entity.Circuit.Resource] == false {
+			fmt.Println("not in main feeder pass id:", entity.ID)
+			continue
+		}
+		resultList = append(resultList, TopoBO{
+			SourceID:     entity.ID,
+			SourceNode:   terminals,
+			SourceFeeder: strings.ReplaceAll(entity.Circuit.Resource, "#", ""),
+		})
+	}
+	for _, entity := range rdf.BusbarSections {
+		terminals := topoCacheMap["#"+entity.ID]
+		if len(terminals) == 0 {
+			fmt.Println("topo not found!:", entity.ID)
+			continue
+		}
+		if mainFeederCacheMap[entity.Circuit.Resource] == false {
+			fmt.Println("not in main feeder pass id:", entity.ID)
+			continue
+		}
+		resultList = append(resultList, TopoBO{
+			SourceID:     entity.ID,
+			SourceNode:   terminals,
+			SourceFeeder: strings.ReplaceAll(entity.Circuit.Resource, "#", ""),
+		})
+	}
+	for _, entity := range rdf.ACLineSegments {
+		terminals := topoCacheMap["#"+entity.ID]
+		if len(terminals) == 0 {
+			fmt.Println("topo not found!:", entity.ID)
+			continue
+		}
+		if mainFeederCacheMap[entity.Circuit.Resource] == false {
+			fmt.Println("not in main feeder pass id:", entity.ID)
+			continue
+		}
+		resultList = append(resultList, TopoBO{
+			SourceID:     entity.ID,
+			SourceNode:   terminals,
+			SourceFeeder: strings.ReplaceAll(entity.Circuit.Resource, "#", ""),
+		})
+	}
+	for _, entity := range rdf.Poles {
+		terminals := topoCacheMap["#"+entity.ID]
+		if len(terminals) == 0 {
+			fmt.Println("topo not found!:", entity.ID)
+			continue
+		}
+		if mainFeederCacheMap[entity.Circuit.Resource] == false {
+			fmt.Println("not in main feeder pass id:", entity.ID)
+			continue
+		}
+		resultList = append(resultList, TopoBO{
+			SourceID:     entity.ID,
+			SourceNode:   terminals,
+			SourceFeeder: strings.ReplaceAll(entity.Circuit.Resource, "#", ""),
+		})
+	}
+	for _, entity := range rdf.FaultIndicators {
+		terminals := topoCacheMap["#"+entity.ID]
+		if len(terminals) == 0 {
+			fmt.Println("topo not found!:", entity.ID)
+			continue
+		}
+		if mainFeederCacheMap[entity.Circuit.Resource] == false {
+			fmt.Println("not in main feeder pass id:", entity.ID)
+			continue
+		}
+		resultList = append(resultList, TopoBO{
+			SourceID:     entity.ID,
+			SourceNode:   terminals,
+			SourceFeeder: strings.ReplaceAll(entity.Circuit.Resource, "#", ""),
+		})
+	}
+
+	return resultList
+}
+
+// HandleTopo @deprecated
+func HandleTopo(idNodeMap, nodeIDMap map[string][]string, topoList []Topo, rdfDCloudMap map[string]IdMap, nodeMap map[string]NodeMap, deviceFeederMap map[string]string, db *gorm.DB, config data.AppConfig, owner string, rdf *RDF, circuitDCloudMap map[string]string) {
 	// DCloud的ID-topo Map
 	topoMap := make(map[string]Topo)
 	for _, topo := range topoList {
@@ -333,7 +479,7 @@ func HandleTopo(idNodeMap, nodeIDMap map[string][]string, topoList []Topo, rdfDC
 
 	for id, nodeList := range idNodeMap {
 		groupNodeMap := make(map[string]bool)
-		feederDCloudID := data.CircuitFeederMap[strings.ReplaceAll(deviceFeederMap[id], "#", "")]
+		feederDCloudID := circuitDCloudMap[strings.ReplaceAll(deviceFeederMap[id], "#", "")]
 		deviceDCloudID := rdfDCloudMap[id].ID
 
 		if feederDCloudID == "" {
@@ -449,7 +595,7 @@ func HandleTopo(idNodeMap, nodeIDMap map[string][]string, topoList []Topo, rdfDC
 					if entity.NodeID != "" { // 不为空用数据库的
 						newNodeID = entity.NodeID
 					} else { // 为空生成
-						newNodeID = GetNoUseNodeInFeeder(deviceFeederMap[id], db, owner)
+						newNodeID = GetNoUseNodeInFeeder(deviceFeederMap[id], owner)
 						if newNodeID == "" {
 							newNodeID = node // 没生成成功先用源端ID
 						}
