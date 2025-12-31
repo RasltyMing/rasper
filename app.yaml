@@ -10,6 +10,7 @@ db2:
   port: 5237
   ip: 127.0.0.1
   database: DKYPW_TEST
+thread-pool: 5
 update-url: http://localhost:8080/
 feeder: 170135090000015732
 owner: 350900

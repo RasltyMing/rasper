@@ -9,6 +9,7 @@ import (
 	"path/filepath"
 	"raselper/src/forwork/read_model/data"
 	"raselper/src/forwork/read_model/util"
+	"raselper/src/secondary/utils"
 	"strings"
 
 	dameng "github.com/godoes/gorm-dameng"
@@ -44,6 +45,10 @@ func main() {
 		return
 	}
 	if fileInfo.IsDir() {
+		// 创建线程池，3个worker，任务队列大小100
+		pool := utils.NewWorkerPool(data.Config.ThreadPool, 5000)
+		defer pool.Close()
+
 		fmt.Printf("%s 是一个文件夹\n", path)
 		err = filepath.Walk(path, func(path string, info os.FileInfo, err error) error {
 			if !strings.HasSuffix(filepath.Base(path), ".xml") {
@@ -51,12 +56,21 @@ func main() {
 				return nil
 			}
 
-			if err = ReadOneFileAndDeal(path); err != nil {
-				log.Println(err)
-				return nil
-			}
+			pool.Submit(func() {
+				fmt.Println("read file:" + path)
+				if err = ReadOneFileAndDeal(path); err != nil {
+					log.Println(err)
+				} else {
+					fmt.Println("file done:", path)
+				}
+			})
+
 			return nil
 		})
+
+		// 等待所有任务完成
+		pool.Wait()
+		fmt.Println("All tasks completed")
 	} else {
 		fmt.Printf("%s 是一个文件\n", path)
 		// 还可以获取更多信息
@@ -99,6 +113,7 @@ func ReadOneFileAndDeal(sourcePath string) error {
 
 	// 获取馈线id和主馈线标识
 	var circuitDCloudMap = make(map[string]string)
+	var circuitMainFeederMap = make(map[string]bool) // 源端馈线ID - 是否主馈线
 	fmt.Println("circuit length:", len(simpleRdf.Circuits))
 	for i, circuit := range simpleRdf.Circuits {
 		fmt.Println("Feeder:", i, ":", circuit.ID)
@@ -112,7 +127,7 @@ func ReadOneFileAndDeal(sourcePath string) error {
 		fmt.Println("Feeder:", circuit.ID, ", DCloud:", feeder.DCloudID)
 		if circuit.IsCurrentFeeder == "1" { // 主馈线
 			owner = feeder.Owner
-			data.CircuitMainFeederMap[circuit.ID] = true
+			circuitMainFeederMap[circuit.ID] = true
 			log.Println("Read File: " + sourcePath + ", owner:" + owner)
 		}
 	}
@@ -125,7 +140,10 @@ func ReadOneFileAndDeal(sourcePath string) error {
 
 	//util.HandleTopo(idNodeMap, nodeIdMap, topoList, rdfDCloudMap, nodeMap, deviceFeederMap, db, data.Config, owner, simpleRdf, circuitDCloudMap)
 	util.HandleDBTopo(cloud, circuitDCloudMap, owner, simpleRdf)
-	util.MainSubConnect(circuitDCloudMap)
+	util.HandleMultiplyNode(cloud, circuitDCloudMap, owner, simpleRdf)
+	util.HandleEmptyTopo(cloud)
+	util.MainSubConnect(circuitDCloudMap, circuitMainFeederMap)                               // 只处理果老师拼接成功的
+	util.MainSubConnectIfNotConnect(circuitDCloudMap, circuitMainFeederMap, cloud, simpleRdf) // 处理没有拼接成功的
 	//util.ConnectMultiplyNode(simpleRdf, owner)
 
 	// 提示图库程序更新图库馈线
@@ -138,12 +156,8 @@ func ReadOneFileAndDeal(sourcePath string) error {
 		}
 		if circuit.IsCurrentFeeder == "1" { // 主馈线
 			owner = feeder.Owner
-			data.CircuitMainFeederMap[circuit.ID] = true
+			circuitMainFeederMap[circuit.ID] = true
 			log.Println("Update Feeder: " + sourcePath + ", owner:" + owner + ", feeder:" + circuit.ID)
-			res := data.DB.Exec("update " + data.Config.DB.Database + ".SG_CON_DPWRGRID_R_TOPO set FIRST_NODE_ID = null where FIRST_NODE_ID = '' and FEEDER_ID = " + feeder.DCloudID)
-			log.Println("res: ", res)
-			res = data.DB.Exec("update " + data.Config.DB.Database + ".SG_CON_DPWRGRID_R_TOPO set SECOND_NODE_ID = null where SECOND_NODE_ID = '' and FEEDER_ID = " + feeder.DCloudID)
-			log.Println("res: ", res)
 			if _, err := httpGet(data.Config.UpdateUrl + "/" + feeder.DCloudID + "/" + owner); err != nil {
 				log.Println(err)
 			}

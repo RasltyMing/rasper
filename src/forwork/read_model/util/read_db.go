@@ -24,6 +24,18 @@ type Topo struct {
 	Stamp         string `gorm:"column:STAMP"`
 }
 
+type TopoWithPrt struct {
+	D             *string `gorm:"column:D"`
+	EffectiveTime *string `gorm:"column:EFFECTIVE_TIME"`
+	ExpiryTime    *string `gorm:"column:EXPIRY_TIME"`
+	FeederID      *string `gorm:"column:FEEDER_ID"`
+	FirstNodeID   *string `gorm:"column:FIRST_NODE_ID"`
+	ID            *string `gorm:"column:ID"`
+	Owner         *string `gorm:"column:OWNER"`
+	SecondNodeID  *string `gorm:"column:SECOND_NODE_ID"`
+	Stamp         string  `gorm:"column:STAMP"`
+}
+
 type IdMap struct {
 	ID           string `gorm:"column:ID"`
 	RdfID        string `gorm:"column:RDF_ID"`
@@ -61,7 +73,7 @@ type FeederIDMapTest struct {
 
 type ModelFeederJoin struct {
 	ID                string `gorm:"column:ID"`
-	PmsRdfID          string `gorm:"column:IS_JOIN"`
+	PmsRdfID          string `gorm:"column:PMS_RDF_ID"`
 	MainNdValue       string `gorm:"column:MIAN_ND_VALUE"`
 	FileNdValue       string `gorm:"column:FILE_ND_VALUE"`
 	IsJoin            string `gorm:"column:IS_JOIN"`
@@ -233,12 +245,12 @@ func GetNoUseNodeInFeeder_NodeMapOwner(feederID string, id string, owner string)
 	return timeUniId
 }
 
-func MainSubConnect(circuitDCloudMap map[string]string) {
+func MainSubConnect(circuitDCloudMap map[string]string, circuitMainFeederMap map[string]bool) {
 	db := data.DB
 
 	for key, cloudID := range circuitDCloudMap {
 		log.Println("handle circuit connect: ", key, ":", cloudID)
-		if !data.CircuitMainFeederMap[key] {
+		if !circuitMainFeederMap[key] {
 			log.Println("not main circuit: ", key, ":", cloudID)
 			continue
 		}
@@ -523,11 +535,11 @@ func GetTopoInfoInDCloud(topoInfo []TopoBO, cloudMap map[string]string, owner st
 			topo.Stamp = cloudTopo.Stamp
 		}
 
-		if len(topo.SourceNode) > 0 {
+		if len(topo.SourceNode) > 0 && topo.SourceNode[0].ConnectivityNode.Resource != "#0" {
 			topo.TransFirstNode = sourceTopoCacheMap[topo.SourceNode[0].ConnectivityNode.Resource]
 			topo.SourceFirstNode = topo.SourceNode[0].ConnectivityNode.Resource
 		}
-		if len(topo.SourceNode) > 1 {
+		if len(topo.SourceNode) > 1 && topo.SourceNode[1].ConnectivityNode.Resource != "#0" {
 			topo.TransSecondNode = sourceTopoCacheMap[topo.SourceNode[1].ConnectivityNode.Resource]
 			topo.SourceSecondNode = topo.SourceNode[1].ConnectivityNode.Resource
 		}
@@ -556,19 +568,22 @@ func HandleDBTopo(topoList []TopoBO, cloudMap map[string]string, owner string, r
 		// 开始录入
 		if topoBO.DCloudID == "" {
 			newID, _ := NewDevice(topoBO.SourceID, rdf, owner, topoBO.DCloudFeeder)
+			if newID == "" { // 没生成跳过
+				fmt.Println("newID is empty, pass:" + topoBO.DCloudID)
+			}
 			fmt.Println("newID:", newID)
 		}
 
 		if topoBO.ID == "" && topoBO.DCloudID != "" { // 没这个topo
 			data.DB.Table(data.Config.DB.Database+".SG_CON_DPWRGRID_R_TOPO").
 				Where("ID = ?", topoBO.ID).
-				Create(&Topo{
-					ID:           topoBO.DCloudID,
-					Owner:        owner,
-					FeederID:     topoBO.DCloudFeeder,
-					FirstNodeID:  topoBO.TransFirstNode,
-					SecondNodeID: topoBO.TransSecondNode,
-					Stamp:        time.Now().Format("2006-01-02 15:04:05"),
+				Create(&TopoWithPrt{
+					ID:           &topoBO.DCloudID,
+					Owner:        &owner,
+					FeederID:     &topoBO.DCloudFeeder,
+					FirstNodeID:  StringReturnNil(&topoBO.TransFirstNode, ""),
+					SecondNodeID: StringReturnNil(&topoBO.TransSecondNode, ""),
+					Stamp:        "350000_00613500000001_" + time.Now().Format("2006-01-02 15:04:05"),
 				})
 			continue
 		}
@@ -577,13 +592,66 @@ func HandleDBTopo(topoList []TopoBO, cloudMap map[string]string, owner string, r
 			data.DB.Table(data.Config.DB.Database+".SG_CON_DPWRGRID_R_TOPO").
 				Where("ID = ?", topoBO.ID).
 				Updates(map[string]interface{}{
-					"FIRST_NODE_ID":  topoBO.TransFirstNode,
-					"SECOND_NODE_ID": topoBO.TransSecondNode,
+					"FIRST_NODE_ID":  StringReturnNil(&topoBO.TransFirstNode, ""),
+					"SECOND_NODE_ID": StringReturnNil(&topoBO.TransSecondNode, ""),
 				})
 			continue
 		}
 
 		fmt.Printf("else: %v\n", topoBO)
 		fmt.Println("---------------------")
+	}
+}
+
+func HandleMultiplyNode(topoList []TopoBO, cloudMap map[string]string, owner string, rdf *RDF) {
+	for _, topoBO := range topoList {
+		if len(topoBO.SourceNode) > 2 {
+			fmt.Printf("topo more than 2: %s\n", topoBO.SourceID)
+			fmt.Printf("topo: %v\n", topoBO)
+			fmt.Printf("cloud: %s, %s, %s\n", topoBO.ID, SafeGetString(topoBO.FirstNodeID), SafeGetString(topoBO.SecondNodeID))
+			for _, terminal := range topoBO.SourceNode[2:] {
+				newNode := GetNoUseNodeInFeeder_NodeMapOwner(topoBO.DCloudFeeder, terminal.ConnectivityNode.Resource, owner)
+				fmt.Println("multiply newNode:", newNode)
+				data.DB.Table(data.Config.DB.Database+".SG_CON_DPWRGRID_R_TOPO").
+					Where("FEEDER_ID = ? and FIRST_NODE_ID = ?", topoBO.DCloudFeeder, newNode).
+					Updates(map[string]interface{}{
+						"FIRST_NODE_ID": topoBO.TransFirstNode,
+					})
+				data.DB.Table(data.Config.DB.Database+".SG_CON_DPWRGRID_R_TOPO").
+					Where("FEEDER_ID = ? and SECOND_NODE_ID = ?", topoBO.DCloudFeeder, newNode).
+					Updates(map[string]interface{}{
+						"SECOND_NODE_ID": topoBO.TransSecondNode,
+					})
+			}
+		}
+	}
+}
+
+func HandleEmptyTopo(cloud []TopoBO) {
+	var firstEmptyList []string
+	var secondEmptyList []string
+
+	for _, topoBO := range cloud {
+		if topoBO.TransFirstNode == "" {
+			firstEmptyList = append(firstEmptyList, topoBO.DCloudID)
+		}
+		if topoBO.TransSecondNode == "" {
+			secondEmptyList = append(secondEmptyList, topoBO.DCloudID)
+		}
+	}
+
+	if res := data.DB.Table(data.Config.DB.Database+".SG_CON_DPWRGRID_R_TOPO").
+		Where("ID in ?", firstEmptyList).
+		Updates(map[string]interface{}{
+			"FIRST_NODE_ID": nil,
+		}); res.Error != nil {
+		fmt.Printf("ERROR: %v\n", res.Error)
+	}
+	if res := data.DB.Table(data.Config.DB.Database+".SG_CON_DPWRGRID_R_TOPO").
+		Where("ID in ?", secondEmptyList).
+		Updates(map[string]interface{}{
+			"SECOND_NODE_ID": nil,
+		}); res.Error != nil {
+		fmt.Printf("ERROR: %v\n", res.Error)
 	}
 }

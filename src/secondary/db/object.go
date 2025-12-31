@@ -2,8 +2,6 @@ package db
 
 import (
 	"encoding/binary"
-	"path/filepath"
-	"raselper/src/secondary/utils"
 )
 
 type Table struct {
@@ -23,13 +21,13 @@ func (r Table) GetByteArray() []byte {
 	return data
 }
 
-func GetTableFromFile(tableName string, tablePath string) (*Table, error) {
-	if offset, err := utils.StreamFromOffset(filepath.Join(tablePath, tableName+".idb"), 0, 8192); err != nil {
-		return
-	} else {
-		tableInfo = readTable(offset)
-	}
-}
+//func GetTableFromFile(tableName string, tablePath string) (*Table, error) {
+//	if offset, err := utils.StreamFromOffset(filepath.Join(tablePath, tableName+".idb"), 0, 8192); err != nil {
+//		return
+//	} else {
+//		tableInfo = readTable(offset)
+//	}
+//}
 
 func readTable(data []byte) *Table {
 	table := &Table{
