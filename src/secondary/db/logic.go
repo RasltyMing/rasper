@@ -46,15 +46,15 @@ func SelectTable(tableName string, tablePath string) (*Table, []*TableRow, error
 	return tableInfo, tableRows, nil
 }
 
-func InsertTable(tableName string, tablePath string) (int, error) {
-	tableInfo := &Table{}
-	readTable()
-	if offset, err := utils.StreamFromOffset(filepath.Join(tablePath, tableName+".idb"), 0, 8192); err != nil {
-		return 0, err
-	} else {
-		tableInfo = readTable(offset)
-	}
-}
+//func InsertTable(tableName string, tablePath string) (int, error) {
+//	tableInfo := &Table{}
+//	readTable()
+//	if offset, err := utils.StreamFromOffset(filepath.Join(tablePath, tableName+".idb"), 0, 8192); err != nil {
+//		return 0, err
+//	} else {
+//		tableInfo = readTable(offset)
+//	}
+//}
 
 //func UpdateTable(tableName string, tablePath string) (int, error) {
 //
