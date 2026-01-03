@@ -7,6 +7,7 @@ import (
 	"log"
 	"os"
 	"raselper/src/forwork/read_model/data"
+	"raselper/src/secondary/utils"
 	"strings"
 
 	"gorm.io/gorm"
@@ -805,10 +806,142 @@ func MainSubConnectIfNotConnect(circuitDCloudMap map[string]string, circuitMainF
 		idNodeMap, nodeIdMap := getDeviceNodeConnectInfo(rdf, key)
 		for _, item := range list {
 			if strings.HasPrefix(item, "31100000") {
-				_ = getDeviceConnectRoute(item, idNodeMap, nodeIdMap)
+				deviceConnectMap := getDeviceConnectMap(idNodeMap, nodeIdMap)
+				connectRoute := getDeviceConnectRoute(item, deviceConnectMap, make(map[string]bool))
+				headTopo := getSubHeadTopo(list, connectRoute)
+				fmt.Println("head topo:", headTopo, " connect to bus:", item)
+				var busTopo Topo
+				if res := data.DB.Raw("select * from DKYPW.SG_CON_PWRGRID_R_TOPO " +
+					"where id in ( " +
+					"    select DCLOUD_ID " +
+					"from DKYPW.SG_DEV_BUSBAR_C where D5000_ID in ( " +
+					"    select BUSBAR_EMS_ID " +
+					"from DKYPW.BUSBARID_SMD where BUSBAR_RDF_ID = '" + item + "' " +
+					"        ) " +
+					"    ) limit 1; ").Find(&busTopo); res.Error != nil {
+					fmt.Println("res:", res)
+				}
+				mainNode := busTopo.FirstNodeID
+				if busTopo.SecondNodeID != "" {
+					mainNode = busTopo.SecondNodeID
+				}
+				fmt.Println("busTopo: ", busTopo, " mainNode: ", mainNode)
+				var subTopo TopoBO
+				for _, topoBO := range cloud {
+					if topoBO.SourceID == headTopo {
+						subTopo = topoBO
+						break
+					}
+				}
+				fmt.Println("subTopo: ", subTopo)
+				logPrefix := "[拓扑处理]"
+				var topoList []Topo
+				{ // 首节点判断
+					log.Printf("%s 开始处理首节点，TransFirstNode: %s", logPrefix, subTopo.TransFirstNode)
+
+					if subTopo.TransFirstNode != "" {
+						result = db.Table(data.Config.DB.Database+".SG_CON_DPWRGRID_R_TOPO").
+							Where("FIRST_NODE_ID = ? or SECOND_NODE_ID = ?", subTopo.TransFirstNode, subTopo.TransFirstNode).
+							Find(&topoList)
+						if result.Error != nil {
+							log.Printf("%s 查询SG_CON_DPWRGRID_R_TOPO失败 - TransFirstNode: %s, 错误: %v",
+								logPrefix, subTopo.TransFirstNode, result.Error)
+						}
+						log.Printf("%s 首节点查询完成 - TransFirstNode: %s, 查询到 %d 条记录",
+							logPrefix, subTopo.TransFirstNode, len(topoList))
+
+						if len(topoList) == 1 { // 未连接其他设备就连上主网设备
+							log.Printf("%s 首节点为孤立节点，开始更新为主网节点 - TransFirstNode: %s → MainNode: %s",
+								logPrefix, subTopo.TransFirstNode, mainNode)
+							updateResult := db.Table(data.Config.DB.Database+".SG_CON_DPWRGRID_R_TOPO").
+								Where("FIRST_NODE_ID = ?", subTopo.TransFirstNode).
+								Updates(map[string]interface{}{
+									"FIRST_NODE_ID": mainNode,
+								})
+							if updateResult.Error != nil {
+								log.Printf("%s 首节点更新失败 - TransFirstNode: %s, 错误: %v",
+									logPrefix, subTopo.TransFirstNode, updateResult.Error)
+							} else {
+								log.Printf("%s 首节点更新成功 - TransFirstNode: %s → MainNode: %s, 影响行数: %d",
+									logPrefix, subTopo.TransFirstNode, mainNode, updateResult.RowsAffected)
+							}
+						}
+					}
+				}
+
+				{ // 末端节点判断
+					log.Printf("%s 开始处理末端节点，SecondNodeID: %s", logPrefix, subTopo.SecondNodeID)
+
+					if subTopo.TransSecondNode != "" {
+						result = db.Table(data.Config.DB.Database+".SG_CON_DPWRGRID_R_TOPO").
+							Where("FIRST_NODE_ID = ? or SECOND_NODE_ID = ?", subTopo.TransSecondNode, subTopo.TransSecondNode).
+							Find(&topoList)
+
+						if result.Error != nil {
+							log.Printf("%s 查询SG_CON_DPWRGRID_R_TOPO失败 - SecondNodeID: %s, 错误: %v",
+								logPrefix, subTopo.TransSecondNode, result.Error)
+						}
+
+						log.Printf("%s 末端节点查询完成 - TransSecondNode: %s, 查询到 %d 条记录",
+							logPrefix, subTopo.TransSecondNode, len(topoList))
+
+						if len(topoList) == 1 { // 未连接其他设备就连上主网设备
+							log.Printf("%s 末端节点为孤立节点，开始更新为主网节点 - TransSecondNode: %s → MainNode: %s",
+								logPrefix, subTopo.TransSecondNode, mainNode)
+
+							updateResult := db.Table(data.Config.DB.Database+".SG_CON_DPWRGRID_R_TOPO").
+								Where("SECOND_NODE_ID = ?", subTopo.TransSecondNode).
+								Updates(map[string]interface{}{
+									"SECOND_NODE_ID": mainNode,
+								})
+
+							if updateResult.Error != nil {
+								log.Printf("%s 末端节点更新失败 - TransSecondNode: %s, 错误: %v",
+									logPrefix, subTopo.TransSecondNode, updateResult.Error)
+							} else {
+								log.Printf("%s 末端节点更新成功 - TransSecondNode: %s → MainNode: %s, 影响行数: %d",
+									logPrefix, subTopo.TransSecondNode, mainNode, updateResult.RowsAffected)
+							}
+						}
+					}
+				}
 			}
 		}
 	}
+}
+
+func getSubHeadTopo(list []string, route [][]string) string {
+	fmt.Println("route:")
+
+	hvTopo := make(map[string]bool)
+	headTopoCount := make(map[string]int)
+
+	for _, item := range list {
+		hvTopo[item] = true
+	}
+
+	for _, topoList := range route {
+		fmt.Println(topoList)
+		for _, topo := range topoList {
+			if hvTopo[topo] {
+				continue
+			}
+			headTopoCount[topo]++
+			break
+		}
+	}
+
+	var tempMaxCount int
+	var tempMaxTopo string
+	for headTopo, count := range headTopoCount {
+		fmt.Println("headTopo:", headTopo, " ", count)
+		if count > tempMaxCount {
+			tempMaxCount = count
+			tempMaxTopo = headTopo
+		}
+	}
+
+	return tempMaxTopo
 }
 
 func getHVSubstationDevice(rdf *RDF, feeder string) (resultList []string) {
@@ -860,13 +993,48 @@ func getHVSubstationDevice(rdf *RDF, feeder string) (resultList []string) {
 	return
 }
 
-func getDeviceConnectRoute(startID string, idNodeMap map[string][]string, nodeIdMap map[string][]string) [][]string {
-	//nodeList := idNodeMap[startID]
-	// todo: feat
-	//for _, deviceList := range nodeList {
-	//
-	//}
-	return [][]string{}
+// 用idNode和NodeId对应找出设备连接关系
+func getDeviceConnectMap(idNodeMap map[string][]string, nodeIdMap map[string][]string) map[string][]string {
+	resultMap := make(map[string][]string)
+
+	for id, nodeList := range idNodeMap {
+		for _, node := range nodeList {
+			for _, device := range nodeIdMap[node] {
+				if !utils.ListContainString(resultMap[id], device) && device != id { // 去重判断
+					resultMap[id] = append(resultMap[id], device)
+				}
+			}
+		}
+	}
+
+	return resultMap
+}
+func getDeviceConnectRoute(startID string, deviceConnectMap map[string][]string, hitDevice map[string]bool) [][]string {
+	hitDevice[startID] = true // 标记节点已被查找
+
+	deviceList := deviceConnectMap[startID]
+	var resultList [][]string
+
+	for _, device := range deviceList {
+		if hitDevice[device] { // 为上游节点而非下游节点
+			continue
+		}
+		connectList := getDeviceConnectRoute(device, deviceConnectMap, hitDevice)
+		for _, connect := range connectList {
+			resultList = append(
+				resultList,
+				append([]string{startID}, connect...),
+			)
+		}
+	}
+
+	if len(resultList) == 0 {
+		return [][]string{
+			{startID},
+		}
+	}
+
+	return resultList
 }
 
 //func GetConnectDevice(startID string, idNodeMap map[string][]string, nodeIdMap map[string][]string) []string {
