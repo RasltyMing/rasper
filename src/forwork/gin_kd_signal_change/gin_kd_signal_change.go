@@ -1,6 +1,7 @@
 package main
 
 import (
+	"fmt"
 	"net/http"
 
 	"github.com/gin-gonic/gin"
@@ -15,6 +16,19 @@ type DataItem struct {
 	FeederId     string `json:"feederId"`
 	StatusValue  int    `json:"statusValue"`
 	OccurTime    string `json:"occurTime"`
+}
+
+// StatusUpdateRequest 状态更新请求
+type StatusUpdateRequest struct {
+	Data []DeviceStatus `json:"data"`
+}
+
+// DeviceStatus 设备状态
+type DeviceStatus struct {
+	DataSourceID string `json:"dataSourceId"`
+	ID           string `json:"id"`
+	StatusValue  int    `json:"statusValue"`
+	UpdateTime   string `json:"updateTime"`
 }
 
 type RequestData struct {
@@ -71,6 +85,20 @@ func main() {
 	for _, route := range routes {
 		r.POST(route, handleSave)
 	}
+
+	r.POST("/DataSaveGuoDiao/DataSaveController/savebreakerYX", func(c *gin.Context) {
+		var req StatusUpdateRequest
+		// 绑定JSON请求体
+		if err := c.ShouldBindJSON(&req); err != nil {
+			c.JSON(http.StatusBadRequest, gin.H{"error": "Invalid JSON format"})
+			return
+		}
+		fmt.Println("req:", req)
+
+		c.JSON(http.StatusOK, map[string]interface{}{
+			"success": true,
+		})
+	})
 
 	// 启动服务器
 	r.Run(":18080")

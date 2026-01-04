@@ -1,0 +1,8 @@
+db:
+  username: SYSDBA
+  password: SYSDBA001
+  port: 5237
+  ip: 127.0.0.1
+  database: DKYPW
+update-url: localhost:18080
+slice: 1000

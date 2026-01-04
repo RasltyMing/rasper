@@ -12,13 +12,14 @@ type AppConfig struct {
 	DB         DBConfig `yaml:"db"`
 	DB2        DBConfig `yaml:"db2"`
 	ThreadPool int      `yaml:"thread-pool"`
-	Server struct {
+	Server     struct {
 		Port string `yaml:"port"`
 		Host string `yaml:"host"`
 	} `yaml:"server"`
 	TargetURL string `yaml:"target_url"`
-	UpdateUrl  string   `yaml:"update-url"`
-	Delete     bool     `yaml:"delete"`
+	UpdateUrl string `yaml:"update-url"`
+	Slice     int    `yaml:"slice"`
+	Delete    bool   `yaml:"delete"`
 }
 type DBConfig struct {
 	Username string `yaml:"username"`
