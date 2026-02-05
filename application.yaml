@@ -6,3 +6,14 @@ db:
   database: DKYPW
 update-url: localhost:18080
 slice: 1000
+redis:
+  username:
+  password:
+  url: localhost:6379
+  db: 0
+test:
+  on: false
+  on-devices:
+    - "1111"
+    - "222"
+  off-devices: []

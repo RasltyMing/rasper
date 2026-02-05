@@ -2,7 +2,6 @@ package util
 
 import (
 	"encoding/xml"
-	"fmt"
 	"io"
 	"log"
 	"os"
@@ -308,7 +307,7 @@ func GetTopoMap(rdf *RDF) (idNodeMap map[string][]string, nodeIdMap map[string][
 		nodeId := strings.Replace(terminal.ConnectivityNode.Resource, "#", "", -1)
 
 		if !existDevice[id] {
-			fmt.Println("pass id:", id)
+			log.Println("pass id:", id)
 			continue
 		}
 
@@ -341,11 +340,11 @@ func GetDeviceTopoMap(rdf *RDF) (resultList []TopoBO) {
 	for _, entity := range rdf.Breakers {
 		terminals := topoCacheMap["#"+entity.ID]
 		if len(terminals) == 0 {
-			fmt.Println("topo not found!:", entity.ID)
+			log.Println("topo not found!:", entity.ID)
 			continue
 		}
 		if mainFeederCacheMap[entity.Circuit.Resource] == false {
-			fmt.Println("not in main feeder pass id:", entity.ID)
+			log.Println("not in main feeder pass id:", entity.ID)
 			continue
 		}
 		resultList = append(resultList, TopoBO{
@@ -357,11 +356,11 @@ func GetDeviceTopoMap(rdf *RDF) (resultList []TopoBO) {
 	for _, entity := range rdf.Disconnectors {
 		terminals := topoCacheMap["#"+entity.ID]
 		if len(terminals) == 0 {
-			fmt.Println("topo not found!:", entity.ID)
+			log.Println("topo not found!:", entity.ID)
 			continue
 		}
 		if mainFeederCacheMap[entity.Circuit.Resource] == false {
-			fmt.Println("not in main feeder pass id:", entity.ID)
+			log.Println("not in main feeder pass id:", entity.ID)
 			continue
 		}
 		resultList = append(resultList, TopoBO{
@@ -373,11 +372,11 @@ func GetDeviceTopoMap(rdf *RDF) (resultList []TopoBO) {
 	for _, entity := range rdf.Fuses {
 		terminals := topoCacheMap["#"+entity.ID]
 		if len(terminals) == 0 {
-			fmt.Println("topo not found!:", entity.ID)
+			log.Println("topo not found!:", entity.ID)
 			continue
 		}
 		if mainFeederCacheMap[entity.Circuit.Resource] == false {
-			fmt.Println("not in main feeder pass id:", entity.ID)
+			log.Println("not in main feeder pass id:", entity.ID)
 			continue
 		}
 		resultList = append(resultList, TopoBO{
@@ -389,11 +388,11 @@ func GetDeviceTopoMap(rdf *RDF) (resultList []TopoBO) {
 	for _, entity := range rdf.PowerTransformers {
 		terminals := topoCacheMap["#"+entity.ID]
 		if len(terminals) == 0 {
-			fmt.Println("topo not found!:", entity.ID)
+			log.Println("topo not found!:", entity.ID)
 			continue
 		}
 		if mainFeederCacheMap[entity.Circuit.Resource] == false {
-			fmt.Println("not in main feeder pass id:", entity.ID)
+			log.Println("not in main feeder pass id:", entity.ID)
 			continue
 		}
 		resultList = append(resultList, TopoBO{
@@ -405,11 +404,11 @@ func GetDeviceTopoMap(rdf *RDF) (resultList []TopoBO) {
 	for _, entity := range rdf.BusbarSections {
 		terminals := topoCacheMap["#"+entity.ID]
 		if len(terminals) == 0 {
-			fmt.Println("topo not found!:", entity.ID)
+			log.Println("topo not found!:", entity.ID)
 			continue
 		}
 		if mainFeederCacheMap[entity.Circuit.Resource] == false {
-			fmt.Println("not in main feeder pass id:", entity.ID)
+			log.Println("not in main feeder pass id:", entity.ID)
 			continue
 		}
 		resultList = append(resultList, TopoBO{
@@ -421,11 +420,11 @@ func GetDeviceTopoMap(rdf *RDF) (resultList []TopoBO) {
 	for _, entity := range rdf.ACLineSegments {
 		terminals := topoCacheMap["#"+entity.ID]
 		if len(terminals) == 0 {
-			fmt.Println("topo not found!:", entity.ID)
+			log.Println("topo not found!:", entity.ID)
 			continue
 		}
 		if mainFeederCacheMap[entity.Circuit.Resource] == false {
-			fmt.Println("not in main feeder pass id:", entity.ID)
+			log.Println("not in main feeder pass id:", entity.ID)
 			continue
 		}
 		resultList = append(resultList, TopoBO{
@@ -437,11 +436,11 @@ func GetDeviceTopoMap(rdf *RDF) (resultList []TopoBO) {
 	for _, entity := range rdf.Poles {
 		terminals := topoCacheMap["#"+entity.ID]
 		if len(terminals) == 0 {
-			fmt.Println("topo not found!:", entity.ID)
+			log.Println("topo not found!:", entity.ID)
 			continue
 		}
 		if mainFeederCacheMap[entity.Circuit.Resource] == false {
-			fmt.Println("not in main feeder pass id:", entity.ID)
+			log.Println("not in main feeder pass id:", entity.ID)
 			continue
 		}
 		resultList = append(resultList, TopoBO{
@@ -453,11 +452,11 @@ func GetDeviceTopoMap(rdf *RDF) (resultList []TopoBO) {
 	for _, entity := range rdf.FaultIndicators {
 		terminals := topoCacheMap["#"+entity.ID]
 		if len(terminals) == 0 {
-			fmt.Println("topo not found!:", entity.ID)
+			log.Println("topo not found!:", entity.ID)
 			continue
 		}
 		if mainFeederCacheMap[entity.Circuit.Resource] == false {
-			fmt.Println("not in main feeder pass id:", entity.ID)
+			log.Println("not in main feeder pass id:", entity.ID)
 			continue
 		}
 		resultList = append(resultList, TopoBO{
@@ -484,7 +483,7 @@ func HandleTopo(idNodeMap, nodeIDMap map[string][]string, topoList []Topo, rdfDC
 		deviceDCloudID := rdfDCloudMap[id].ID
 
 		if feederDCloudID == "" {
-			fmt.Println("Feeder ID Not Get:", id)
+			log.Println("Feeder ID Not Get:", id)
 			continue
 		}
 
@@ -498,49 +497,49 @@ func HandleTopo(idNodeMap, nodeIDMap map[string][]string, topoList []Topo, rdfDC
 			groupNodeList = append(groupNodeList, nodeMap[node].NodeID)
 		}
 
-		fmt.Println("--------------------------------------------")
+		log.Println("--------------------------------------------")
 		// 源端设备没有录入
 		if deviceDCloudID == "" {
-			fmt.Println("ID:", id, " Device Lost!")
+			log.Println("ID:", id, " Device Lost!")
 			if isMainFeeder {
 				if newID, err := NewDevice(id, rdf, owner, feederDCloudID); err != nil {
-					fmt.Println("NewDevice error:", err)
+					log.Println("NewDevice error:", err)
 					continue
 				} else {
-					fmt.Println("NewDevice success!", " ID:", newID)
+					log.Println("NewDevice success!", " ID:", newID)
 					rdfDCloudMap[id] = IdMap{
 						ID:    newID,
 						RdfID: id,
 					}
 				}
 			} else {
-				fmt.Println("ID:", id, " not in mainFeeder")
+				log.Println("ID:", id, " not in mainFeeder")
 				continue
 			}
 		}
 
-		fmt.Println("DCloud Feeder:" + feederDCloudID)
-		fmt.Print("Source:")
-		fmt.Printf("ID: %s", id)
+		log.Println("DCloud Feeder:" + feederDCloudID)
+		log.Print("Source:")
+		log.Printf("ID: %s", id)
 		for _, node := range nodeList {
-			fmt.Printf("\t%s", node)
+			log.Printf("\t%s", node)
 		}
-		fmt.Println()
+		log.Println()
 
-		fmt.Print("Trans:")
-		fmt.Printf("ID: %s", deviceDCloudID)
+		log.Print("Trans:")
+		log.Printf("ID: %s", deviceDCloudID)
 		for _, node := range nodeList {
-			fmt.Printf("\t%s", nodeMap[node].NodeID)
+			log.Printf("\t%s", nodeMap[node].NodeID)
 		}
-		fmt.Println()
+		log.Println()
 
-		fmt.Print("DB:")
-		fmt.Printf("ID: %s First: %s Second: %s\n", topoMap[deviceDCloudID].ID, topoMap[deviceDCloudID].FirstNodeID, topoMap[deviceDCloudID].SecondNodeID)
+		log.Print("DB:")
+		log.Printf("ID: %s First: %s Second: %s\n", topoMap[deviceDCloudID].ID, topoMap[deviceDCloudID].FirstNodeID, topoMap[deviceDCloudID].SecondNodeID)
 
 		// 源端和数据库FeederID不一致
 		if deviceDCloudID != "" && feederDCloudID != topoMap[deviceDCloudID].FeederID {
 			// 更新feeder_id
-			fmt.Println("FEEDER_ID:", topoMap[deviceDCloudID].ID, " Not Compare!")
+			log.Println("FEEDER_ID:", topoMap[deviceDCloudID].ID, " Not Compare!")
 			updateMap := make(map[string]interface{})
 			updateMap["FEEDER_ID"] = feederDCloudID
 			if result := db.Table(config.DB.Database+".SG_CON_DPWRGRID_R_TOPO").
@@ -556,7 +555,7 @@ func HandleTopo(idNodeMap, nodeIDMap map[string][]string, topoList []Topo, rdfDC
 			groupNodeMap[topoMap[deviceDCloudID].SecondNodeID] &&
 			(topoMap[deviceDCloudID].SecondNodeID != topoMap[deviceDCloudID].FirstNodeID) &&
 			len(nodeList) == 2 {
-			fmt.Println("ID compare!")
+			log.Println("ID compare!")
 			continue
 		}
 
@@ -579,12 +578,12 @@ func HandleTopo(idNodeMap, nodeIDMap map[string][]string, topoList []Topo, rdfDC
 		}
 
 		if len(nodeList) > 2 {
-			fmt.Println("ID:", deviceDCloudID, " has multiply node")
+			log.Println("ID:", deviceDCloudID, " has multiply node")
 			continue
 		}
 		// 源端没有映射到数据库节点或ID
 		if len(groupNodeList) == 0 || listContainID(groupNodeList, "") {
-			fmt.Println("ID:", topoMap[deviceDCloudID].ID, " Cannot Convert!")
+			log.Println("ID:", topoMap[deviceDCloudID].ID, " Cannot Convert!")
 			groupNodeList = []string{}
 			for _, node := range nodeList {
 				newNodeID := ""
@@ -641,7 +640,7 @@ func HandleTopo(idNodeMap, nodeIDMap map[string][]string, topoList []Topo, rdfDC
 		}
 		// 源端有数据库没有
 		if topoMap[deviceDCloudID].ID == "" {
-			fmt.Println("ID:", topoMap[deviceDCloudID].ID, " Topo Not Exist!")
+			log.Println("ID:", topoMap[deviceDCloudID].ID, " Topo Not Exist!")
 			insertMap := map[string]interface{}{
 				"ID":            deviceDCloudID,
 				"FEEDER_ID":     feederDCloudID,
@@ -661,7 +660,7 @@ func HandleTopo(idNodeMap, nodeIDMap map[string][]string, topoList []Topo, rdfDC
 		// 源端和数据库节点不一致, FirstNode或SecondNode不存在
 		if (topoMap[deviceDCloudID].FirstNodeID != "" && !listContainID(groupNodeList, topoMap[deviceDCloudID].FirstNodeID)) ||
 			topoMap[deviceDCloudID].SecondNodeID != "" && !listContainID(groupNodeList, topoMap[deviceDCloudID].SecondNodeID) {
-			fmt.Println("ID:", topoMap[deviceDCloudID].ID, " Not Compare!")
+			log.Println("ID:", topoMap[deviceDCloudID].ID, " Not Compare!")
 			updateMap := make(map[string]interface{})
 			updateMap["FIRST_NODE_ID"] = groupNodeList[0]
 			if len(groupNodeList) > 1 {
@@ -694,25 +693,25 @@ func listContainID(list []string, item string) bool {
 // 处理大于2个的节点
 func ConnectMultiplyNode(rdf *RDF, owner string) {
 	if owner == "" {
-		fmt.Println("Owner Not Exist!")
+		log.Println("Owner Not Exist!")
 		return
 	}
 
 	nodeMap, nodeIDMap, _ := GetTopoMap(rdf)
-	fmt.Println("nodeIDMap:", len(nodeIDMap))
+	log.Println("nodeIDMap:", len(nodeIDMap))
 	for id, nodeList := range nodeMap {
 		if len(nodeList) <= 2 {
 			continue
 		}
 
 		// 出现大于2的
-		fmt.Println("ID:", id, ", nodeList: ", len(nodeList))
+		log.Println("ID:", id, ", nodeList: ", len(nodeList))
 		var idEntity IdMap
 		data.DB.Table(data.Config.DB.Database+".ID_MAP").
 			Where("RDF_ID = ?", id).
 			Find(&idEntity)
 		if idEntity.ID == "" {
-			fmt.Println("ID:", idEntity.ID, " DCloud Not Exist!")
+			log.Println("ID:", idEntity.ID, " DCloud Not Exist!")
 			continue
 		}
 		// 获取所有node对应的DCloudID
@@ -729,7 +728,7 @@ func ConnectMultiplyNode(rdf *RDF, owner string) {
 			for _, node := range nodeListEntity {
 				sourceDCloudNodeMap[node.ID] = node.NodeID
 			}
-			fmt.Println("sourceDCloudNodeMap:", sourceDCloudNodeMap)
+			log.Println("sourceDCloudNodeMap:", sourceDCloudNodeMap)
 		}
 
 		{ // 更新超2个连接点的设备的首节点和末节点为0和1号节点
@@ -739,8 +738,8 @@ func ConnectMultiplyNode(rdf *RDF, owner string) {
 					"FIRST_NODE_ID":  sourceDCloudNodeMap[owner+nodeList[0]],
 					"SECOND_NODE_ID": sourceDCloudNodeMap[owner+nodeList[1]],
 				})
-			fmt.Print("DCloudID:", idEntity.ID, ", nodeList:", nodeList)
-			fmt.Println(", sourceDCloudNodeMap:", sourceDCloudNodeMap)
+			log.Print("DCloudID:", idEntity.ID, ", nodeList:", nodeList)
+			log.Println(", sourceDCloudNodeMap:", sourceDCloudNodeMap)
 		}
 
 		for i, node := range nodeList[2:] { // 第二个以后的节点都连到0号节点
@@ -751,14 +750,14 @@ func ConnectMultiplyNode(rdf *RDF, owner string) {
 
 			nodeID := sourceDCloudNodeMap[owner+node]
 			idList := nodeIDMap[node]
-			fmt.Println("Node: ", node, "DCloud Node: ", nodeID)
+			log.Println("Node: ", node, "DCloud Node: ", nodeID)
 
 			var idEntityList []IdMap
 			data.DB.Table(data.Config.DB.Database+".ID_MAP").
 				Where("RDF_ID in ?", idList).
 				Find(&idEntityList)
 			for _, idMap := range idEntityList { // 首节点或尾节点的node更新为0号节点的node
-				fmt.Println("ID:", idMap.ID, " RDF : ", idMap.RdfID)
+				log.Println("ID:", idMap.ID, " RDF : ", idMap.RdfID)
 				data.DB.Table(data.Config.DB.Database+".SG_CON_DPWRGRID_R_TOPO").
 					Where("FIRST_NODE_ID = ?", nodeID).
 					Updates(map[string]interface{}{
@@ -778,8 +777,9 @@ func ConnectMultiplyNode(rdf *RDF, owner string) {
 	}
 }
 
-func MainSubConnectIfNotConnect(circuitDCloudMap map[string]string, circuitMainFeederMap map[string]bool, cloud []TopoBO, rdf *RDF) {
+func MainSubConnectIfNotConnect(circuitDCloudMap map[string]string, circuitMainFeederMap map[string]bool, cloud []TopoBO, rdf *RDF) bool {
 	db := data.DB
+	success := true
 
 	for key, cloudID := range circuitDCloudMap {
 		log.Println("handle circuit connect: ", key, ":", cloudID)
@@ -802,14 +802,14 @@ func MainSubConnectIfNotConnect(circuitDCloudMap map[string]string, circuitMainF
 
 		// 处理未拼接线路
 		list := getHVSubstationDevice(rdf, key)
-		fmt.Println("HVList: ", list)
+		log.Println("HVList: ", list)
 		idNodeMap, nodeIdMap := getDeviceNodeConnectInfo(rdf, key)
 		for _, item := range list {
 			if strings.HasPrefix(item, "31100000") {
 				deviceConnectMap := getDeviceConnectMap(idNodeMap, nodeIdMap)
 				connectRoute := getDeviceConnectRoute(item, deviceConnectMap, make(map[string]bool))
-				headTopo := getSubHeadTopo(list, connectRoute)
-				fmt.Println("head topo:", headTopo, " connect to bus:", item)
+				headTopo, _ := getSubHeadTopo(list, connectRoute)
+				log.Println("head topo:", headTopo, " connect to bus:", item)
 				var busTopo Topo
 				if res := data.DB.Raw("select * from DKYPW.SG_CON_PWRGRID_R_TOPO " +
 					"where id in ( " +
@@ -819,13 +819,13 @@ func MainSubConnectIfNotConnect(circuitDCloudMap map[string]string, circuitMainF
 					"from DKYPW.BUSBARID_SMD where BUSBAR_RDF_ID = '" + item + "' " +
 					"        ) " +
 					"    ) limit 1; ").Find(&busTopo); res.Error != nil {
-					fmt.Println("res:", res)
+					log.Println("res:", res)
 				}
 				mainNode := busTopo.FirstNodeID
 				if busTopo.SecondNodeID != "" {
 					mainNode = busTopo.SecondNodeID
 				}
-				fmt.Println("busTopo: ", busTopo, " mainNode: ", mainNode)
+				log.Println("busTopo: ", busTopo, " mainNode: ", mainNode)
 				var subTopo TopoBO
 				for _, topoBO := range cloud {
 					if topoBO.SourceID == headTopo {
@@ -833,7 +833,11 @@ func MainSubConnectIfNotConnect(circuitDCloudMap map[string]string, circuitMainF
 						break
 					}
 				}
-				fmt.Println("subTopo: ", subTopo)
+				log.Println("subTopo: ", subTopo)
+				if subTopo.ID == "" {
+					success = false
+					continue
+				}
 				logPrefix := "[拓扑处理]"
 				var topoList []Topo
 				{ // 首节点判断
@@ -864,6 +868,7 @@ func MainSubConnectIfNotConnect(circuitDCloudMap map[string]string, circuitMainF
 							} else {
 								log.Printf("%s 首节点更新成功 - TransFirstNode: %s → MainNode: %s, 影响行数: %d",
 									logPrefix, subTopo.TransFirstNode, mainNode, updateResult.RowsAffected)
+								continue
 							}
 						}
 					}
@@ -901,32 +906,43 @@ func MainSubConnectIfNotConnect(circuitDCloudMap map[string]string, circuitMainF
 							} else {
 								log.Printf("%s 末端节点更新成功 - TransSecondNode: %s → MainNode: %s, 影响行数: %d",
 									logPrefix, subTopo.TransSecondNode, mainNode, updateResult.RowsAffected)
+								continue
 							}
 						}
 					}
 				}
+
+				// 执行到这说明没有节点被更新
+				log.Println("topo update fail")
+				success = false
 			}
 		}
 	}
+
+	return success
 }
 
-func getSubHeadTopo(list []string, route [][]string) string {
-	fmt.Println("route:")
+func getSubHeadTopo(list []string, route [][]string) (resultSubHeadID string, resultRoute map[string][]string) {
+	log.Println("route:")
 
 	hvTopo := make(map[string]bool)
 	headTopoCount := make(map[string]int)
+	headTopoRoute := make(map[string][]string)
 
 	for _, item := range list {
 		hvTopo[item] = true
 	}
 
 	for _, topoList := range route {
-		fmt.Println(topoList)
+		log.Println(topoList)
+		var tempRouteList []string
 		for _, topo := range topoList {
+			tempRouteList = append(tempRouteList, topo)
 			if hvTopo[topo] {
 				continue
 			}
 			headTopoCount[topo]++
+			headTopoRoute[topo] = tempRouteList
 			break
 		}
 	}
@@ -934,14 +950,14 @@ func getSubHeadTopo(list []string, route [][]string) string {
 	var tempMaxCount int
 	var tempMaxTopo string
 	for headTopo, count := range headTopoCount {
-		fmt.Println("headTopo:", headTopo, " ", count)
+		log.Println("headTopo:", headTopo, " ", count)
 		if count > tempMaxCount {
 			tempMaxCount = count
 			tempMaxTopo = headTopo
 		}
 	}
 
-	return tempMaxTopo
+	return tempMaxTopo, headTopoRoute
 }
 
 func getHVSubstationDevice(rdf *RDF, feeder string) (resultList []string) {
@@ -1103,7 +1119,7 @@ func getDeviceNodeConnectInfo(rdf *RDF, feeder string) (idNodeMap map[string][]s
 		nodeId := strings.Replace(terminal.ConnectivityNode.Resource, "#", "", -1)
 
 		if !existDevice[id] {
-			fmt.Println("pass id:", id)
+			log.Println("pass id:", id)
 			continue
 		}
 
@@ -1118,4 +1134,65 @@ func getDeviceNodeConnectInfo(rdf *RDF, feeder string) (idNodeMap map[string][]s
 	}
 
 	return idNodeMap, nodeIdMap
+}
+
+func MainSubConnect_UseSourceInfo(circuitDCloudMap map[string]string, circuitMainFeederMap map[string]bool, cloud []TopoBO, rdf *RDF) bool {
+	db := data.DB
+	success := true
+
+	for key, cloudID := range circuitDCloudMap {
+		log.Println("handle circuit connect: ", key, ":", cloudID)
+		if !circuitMainFeederMap[key] {
+			log.Println("not main circuit: ", key, ":", cloudID)
+			continue
+		}
+
+		var feederJoin FeederJoinDetail
+		result := db.Table(data.Config.DB.Database+".FEEDER_JOIN_DETAIL").
+			Where("ID = ?", cloudID).
+			Find(&feederJoin)
+		if result.Error != nil {
+			log.Printf("Select FEEDER_JOIN_DETAIL fail: %v", result.Error)
+		}
+
+		// 查主配路径
+		list := getHVSubstationDevice(rdf, key)
+		log.Println("HVList: ", list)
+		idNodeMap, nodeIdMap := getDeviceNodeConnectInfo(rdf, key)
+		for _, item := range list {
+			if strings.HasPrefix(item, "31100000") { // 母线, 开始拓扑
+				deviceConnectMap := getDeviceConnectMap(idNodeMap, nodeIdMap)
+				connectRoute := getDeviceConnectRoute(item, deviceConnectMap, make(map[string]bool))
+				headTopo, subHeadTopoRoute := getSubHeadTopo(list, connectRoute)
+				log.Println("subHeadTopoRoute:", subHeadTopoRoute)
+				log.Println("head topo:", headTopo, " connect to bus:", item)
+				insertOrUpdate(subHeadTopoRoute)
+
+				// 执行到这说明没有节点被更新
+				log.Println("topo update fail")
+				success = false
+			}
+		}
+	}
+
+	return success
+}
+
+func insertOrUpdate(route map[string][]string) {
+	var idList []string
+	var svgDevList []SvgDevView
+
+	for _, list := range route {
+		for _, item := range list {
+			idList = append(idList, item)
+		}
+	}
+
+	data.DB.Table(data.Config.DB.Database+".SVG_DEV_VIEW").
+		Where("ID in ?", idList).
+		Find(&svgDevList)
+
+	//for _, view := range svgDevList {
+	//
+	//}
 }

@@ -20,6 +20,23 @@ type AppConfig struct {
 	UpdateUrl string `yaml:"update-url"`
 	Slice     int    `yaml:"slice"`
 	Delete    bool   `yaml:"delete"`
+	BackPath  string `yaml:"back-path"`
+	Redis     struct {
+		Url      string `yaml:"url"`
+		Username string `yaml:"username"`
+		Password string `yaml:"password"`
+		DB       int    `yaml:"db"`
+	} `yaml:"redis"`
+	Test struct {
+		On               bool     `yaml:"on"`
+		OnDevices        []string `yaml:"on-devices"`
+		OffDevices       []string `yaml:"off-devices"`
+		PointOffDevices  []string `yaml:"point-off-devices"`
+		PointOffDevices2 []string `yaml:"point-off-devices2"`
+		PointOffDevices3 []string `yaml:"point-off-devices3"`
+		PointOnDevices   []string `yaml:"point-on-devices"`
+		GroundDevices    []string `yaml:"ground-devices"`
+	}
 }
 type DBConfig struct {
 	Username string `yaml:"username"`

@@ -81,6 +81,34 @@ type ModelFeederJoin struct {
 	SubDeviceDCloudID string `gorm:"column:SUB_DEVICE_DCLOUD_ID"` // 配网连接设备
 }
 
+type FeederJoinDetail struct {
+	ID         string `gorm:"column:ID"`
+	Owner      string `gorm:"column:OWNER"`
+	MainDevice string `gorm:"column:MAIN_DEVICE"`
+	MainNode   string `gorm:"column:MAIN_NODE"`
+	SubDevice  string `gorm:"column:SUB_DEVICE"`
+	SubNode    string `gorm:"column:SUB_NODE"`
+	InsertTime string `gorm:"column:INSERT_TIME"`
+	UpdateTime string `gorm:"column:UPDATE_TIME"`
+}
+type SvgDevView struct {
+	ID       string `gorm:"column:ID"`
+	Owner    string `gorm:"column:OWNER"`
+	PmsRdfID string `gorm:"column:PMS_RDF_ID"`
+}
+
+type SourceUnconnectTopo struct {
+	ID        string `gorm:"column:ID"`
+	Name      string `gorm:"column:NAME"`
+	Ind       string `gorm:"column:IND"`
+	Jnd       string `gorm:"column:JND"`
+	RdfID     string `gorm:"column:RDF_ID"`
+	StID      string `gorm:"column:ST_ID"`
+	AreaID    string `gorm:"column:AREAID"`
+	AreaRdfID string `gorm:"column:AREA_RDF_ID"`
+	Owner     string `gorm:"column:OWNER"`
+}
+
 func GetFeederJoin(db *gorm.DB, config data.AppConfig, feederID string) ModelFeederJoin {
 	var entity ModelFeederJoin
 	result := db.Table(config.DB.Database+".MODEL_FEEDER_JOIN").
@@ -245,8 +273,9 @@ func GetNoUseNodeInFeeder_NodeMapOwner(feederID string, id string, owner string)
 	return timeUniId
 }
 
-func MainSubConnect(circuitDCloudMap map[string]string, circuitMainFeederMap map[string]bool) {
+func MainSubConnect(circuitDCloudMap map[string]string, circuitMainFeederMap map[string]bool) bool {
 	db := data.DB
+	success := true
 
 	for key, cloudID := range circuitDCloudMap {
 		log.Println("handle circuit connect: ", key, ":", cloudID)
@@ -319,6 +348,7 @@ func MainSubConnect(circuitDCloudMap map[string]string, circuitMainFeederMap map
 					} else {
 						log.Printf("%s 首节点更新成功 - FirstNodeID: %s → MainNode: %s, 影响行数: %d",
 							logPrefix, subTopo.FirstNodeID, mainNode, updateResult.RowsAffected)
+						continue
 					}
 				}
 			}
@@ -356,14 +386,17 @@ func MainSubConnect(circuitDCloudMap map[string]string, circuitMainFeederMap map
 					} else {
 						log.Printf("%s 末端节点更新成功 - SecondNodeID: %s → MainNode: %s, 影响行数: %d",
 							logPrefix, subTopo.SecondNodeID, mainNode, updateResult.RowsAffected)
+						continue
 					}
 				}
 			}
 		}
 
-		log.Printf("%s: %s 拓扑处理完成 - FirstNodeID: %s, SecondNodeID: %s",
+		log.Printf("%s: %s 拓扑处理完成, but no node update... - FirstNodeID: %s, SecondNodeID: %s",
 			key, logPrefix, subTopo.FirstNodeID, subTopo.SecondNodeID)
+		success = false
 	}
+	return success
 }
 
 func NewDevice(id string, rdf *RDF, owner string, feederDCloudID string) (string, error) {
@@ -654,4 +687,19 @@ func HandleEmptyTopo(cloud []TopoBO) {
 		}); res.Error != nil {
 		fmt.Printf("ERROR: %v\n", res.Error)
 	}
+}
+
+func GetMainBus(busID string) string {
+	var cloudBusID string
+	data.DB.Raw("select DCLOUD_ID from DKYPW.SG_DEV_BUSBAR_C where DCLOUD_ID = (select BUSBAR_EMS_ID from DKYPW.BUSBARID_SMD where BUSBAR_RDF_ID = '" + busID + "')").
+		Find(&cloudBusID)
+
+	return cloudBusID
+}
+func GetMainBreaker(breakerID string) string {
+	var cloudID string
+	data.DB.Raw("select DCLOUD_ID from DKYPW.SG_DEV_BUSBAR_C where DCLOUD_ID = (select BUSBAR_EMS_ID from DKYPW.BUSBARID_SMD where BUSBAR_RDF_ID = '" + breakerID + "')").
+		Find(&cloudID)
+
+	return cloudID
 }

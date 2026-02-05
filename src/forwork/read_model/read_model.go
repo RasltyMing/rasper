@@ -142,8 +142,14 @@ func ReadOneFileAndDeal(sourcePath string) error {
 	util.HandleDBTopo(cloud, circuitDCloudMap, owner, simpleRdf)
 	util.HandleMultiplyNode(cloud, circuitDCloudMap, owner, simpleRdf)
 	util.HandleEmptyTopo(cloud)
-	util.MainSubConnect(circuitDCloudMap, circuitMainFeederMap)                               // 只处理果老师拼接成功的
-	util.MainSubConnectIfNotConnect(circuitDCloudMap, circuitMainFeederMap, cloud, simpleRdf) // 处理没有拼接成功的
+	success := util.MainSubConnect(circuitDCloudMap, circuitMainFeederMap)
+	if !success {
+		success = util.MainSubConnectIfNotConnect(circuitDCloudMap, circuitMainFeederMap, cloud, simpleRdf) // 处理没有拼接成功的
+	}
+	//if !success {
+	success = util.MainSubConnect_UseSourceInfo(circuitDCloudMap, circuitMainFeederMap, cloud, simpleRdf) // 用源端文件自己来主配拼接
+	//}
+	//success = util.MainSubConnect_UseSourceInfo(circuitDCloudMap, circuitMainFeederMap, cloud, simpleRdf) // 用源端文件自己来主配拼接
 	//util.ConnectMultiplyNode(simpleRdf, owner)
 
 	// 提示图库程序更新图库馈线
@@ -166,9 +172,16 @@ func ReadOneFileAndDeal(sourcePath string) error {
 
 	log.Println("ReadFileDone: ", sourcePath)
 
-	if data.Config.Delete {
+	if !success {
+		_, err := utils.CopyFile(filepath.Join(data.Config.BackPath, filepath.Base(sourcePath)), sourcePath)
+		if err != nil {
+			log.Println(err)
+		}
+		log.Println("BackFileDone: ", sourcePath)
+	}
+	if success && data.Config.Delete {
 		if err := os.Remove(sourcePath); err != nil {
-			log.Print(err)
+			log.Println(err)
 		}
 		log.Println("Remove File: " + sourcePath)
 	}
