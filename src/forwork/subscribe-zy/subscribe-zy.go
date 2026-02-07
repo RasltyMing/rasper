@@ -178,7 +178,7 @@ func zyStartHandler(w http.ResponseWriter, r *http.Request) {
 			filteredOnDevices = append(filteredOnDevices, device)
 		}
 	}
-	response.OnDevices = removeRdfId(filteredOnDevices)
+	response.OnDevices = removeRdfIdAndDuplicate(filteredOnDevices)
 
 	// 查找拓扑, 找出相关馈线的所有拓扑
 	list := getTopoList(filteredOnDevices)
@@ -278,9 +278,12 @@ func removeDeviceList(list, removeList []string) (resultList []string) {
 	return resultList
 }
 
-func removeRdfId(list []string) (resultList []string) {
+func removeRdfIdAndDuplicate(list []string) (resultList []string) {
 	for _, item := range list {
 		if strings.Contains(item, "_") {
+			continue
+		}
+		if utils.Contains(resultList, item) {
 			continue
 		}
 		resultList = append(resultList, item)
