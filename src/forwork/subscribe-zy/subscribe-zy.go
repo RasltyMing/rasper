@@ -182,8 +182,10 @@ func zyStartHandler(w http.ResponseWriter, r *http.Request) {
 
 	// 查找拓扑, 找出相关馈线的所有拓扑
 	list := getTopoList(filteredOnDevices)
+	mainList := getMainTopoList(filteredOnDevices)
 	feederList := getTopoFeederList(list) // 找有关的馈线
 	var totalTopoList []first.Topo
+	totalTopoList = append(totalTopoList, mainList...) // 添加主网部分的拓扑
 	for _, feeder := range feederList {
 		topoList := queryTopoData(feeder)
 		totalTopoList = append(totalTopoList, topoList...)
@@ -258,6 +260,17 @@ func queryTopoData(feederId string) []first.Topo {
 
 func getTopoList(idList []string) (topoList []first.Topo) {
 	result := data.DB.Table(data.Config.DB.Database+".SG_CON_DPWRGRID_R_TOPO").
+		Where("ID in ?", idList).
+		Find(&topoList)
+	if result.Error != nil {
+		log.Printf("Failed to get topo list: %v", result.Error)
+		return
+	}
+	return topoList
+}
+
+func getMainTopoList(idList []string) (topoList []first.Topo) {
+	result := data.DB.Table(data.Config.DB.Database+".SG_CON_PWRGRID_R_TOPO").
 		Where("ID in ?", idList).
 		Find(&topoList)
 	if result.Error != nil {

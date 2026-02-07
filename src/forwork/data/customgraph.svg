@@ -1,0 +1,937 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg xmlns="http://www.w3.org/2000/svg">
+<g>
+	<g name="站房" devicetype="5">
+		<g name="变电站" subtype="1"/>
+		<g name="配电站" subtype="2"/>
+	</g>
+	<g name="母线" devicetype="6">
+		<g name="普通母线" subtype="1"/>
+	</g>
+	<g name="开关" devicetype="16">
+		<g name="站内断路器" subtype="1">
+			<text style="text-anchor:middle" x="100" y="20" visibility="visible" font-size="20" font-family="SimSun" fill="rgb(0,0,0)">断路器</text>
+			<g status="1" gpmsstatus="536870912" descr="分" symbolid="Breaker_4100012@1" transform="translate(200,5)" viewBox="0,0,101,40">
+				<rect x="0" y="0" width="101" height="40" stroke="green" fill="green"/>
+			</g>
+			<g status="2" gpmsstatus="536870913" descr="合" symbolid="Breaker_4100012@0" transform="translate(350,5)" viewBox="0,0,101,40">
+				<rect x="0" y="0" width="101" height="40" stroke="red" fill="red"/>
+			</g>
+		</g>
+		<g name="柱上断路器" subtype="2">
+			<text style="text-anchor:middle" x="100" y="20" visibility="visible" font-size="20" font-family="SimSun" fill="rgb(0,0,0)">断路器</text>
+			<g status="1" gpmsstatus="536870912" descr="分" symbolid="Breaker_4100012@1" transform="translate(200,5)" viewBox="0,0,101,40">
+				<rect x="0" y="0" width="101" height="40" stroke="green" fill="green"/>
+			</g>
+			<g status="2" gpmsstatus="536870913" descr="合" symbolid="Breaker_4100012@0" transform="translate(350,5)" viewBox="0,0,101,40">
+				<rect x="0" y="0" width="101" height="40" stroke="red" fill="red"/>
+			</g>
+		</g>
+		<g name="重合器" subtype="3">
+			<text style="text-anchor:middle" x="100" y="820" visibility="visible" font-size="20" font-family="SimSun" fill="rgb(0,0,0)">柱上重合器</text>
+			<g status="1" gpmsstatus="536870912" descr="分" symbolid="Breaker_2070011@0" transform="translate(200,800)" viewBox="0,0,56,56">
+				<ellipse cx="28" cy="28" rx="28" ry="28" stroke="green" fill="none"/>
+				<polyline points="8.2,8.2,47.8,8.2,47.8,47.8,8.2,8.2,8.2,47.8,47.8,47.8" stroke="green" fill="none"/>
+				<line x1="8.2"  y1="47.8" x2="47.8" y2="8.2" stroke="green"/>
+			</g>
+			<g status="2" gpmsstatus="536870913" descr="合" symbolid="Breaker_2070010@1" transform="translate(300,800)" viewBox="0,0,56,56">
+				<ellipse cx="28" cy="28" rx="28" ry="28" stroke="red" fill="none"/>
+				<polyline points="8.2,8.2,47.8,8.2,47.8,47.8,8.2,47.8,8.2,8.2" stroke="red" fill="none"/>
+			</g>
+		</g>
+		<g name="负荷开关" subtype="4" >
+			<text style="text-anchor:middle" x="100" y="120" visibility="visible" font-size="20" font-family="SimSun" fill="rgb(0,0,0)">负荷开关</text>
+			<g status="1" gpmsstatus="536870912" descr="分" symbolid="LoadBreakSwitch_4040011@0" transform="translate(200,100)" viewBox="0,0,101,40">
+				<polyline points="0,20,35,20,55,0" stroke="green" fill="none"/>
+				<line x1="101" y1="20" x2="70" y2="20" stroke="green"/>
+				<line x1="70" y1="7"  x2="70" y2="33" stroke="green"/>
+				<ellipse cx="63" cy="20" rx="7" ry="7" stroke="green" fill="none"/>
+			</g>
+			<g status="2" gpmsstatus="536870913" descr="合" symbolid="LoadBreakSwitch_4040010@1" transform="translate(350,100)" viewBox="0,0,101,40">
+				<polyline points="0,20,35,20,70,9" stroke="red" fill="none"/>
+				<line x1="101" y1="20" x2="70" y2="20" stroke="red"/>
+				<line x1="70" y1="7"  x2="70" y2="33" stroke="red"/>
+				<ellipse cx="63" cy="20" rx="7" ry="7" stroke="red" fill="none"/>
+			</g>
+		</g>
+		<g name="手车开关" subtype="5">
+			<text style="text-anchor:middle" x="100" y="1240" visibility="visible" font-size="20" font-family="SimSun" fill="rgb(0,0,0)">手车负荷开关</text>
+			<g status="3" gpmsstatus="913003" descr="试验/检修" symbolid="Breaker_4100012@0" transform="translate(200,1240)" viewBox="0,0,174,74">
+				<polyline points="0,17,15,37,30,17" stroke="red" fill="none"/>
+				<polyline points="0,37,15,57,30,37" stroke="red" fill="none"/>
+				<polyline points="30,37,50,37,124,18" stroke="red" fill="none"/>
+				<ellipse cx="109" cy="37" rx="15" ry="15" stroke="red" fill="none"/>
+				<line x1="124" y1="4" x2="124" y2="70" stroke="red"/>
+				<line x1="124" y1="37" x2="144" y2="37" stroke="red"/>
+				<polyline points="144,17,159,37,174,17" stroke="red" fill="none"/>
+				<polyline points="144,37,159,57,174,37" stroke="red" fill="none"/>
+			</g>
+			<g status="1" gpmsstatus="96601" descr="分/冷备" symbolid="Breaker_4100012@1" transform="translate(400,1240)" viewBox="0,0,174,74">
+				<polyline points="0,17,15,37,30,17" stroke="red" fill="none"/>
+				<polyline points="0,37,15,57,30,37" stroke="red" fill="none"/>
+				<polyline points="30,37,50,37,90,0" stroke="red" fill="none"/>
+				<ellipse cx="109" cy="37" rx="15" ry="15" stroke="red" fill="none"/>
+				<line x1="124" y1="4" x2="124" y2="70" stroke="red"/>
+				<line x1="124" y1="37" x2="144" y2="37" stroke="red"/>
+				<polyline points="144,17,159,37,174,17" stroke="red" fill="none"/>
+				<polyline points="144,37,159,57,174,37" stroke="red" fill="none"/>
+			</g>
+			<g status="4" gpmsstatus="96602" descr="分/热备" symbolid="Breaker_4100012@1" transform="translate(600,1240)" viewBox="0,0,174,74">
+				<polyline points="15,18,0,37,15,56" stroke="red" fill="none"/>
+				<polyline points="30,18,15,37,30,56" stroke="red" fill="none"/>
+				<polyline points="0,37,50,37,90,0" stroke="red" fill="none"/>
+				<ellipse cx="109" cy="37" rx="15" ry="15" stroke="red" fill="none"/>
+				<line x1="124" y1="4" x2="124" y2="70" stroke="red"/>
+				<line x1="124" y1="37" x2="174" y2="37" stroke="red"/>
+				<polyline points="159,18,174,37,159,56" stroke="red" fill="none"/>
+				<polyline points="144,18,159,37,144,56" stroke="red" fill="none"/>
+			</g>
+			<g status="2" gpmsstatus="536870913" descr="合/运行" symbolid="Breaker_4100012@1" transform="translate(800,1240)" viewBox="0,0,174,74">
+				<polyline points="15,18,0,37,15,56" stroke="red" fill="none"/>
+				<polyline points="30,18,15,37,30,56" stroke="red" fill="none"/>
+				<polyline points="0,37,50,37,124,18" stroke="red" fill="none"/>
+				<ellipse cx="109" cy="37" rx="15" ry="15" stroke="red" fill="none"/>
+				<line x1="124" y1="4" x2="124" y2="70" stroke="red"/>
+				<line x1="124" y1="37" x2="174" y2="37" stroke="red"/>
+				<polyline points="159,18,174,37,159,56" stroke="red" fill="none"/>
+				<polyline points="144,18,159,37,144,56" stroke="red" fill="none"/>
+			</g>
+		</g>
+		<g name="联动开关" subtype="8">
+			<text style="text-anchor:middle" x="100" y="920" visibility="visible" font-size="20" font-family="SimSun" fill="rgb(0,0,0)">联动开关</text>
+			<g status="0" gpmsstatus="805306368" descr="分" symbolid="Breaker_4030061@0" transform="translate(200,900)" viewBox="0,0,92,78">
+				<polyline points="0,39,46,39,78,25" stroke="green" fill="none"/>
+				<line x1="11" y1="73"  x2="13" y2="73"  stroke="green"/>
+				<line x1="10" y1="71"  x2="14" y2="71"  stroke="green"/>
+				<line x1="9"  y1="69"  x2="15" y2="69"  stroke="green"/>
+				<polyline points="12,69,12,65,21,48" stroke="green" fill="none"/>
+				<line x1="12" y1="39" x2="12" y2="43" stroke="green"/>
+				<line x1="10" y1="43" x2="14" y2="43" stroke="green"/>
+
+				<polyline points="35,44,35,54,31,54" stroke="green" fill="none"/>
+				<line x1="28" y1="54" x2="24" y2="54" stroke="green"/>
+				<line x1="21" y1="54" x2="17" y2="54" stroke="green"/>
+
+				<polyline points="24,34,46,34,46,44,24,44,24,34" stroke="green" fill="none"/>
+
+				<polyline points="35,34,35,24,45,24" stroke="green" fill="none"/>
+				<line x1="50" y1="24" x2="60" y2="24" stroke="green"/>
+				<polyline points="65,24,70,24,70,29" stroke="green" fill="none"/>
+
+				<line x1="92" y1="39" x2="84" y2="39" stroke="green"/>
+				<line x1="84" y1="32" x2="84" y2="46" stroke="green"/>
+				<ellipse cx="80" cy="39" rx="4" ry="4" stroke="green" fill="none"/>
+
+			</g>
+			<g status="1" gpmsstatus="805306370" descr="合" symbolid="Breaker_4030060@1" transform="translate(350,900)" viewBox="0,0,92,78">
+				<polyline points="0,39,46,39,86,32" stroke="red" fill="none"/>
+
+				<line x1="11" y1="73"  x2="13" y2="73"  stroke="red"/>
+				<line x1="10" y1="71"  x2="14" y2="71"  stroke="red"/>
+				<line x1="9"  y1="69"  x2="15" y2="69"  stroke="red"/>
+				<polyline points="12,69,12,65,21,48" stroke="red" fill="none"/>
+				<line x1="12" y1="39" x2="12" y2="43" stroke="red"/>
+				<line x1="10" y1="43" x2="14" y2="43" stroke="red"/>
+
+				<polyline points="35,44,35,54,31,54" stroke="red" fill="none"/>
+				<line x1="28" y1="54" x2="24" y2="54" stroke="red"/>
+				<line x1="21" y1="54" x2="17" y2="54" stroke="red"/>
+
+				<polyline points="24,34,46,34,46,44,24,44,24,34" stroke="red" fill="none"/>
+
+				<polyline points="35,34,35,24,45,24" stroke="red" fill="none"/>
+				<line x1="50" y1="24" x2="60" y2="24" stroke="red"/>
+				<polyline points="65,24,70,24,70,35" stroke="red" fill="none"/>
+
+				<line x1="92" y1="39" x2="84" y2="39" stroke="red"/>
+				<line x1="84" y1="32" x2="84" y2="46" stroke="red"/>
+				<ellipse cx="80" cy="39" rx="4" ry="4" stroke="red" fill="none"/>
+
+			</g>
+			<g status="2" gpmsstatus="805306369" descr="接地" symbolid="Breaker_4030062" transform="translate(500,900)" viewBox="0,0,92,78">
+				<polyline points="0,39,46,39,78,25" stroke="black" fill="none"/>
+
+				<line x1="11" y1="73"  x2="13" y2="73"  stroke="black"/>
+				<line x1="10" y1="71"  x2="14" y2="71"  stroke="black"/>
+				<line x1="9"  y1="69"  x2="15" y2="69"  stroke="black"/>
+				<polyline points="12,69,12,65,14,41" stroke="black" fill="none"/>
+				<line x1="12" y1="39" x2="12" y2="43" stroke="black"/>
+				<line x1="10" y1="43" x2="14" y2="43" stroke="black"/>
+
+				<polyline points="35,44,35,54,31,54" stroke="black" fill="none"/>
+				<line x1="28" y1="54" x2="24" y2="54" stroke="black"/>
+				<line x1="21" y1="54" x2="17" y2="54" stroke="black"/>
+				<line x1="14" y1="54" x2="13" y2="54" stroke="black"/>
+
+				<polyline points="24,34,46,34,46,44,24,44,24,34" stroke="black" fill="none"/>
+
+				<polyline points="35,34,35,24,45,24" stroke="black" fill="none"/>
+				<line x1="50" y1="24" x2="60" y2="24" stroke="black"/>
+				<polyline points="65,24,70,24,70,29" stroke="black	" fill="none"/>
+
+				<line x1="92" y1="39" x2="84" y2="39" stroke="black"/>
+				<line x1="84" y1="32" x2="84" y2="46" stroke="black"/>
+				<ellipse cx="80" cy="39" rx="4" ry="4" stroke="black" fill="none"/>
+			</g>
+		</g>
+		<g name="手车负荷开关" subtype="6">
+			<text style="text-anchor:middle" x="100" y="1240" visibility="visible" font-size="20" font-family="SimSun" fill="rgb(0,0,0)">手车负荷开关</text>
+			<g status="3" gpmsstatus="913003" descr="试验/检修" symbolid="Breaker_4100012@0" transform="translate(200,1240)" viewBox="0,0,174,74">
+				<polyline points="0,17,15,37,30,17" stroke="red" fill="none"/>
+				<polyline points="0,37,15,57,30,37" stroke="red" fill="none"/>
+				<polyline points="30,37,50,37,124,18" stroke="red" fill="none"/>
+				<ellipse cx="109" cy="37" rx="15" ry="15" stroke="red" fill="none"/>
+				<line x1="124" y1="4" x2="124" y2="70" stroke="red"/>
+				<line x1="124" y1="37" x2="144" y2="37" stroke="red"/>
+				<polyline points="144,17,159,37,174,17" stroke="red" fill="none"/>
+				<polyline points="144,37,159,57,174,37" stroke="red" fill="none"/>
+			</g>
+			<g status="1" gpmsstatus="96601" descr="分/冷备" symbolid="Breaker_4100012@1" transform="translate(400,1240)" viewBox="0,0,174,74">
+				<polyline points="0,17,15,37,30,17" stroke="red" fill="none"/>
+				<polyline points="0,37,15,57,30,37" stroke="red" fill="none"/>
+				<polyline points="30,37,50,37,90,0" stroke="red" fill="none"/>
+				<ellipse cx="109" cy="37" rx="15" ry="15" stroke="red" fill="none"/>
+				<line x1="124" y1="4" x2="124" y2="70" stroke="red"/>
+				<line x1="124" y1="37" x2="144" y2="37" stroke="red"/>
+				<polyline points="144,17,159,37,174,17" stroke="red" fill="none"/>
+				<polyline points="144,37,159,57,174,37" stroke="red" fill="none"/>
+			</g>
+			<g status="4" gpmsstatus="96602" descr="分/热备" symbolid="Breaker_4100012@1" transform="translate(600,1240)" viewBox="0,0,174,74">
+				<polyline points="15,18,0,37,15,56" stroke="red" fill="none"/>
+				<polyline points="30,18,15,37,30,56" stroke="red" fill="none"/>
+				<polyline points="0,37,50,37,90,0" stroke="red" fill="none"/>
+				<ellipse cx="109" cy="37" rx="15" ry="15" stroke="red" fill="none"/>
+				<line x1="124" y1="4" x2="124" y2="70" stroke="red"/>
+				<line x1="124" y1="37" x2="174" y2="37" stroke="red"/>
+				<polyline points="159,18,174,37,159,56" stroke="red" fill="none"/>
+				<polyline points="144,18,159,37,144,56" stroke="red" fill="none"/>
+			</g>
+			<g status="2" gpmsstatus="536870913" descr="合/运行" symbolid="Breaker_4100012@1" transform="translate(800,1240)" viewBox="0,0,174,74">
+				<polyline points="15,18,0,37,15,56" stroke="red" fill="none"/>
+				<polyline points="30,18,15,37,30,56" stroke="red" fill="none"/>
+				<polyline points="0,37,50,37,124,18" stroke="red" fill="none"/>
+				<ellipse cx="109" cy="37" rx="15" ry="15" stroke="red" fill="none"/>
+				<line x1="124" y1="4" x2="124" y2="70" stroke="red"/>
+				<line x1="124" y1="37" x2="174" y2="37" stroke="red"/>
+				<polyline points="159,18,174,37,159,56" stroke="red" fill="none"/>
+				<polyline points="144,18,159,37,144,56" stroke="red" fill="none"/>
+			</g>
+		</g>
+		<g name="熔断负荷手车隔离开关" subtype="7">
+			<text style="text-anchor:middle" x="100" y="1240" visibility="visible" font-size="20" font-family="SimSun" fill="rgb(0,0,0)">手车负荷开关</text>
+			<g status="3" gpmsstatus="913003" descr="试验/检修" symbolid="Breaker_4100012@0" transform="translate(200,1240)" viewBox="0,0,174,74">
+				<polyline points="0,17,15,37,30,17" stroke="red" fill="none"/>
+				<polyline points="0,37,15,57,30,37" stroke="red" fill="none"/>
+				<polyline points="30,37,50,37,124,18" stroke="red" fill="none"/>
+				<ellipse cx="109" cy="37" rx="15" ry="15" stroke="red" fill="none"/>
+				<line x1="124" y1="4" x2="124" y2="70" stroke="red"/>
+				<line x1="124" y1="37" x2="144" y2="37" stroke="red"/>
+				<polyline points="144,17,159,37,174,17" stroke="red" fill="none"/>
+				<polyline points="144,37,159,57,174,37" stroke="red" fill="none"/>
+			</g>
+			<g status="1" gpmsstatus="96601" descr="分/冷备" symbolid="Breaker_4100012@1" transform="translate(400,1240)" viewBox="0,0,174,74">
+				<polyline points="0,17,15,37,30,17" stroke="red" fill="none"/>
+				<polyline points="0,37,15,57,30,37" stroke="red" fill="none"/>
+				<polyline points="30,37,50,37,90,0" stroke="red" fill="none"/>
+				<ellipse cx="109" cy="37" rx="15" ry="15" stroke="red" fill="none"/>
+				<line x1="124" y1="4" x2="124" y2="70" stroke="red"/>
+				<line x1="124" y1="37" x2="144" y2="37" stroke="red"/>
+				<polyline points="144,17,159,37,174,17" stroke="red" fill="none"/>
+				<polyline points="144,37,159,57,174,37" stroke="red" fill="none"/>
+			</g>
+			<g status="4" gpmsstatus="96602" descr="分/热备" symbolid="Breaker_4100012@1" transform="translate(600,1240)" viewBox="0,0,174,74">
+				<polyline points="15,18,0,37,15,56" stroke="red" fill="none"/>
+				<polyline points="30,18,15,37,30,56" stroke="red" fill="none"/>
+				<polyline points="0,37,50,37,90,0" stroke="red" fill="none"/>
+				<ellipse cx="109" cy="37" rx="15" ry="15" stroke="red" fill="none"/>
+				<line x1="124" y1="4" x2="124" y2="70" stroke="red"/>
+				<line x1="124" y1="37" x2="174" y2="37" stroke="red"/>
+				<polyline points="159,18,174,37,159,56" stroke="red" fill="none"/>
+				<polyline points="144,18,159,37,144,56" stroke="red" fill="none"/>
+			</g>
+			<g status="2" gpmsstatus="536870913" descr="合/运行" symbolid="Breaker_4100012@1" transform="translate(800,1240)" viewBox="0,0,174,74">
+				<polyline points="15,18,0,37,15,56" stroke="red" fill="none"/>
+				<polyline points="30,18,15,37,30,56" stroke="red" fill="none"/>
+				<polyline points="0,37,50,37,124,18" stroke="red" fill="none"/>
+				<ellipse cx="109" cy="37" rx="15" ry="15" stroke="red" fill="none"/>
+				<line x1="124" y1="4" x2="124" y2="70" stroke="red"/>
+				<line x1="124" y1="37" x2="174" y2="37" stroke="red"/>
+				<polyline points="159,18,174,37,159,56" stroke="red" fill="none"/>
+				<polyline points="144,18,159,37,144,56" stroke="red" fill="none"/>
+			</g>
+		</g>
+	</g>
+	<g name="刀闸" devicetype="17">
+		<g name="圆形刀闸" subtype="1">
+			<text style="text-anchor:middle" x="100" y="2120" visibility="visible" font-size="20" font-family="SimSun" fill="rgb(0,0,0)">圆形刀闸</text>
+			<g status="1" gpmsstatus="536870912" descr="分" symbolid="Breaker_4100012@1" transform="translate(200,2100)" viewBox="0,0,80,80">
+				<ellipse cx="40" cy="40" rx="40" ry="40" stroke="green" fill="green"/>
+			</g>
+			<g status="2" gpmsstatus="536870913" descr="合" symbolid="Breaker_4100012@0" transform="translate(350,2100)" viewBox="0,0,80,80">
+				<ellipse cx="40" cy="40" rx="40" ry="40" stroke="red" fill="red"/>
+			</g>
+		</g>
+		<g name="菱形刀闸" subtype="2">
+			<text style="text-anchor:middle" x="100" y="2220" visibility="visible" font-size="20" font-family="SimSun" fill="rgb(0,0,0)">菱形刀闸</text>
+			<g status="1" gpmsstatus="536870912" descr="分" symbolid="Breaker_4100012@1" transform="translate(200,2100)" viewBox="0,0,80,80">
+				<ellipse cx="40" cy="40" rx="40" ry="40" stroke="green" fill="green"/>
+			</g>
+			<g status="2" gpmsstatus="536870913" descr="合" symbolid="Breaker_4100012@0" transform="translate(350,2100)" viewBox="0,0,80,80">
+				<ellipse cx="40" cy="40" rx="40" ry="40" stroke="red" fill="red"/>
+			</g>
+		</g>
+		<g name="上手车" subtype="3">
+			<text style="text-anchor:middle" x="100" y="2320" visibility="visible" font-size="20" font-family="SimSun" fill="rgb(0,0,0)">上手车</text>
+			<g status="1" gpmsstatus="536870912" descr="分" symbolid="" transform="translate(200,2300)" viewBox="0,0,55,30">
+				<polyline points="25,0,40,15,25,30" stroke="green" fill="none"/>
+				<polyline points="40,0,55,15,40,30" stroke="green" fill="none"/>
+				<line x1="40"  y1="15" x2="0" y2="15" stroke="green"/>
+			</g>
+			<g status="2" gpmsstatus="536870913" descr="合" symbolid="" transform="translate(350,2300)" viewBox="0,0,55,30">
+				<polyline points="15,0,0,15,15,30" stroke="red" fill="none"/>
+				<polyline points="30,0,15,15,30,30" stroke="red" fill="none"/>
+				<line x1="15"  y1="15" x2="55" y2="15" stroke="red"/>
+			</g>
+		</g>
+		<g name="双手车" subtype="4">
+			<text style="text-anchor:middle" x="100" y="2420" visibility="visible" font-size="20" font-family="SimSun" fill="rgb(0,0,0)">双手车</text>
+			<g status="1" gpmsstatus="536870912" descr="分" symbolid="Disconnect_@0" transform="translate(200,2400)" viewBox="0,0,102,22">
+				<polyline points="99,11,92,19,86,11" stroke="green" fill="none"/>
+				<polyline points="99,3,92,11,86,3" stroke="green" fill="none"/>
+				<polyline points="3,3,10,11,16,3" stroke="green" fill="none"/>
+				<polyline points="3,11,10,19,16,11" stroke="green" fill="none"/>
+				<line x1="9" y1="11" x2="92" y2="11" stroke="green"/>
+			</g>
+			<g status="2" gpmsstatus="536870913" descr="合" symbolid="Disconnect_@0" transform="translate(350,2400)" viewBox="0,0,102,22">
+				<polyline points="94,19,99,11,94,3" stroke="red" fill="none"/>
+				<polyline points="86,3,92,11,86,19" stroke="red" fill="none"/>
+				<polyline points="16,19,10,11,16,3" stroke="red" fill="none"/>
+				<polyline points="8,19,3,11,8,3" stroke="red" fill="none"/>
+				<line x1="9" y1="11" x2="92" y2="11" stroke="red"/>
+			</g>
+		</g>
+		<g name="隔离开关" subtype="5">
+			<text style="text-anchor:middle" x="100" y="2820" visibility="visible" font-size="20" font-family="SimSun" fill="rgb(0,0,0)">隔离开关</text>
+			<g status="1" gpmsstatus="536870912" descr="分" symbolid="LoadBreakSwitch_4040011@0" transform="translate(200,2800)" viewBox="0,0,101,40">
+				<polyline points="0,20,30,20,61,0" stroke="green" fill="none"/>
+				<line x1="98" y1="20" x2="73" y2="20" stroke="green"/>
+				<line x1="73" y1="10"  x2="73" y2="30" stroke="green"/>
+			</g>
+			<g status="2" gpmsstatus="536870913" descr="合" symbolid="LoadBreakSwitch_4040010@1" transform="translate(350,2800)" viewBox="0,0,101,40">
+				<polyline points="0,20,30,20,78,7" stroke="red" fill="none"/>
+				<line x1="98" y1="20" x2="73" y2="20" stroke="red"/>
+				<line x1="73" y1="10"  x2="73" y2="30" stroke="red"/>
+			</g>
+		</g>
+		<g name="接地刀闸" subtype="9">
+			<text style="text-anchor:middle" x="100" y="2920" visibility="visible" font-size="20" font-family="SimSun" fill="rgb(0,0,0)">接地刀闸</text>
+			<g status="1" gpmsstatus="536870912" descr="分" symbolid="GroundDisconnector_4220010@0" transform="translate(200,2900)" viewBox="0,0,94,45">
+				<polyline points="16,23,45,23,65,10" stroke="green" fill="none"/>
+				<line x1="0"  y1="18" x2="0" y2="28" stroke="green"/>
+				<line x1="8"  y1="16" x2="8" y2="30" stroke="green"/>
+				<line x1="16"  y1="14" x2="16" y2="32" stroke="green"/>
+				<line x1="70"  y1="23" x2="94" y2="23" stroke="green"/>
+				<line x1="70"  y1="16" x2="70" y2="30" stroke="green"/>
+			</g>
+			<g status="2" gpmsstatus="536870913" descr="合" symbolid="GroundDisconnector_4220011@1" transform="translate(350,2900)" viewBox="0,0,94,45">
+				<polyline points="16,23,45,23,75,16" stroke="red" fill="none"/>
+				<line x1="0"  y1="18" x2="0" y2="28" stroke="red"/>
+				<line x1="8"  y1="16" x2="8" y2="30" stroke="red"/>
+				<line x1="16"  y1="14" x2="16" y2="32" stroke="red"/>
+				<line x1="70"  y1="23" x2="94" y2="23" stroke="red"/>
+				<line x1="70"  y1="16" x2="70" y2="30" stroke="red"/>
+			</g>
+		</g>
+		<g name="柱上隔离开关" subtype="6">
+			<text style="text-anchor:middle" x="100" y="3020" visibility="visible" font-size="20" font-family="SimSun" fill="rgb(0,0,0)">柱上隔离开关</text>
+			<g status="1" gpmsstatus="536870912" descr="分" symbolid="LoadBreakSwitch_4040011@0" transform="translate(200,3000)" viewBox="0,0,101,40">
+				<polyline points="0,20,30,20,61,0" stroke="green" fill="none"/>
+				<line x1="101" y1="20" x2="73" y2="20" stroke="green"/>
+				<line x1="73" y1="10"  x2="73" y2="30" stroke="green"/>
+			</g>
+			<g status="2" gpmsstatus="536870913" descr="合" symbolid="LoadBreakSwitch_4040010@1" transform="translate(350,3000)" viewBox="0,0,101,40">
+				<polyline points="0,20,30,20,78,8" stroke="red" fill="none"/>
+				<line x1="101" y1="20" x2="73" y2="20" stroke="red"/>
+				<line x1="73" y1="10"  x2="73" y2="30" stroke="red"/>
+			</g>
+		</g>
+	</g>
+	<g name="组合开关" devicetype="40">
+		<g name="三工位负荷开关" subtype="4">
+			<text style="text-anchor:middle" x="100" y="220" visibility="visible" font-size="20" font-family="SimSun" fill="rgb(0,0,0)">三工位开关</text>
+			<g status="1" gpmsstatus="805306368" descr="分" symbolid="Breaker_4070011@0" transform="translate(200,200)" viewBox="0,0,92,78">
+				<polyline points="0,39,28,39,62,20" stroke="green" fill="none"/>
+				<line x1="92" y1="39" x2="68" y2="39" stroke="green"/>
+				<ellipse cx="61" cy="39" rx="7" ry="7" stroke="green" fill="none"/>
+				<line x1="40" y1="0"  x2="44" y2="0"  stroke="green"/>
+				<line x1="38" y1="3"  x2="46" y2="3"  stroke="green"/>
+				<line x1="36" y1="6"  x2="48" y2="6" stroke="green"/>
+				<line x1="42" y1="6"  x2="42" y2="18" stroke="green"/>
+				<line x1="40" y1="18" x2="44" y2="18" stroke="green"/>
+			</g>
+			<g status="2" gpmsstatus="805306370" descr="合" symbolid="Breaker_4070010@1" transform="translate(350,200)" viewBox="0,0,92,78">
+				<polyline points="0,39,28,39,70,30" stroke="red" fill="none"/>
+				<line x1="92" y1="39" x2="68" y2="39" stroke="red"/>
+				<ellipse cx="61" cy="39" rx="7" ry="7" stroke="red" fill="none"/>
+				<line x1="40" y1="0"  x2="44" y2="0"  stroke="red"/>
+				<line x1="38" y1="3"  x2="46" y2="3"  stroke="red"/>
+				<line x1="36" y1="6"  x2="48" y2="6" stroke="red"/>
+				<line x1="42" y1="6"  x2="42" y2="18" stroke="red"/>
+				<line x1="40" y1="18" x2="44" y2="18" stroke="red"/>
+			</g>
+			<g status="13" gpmsstatus="805306369" descr="接地" symbolid="Breaker_4070012" transform="translate(500,200)" viewBox="0,0,92,78">
+				<polyline points="0,39,28,39,47,15" stroke="black" fill="none"/>
+				<line x1="92" y1="39" x2="68" y2="39" stroke="black"/>
+				<ellipse cx="61" cy="39" rx="7" ry="7" stroke="black" fill="none"/>
+				<line x1="40" y1="0"  x2="44" y2="0"  stroke="black"/>
+				<line x1="38" y1="3"  x2="46" y2="3"  stroke="black"/>
+				<line x1="36" y1="6"  x2="48" y2="6" stroke="black"/>
+				<line x1="42" y1="6"  x2="42" y2="18" stroke="black"/>
+				<line x1="40" y1="18" x2="44" y2="18" stroke="black"/>
+			</g>
+		</g>
+		<g name="手车开关" subtype="1">
+			<text style="text-anchor:middle" x="100" y="320" visibility="visible" font-size="20" font-family="SimSun" fill="rgb(0,0,0)">手车开关</text>
+			<g status="3" gpmsstatus="913003" descr="试验/检修" symbolid="Breaker_4100012@0" transform="translate(200,300)" viewBox="0,0,102,22">
+				<line x1="16" y1="11" x2="28" y2="11" stroke="green"/>
+				<line x1="74" y1="11" x2="86" y2="11" stroke="green"/>
+				<polyline points="99,11,92,19,86,11" stroke="green" fill="none"/>
+				<polyline points="99,3,92,11,86,3" stroke="green" fill="none"/>
+				<polyline points="3,3,10,11,16,3" stroke="green" fill="none"/>
+				<polyline points="3,11,10,19,16,11" stroke="green" fill="none"/>
+				<rect x="28" y="1" width="46" height="20" stroke="red" fill="red"/>
+			</g>
+			<g status="1" gpmsstatus="96601" descr="分/冷备" symbolid="Breaker_4100012@1" transform="translate(400,300)" viewBox="0,0,102,22">
+				<line x1="16" y1="11" x2="28" y2="11" stroke="green"/>
+				<line x1="74" y1="11" x2="86" y2="11" stroke="green"/>
+				<polyline points="99,11,92,19,86,11" stroke="green" fill="none"/>
+				<polyline points="99,3,92,11,86,3" stroke="green" fill="none"/>
+				<polyline points="3,3,10,11,16,3" stroke="green" fill="none"/>
+				<polyline points="3,11,10,19,16,11" stroke="green" fill="none"/>
+				<rect x="28" y="1" width="46" height="20" stroke="green" fill="green"/>
+			</g>
+			<g status="4" gpmsstatus="96602" descr="分/热备" symbolid="Breaker_4100012@1" transform="translate(600,300)" viewBox="0,0,102,22">
+				<line x1="16" y1="11" x2="28" y2="11" stroke="red"/>
+				<line x1="74" y1="11" x2="86" y2="11" stroke="red"/>
+				<polyline points="94,19,99,11,94,3" stroke="red" fill="none"/>
+				<polyline points="86,3,92,11,86,19" stroke="red" fill="none"/>
+				<polyline points="16,19,10,11,16,3" stroke="red" fill="none"/>
+				<polyline points="8,19,3,11,8,3" stroke="red" fill="none"/>
+				<rect x="28" y="1" width="46" height="20" stroke="green" fill="green"/>
+			</g>
+			<g status="2" gpmsstatus="536870913" descr="合/运行" symbolid="Breaker_4100012@1" transform="translate(800,300)" viewBox="0,0,102,22">
+				<line x1="16" y1="11" x2="28" y2="11" stroke="red"/>
+				<line x1="74" y1="11" x2="86" y2="11" stroke="red"/>
+				<polyline points="94,19,99,11,94,3" stroke="red" fill="none"/>
+				<polyline points="86,3,92,11,86,19" stroke="red" fill="none"/>
+				<polyline points="16,19,10,11,16,3" stroke="red" fill="none"/>
+				<polyline points="8,19,3,11,8,3" stroke="red" fill="none"/>
+				<rect x="28" y="1" width="46" height="20" stroke="red" fill="red"/>
+			</g>
+		</g>
+		<g name="T型开关" subtype="8">
+			<text style="text-anchor:middle" x="100" y="720" visibility="visible" font-size="20" font-family="SimSun" fill="rgb(0,0,0)">T型开关</text>
+			<g status="6" gpmsstatus="1073741835" descr="T型开关AB-C" symbolid="LoadBreakSwitch_4080010" transform="translate(200,700)" viewBox="0,0,88,96">
+				<ellipse cx="10" cy="10" rx="10" ry="10" stroke="green" fill="none"/>
+				<ellipse cx="78" cy="10" rx="10" ry="10" stroke="green" fill="none"/>
+				<ellipse cx="10" cy="86" rx="10" ry="10" stroke="green" fill="none"/>
+				<ellipse cx="78" cy="86" rx="10" ry="10" stroke="green" fill="none"/>
+				<line x1="17"  y1="17" x2="71" y2="79" stroke="green"/>
+				<line x1="71"  y1="17" x2="44" y2="48" stroke="green"/>
+				<text x="10" y="10" stroke="green">A</text>
+				<text x="78" y="10" stroke="green">B</text>
+				<text x="78" y="86" stroke="green">C</text>
+			</g>
+			<g status="7" gpmsstatus="1073741880" descr="T型开关B-C" symbolid="LoadBreakSwitch_4080010" transform="translate(350,700)" viewBox="0,0,88,96">
+				<ellipse cx="10" cy="10" rx="10" ry="10" stroke="green" fill="none"/>
+				<ellipse cx="78" cy="10" rx="10" ry="10" stroke="green" fill="none"/>
+				<ellipse cx="10" cy="86" rx="10" ry="10" stroke="green" fill="none"/>
+				<ellipse cx="78" cy="86" rx="10" ry="10" stroke="green" fill="none"/>
+				<line x1="71"  y1="17" x2="17" y2="79" stroke="green"/>
+				<line x1="71"  y1="79" x2="44" y2="48" stroke="green"/>
+				<text x="10" y="10" stroke="green">A</text>
+				<text x="78" y="10" stroke="green">B</text>
+				<text x="78" y="86" stroke="green">C</text>
+			</g>
+			<g status="8" gpmsstatus="1073741862" descr="T型开关A-C" symbolid="LoadBreakSwitch_4080010" transform="translate(500,700)" viewBox="0,0,88,96">
+				<ellipse cx="10" cy="10" rx="10" ry="10" stroke="green" fill="none"/>
+				<ellipse cx="78" cy="10" rx="10" ry="10" stroke="green" fill="none"/>
+				<ellipse cx="10" cy="86" rx="10" ry="10" stroke="green" fill="none"/>
+				<ellipse cx="78" cy="86" rx="10" ry="10" stroke="green" fill="none"/>
+				<line x1="17"  y1="17" x2="71" y2="79" stroke="green"/>
+				<line x1="17"  y1="79" x2="44" y2="48" stroke="green"/>
+				<text x="10" y="10" stroke="green">A</text>
+				<text x="78" y="10" stroke="green">B</text>
+				<text x="78" y="86" stroke="green">C</text>
+			</g>
+			<g status="9" gpmsstatus="1073741845" descr="T型开关A-B" symbolid="LoadBreakSwitch_4080010" transform="translate(650,700)" viewBox="0,0,88,96">
+				<ellipse cx="10" cy="10" rx="10" ry="10" stroke="green" fill="none"/>
+				<ellipse cx="78" cy="10" rx="10" ry="10" stroke="green" fill="none"/>
+				<ellipse cx="10" cy="86" rx="10" ry="10" stroke="green" fill="none"/>
+				<ellipse cx="78" cy="86" rx="10" ry="10" stroke="green" fill="none"/>
+				<line x1="71"  y1="17" x2="17" y2="79" stroke="green"/>
+				<line x1="17"  y1="17" x2="44" y2="48" stroke="green"/>
+				<text x="10" y="10" stroke="green">A</text>
+				<text x="78" y="10" stroke="green">B</text>
+				<text x="78" y="86" stroke="green">C</text>
+			</g>
+		</g>
+		<g name="联动开关" subtype="7">
+			<text style="text-anchor:middle" x="100" y="920" visibility="visible" font-size="20" font-family="SimSun" fill="rgb(0,0,0)">联动开关</text>
+			<g status="1" gpmsstatus="805306368" descr="分" symbolid="Breaker_4030061@0" transform="translate(200,900)" viewBox="0,0,92,78">
+				<polyline points="0,39,46,39,78,25" stroke="green" fill="none"/>
+				<line x1="11" y1="73"  x2="13" y2="73"  stroke="green"/>
+				<line x1="10" y1="71"  x2="14" y2="71"  stroke="green"/>
+				<line x1="9"  y1="69"  x2="15" y2="69"  stroke="green"/>
+				<polyline points="12,69,12,65,21,48" stroke="green" fill="none"/>
+				<line x1="12" y1="39" x2="12" y2="43" stroke="green"/>
+				<line x1="10" y1="43" x2="14" y2="43" stroke="green"/>
+
+				<polyline points="35,44,35,54,31,54" stroke="green" fill="none"/>
+				<line x1="28" y1="54" x2="24" y2="54" stroke="green"/>
+				<line x1="21" y1="54" x2="17" y2="54" stroke="green"/>
+
+				<polyline points="24,34,46,34,46,44,24,44,24,34" stroke="green" fill="none"/>
+
+				<polyline points="35,34,35,24,45,24" stroke="green" fill="none"/>
+				<line x1="50" y1="24" x2="60" y2="24" stroke="green"/>
+				<polyline points="65,24,70,24,70,29" stroke="green" fill="none"/>
+
+				<line x1="92" y1="39" x2="84" y2="39" stroke="green"/>
+				<line x1="84" y1="32" x2="84" y2="46" stroke="green"/>
+				<ellipse cx="80" cy="39" rx="4" ry="4" stroke="green" fill="none"/>
+
+			</g>
+			<g status="2" gpmsstatus="805306370" descr="合" symbolid="Breaker_4030060@1" transform="translate(350,900)" viewBox="0,0,92,78">
+				<polyline points="0,39,46,39,86,32" stroke="red" fill="none"/>
+
+				<line x1="11" y1="73"  x2="13" y2="73"  stroke="red"/>
+				<line x1="10" y1="71"  x2="14" y2="71"  stroke="red"/>
+				<line x1="9"  y1="69"  x2="15" y2="69"  stroke="red"/>
+				<polyline points="12,69,12,65,21,48" stroke="red" fill="none"/>
+				<line x1="12" y1="39" x2="12" y2="43" stroke="red"/>
+				<line x1="10" y1="43" x2="14" y2="43" stroke="red"/>
+
+				<polyline points="35,44,35,54,31,54" stroke="red" fill="none"/>
+				<line x1="28" y1="54" x2="24" y2="54" stroke="red"/>
+				<line x1="21" y1="54" x2="17" y2="54" stroke="red"/>
+
+				<polyline points="24,34,46,34,46,44,24,44,24,34" stroke="red" fill="none"/>
+
+				<polyline points="35,34,35,24,45,24" stroke="red" fill="none"/>
+				<line x1="50" y1="24" x2="60" y2="24" stroke="red"/>
+				<polyline points="65,24,70,24,70,35" stroke="red" fill="none"/>
+
+				<line x1="92" y1="39" x2="84" y2="39" stroke="red"/>
+				<line x1="84" y1="32" x2="84" y2="46" stroke="red"/>
+				<ellipse cx="80" cy="39" rx="4" ry="4" stroke="red" fill="none"/>
+
+			</g>
+			<g status="13" gpmsstatus="805306369" descr="接地" symbolid="Breaker_4030062" transform="translate(500,900)" viewBox="0,0,92,78">
+				<polyline points="0,39,46,39,78,25" stroke="black" fill="none"/>
+
+				<line x1="11" y1="73"  x2="13" y2="73"  stroke="black"/>
+				<line x1="10" y1="71"  x2="14" y2="71"  stroke="black"/>
+				<line x1="9"  y1="69"  x2="15" y2="69"  stroke="black"/>
+				<polyline points="12,69,12,65,14,41" stroke="black" fill="none"/>
+				<line x1="12" y1="39" x2="12" y2="43" stroke="black"/>
+				<line x1="10" y1="43" x2="14" y2="43" stroke="black"/>
+
+				<polyline points="35,44,35,54,31,54" stroke="black" fill="none"/>
+				<line x1="28" y1="54" x2="24" y2="54" stroke="black"/>
+				<line x1="21" y1="54" x2="17" y2="54" stroke="black"/>
+				<line x1="14" y1="54" x2="13" y2="54" stroke="black"/>
+
+				<polyline points="24,34,46,34,46,44,24,44,24,34" stroke="black" fill="none"/>
+
+				<polyline points="35,34,35,24,45,24" stroke="black" fill="none"/>
+				<line x1="50" y1="24" x2="60" y2="24" stroke="black"/>
+				<polyline points="65,24,70,24,70,29" stroke="black	" fill="none"/>
+
+				<line x1="92" y1="39" x2="84" y2="39" stroke="black"/>
+				<line x1="84" y1="32" x2="84" y2="46" stroke="black"/>
+				<ellipse cx="80" cy="39" rx="4" ry="4" stroke="black" fill="none"/>
+			</g>
+		</g>
+		<g name="三工位断路器" subtype="3">
+			<text style="text-anchor:middle" x="100" y="1020" visibility="visible" font-size="20" font-family="SimSun" fill="rgb(0,0,0)">三工位断路器</text>
+			<g status="1" gpmsstatus="805306368" descr="分" symbolid="" transform="translate(200,1000)" viewBox="0,0,92,78">
+				<polyline points="0,39,28,39,67,17" stroke="green" fill="none"/>
+				<line x1="92" y1="39" x2="74" y2="39" stroke="green"/>
+				<line x1="68" y1="33" x2="80" y2="45" stroke="green"/>
+				<line x1="80" y1="33" x2="68" y2="45" stroke="green"/>
+				<line x1="40" y1="0"  x2="44" y2="0"  stroke="green"/>
+				<line x1="38" y1="3"  x2="46" y2="3"  stroke="green"/>
+				<line x1="36" y1="6"  x2="48" y2="6" stroke="green"/>
+				<line x1="42" y1="6"  x2="42" y2="20" stroke="green"/>
+				<line x1="40" y1="20" x2="44" y2="20" stroke="green"/>
+			</g>
+			<g status="2" gpmsstatus="805306370" descr="合" symbolid="Breaker_4030070" transform="translate(350,1000)" viewBox="0,0,92,78">
+				<polyline points="0,39,28,39,83,30" stroke="red" fill="none"/>
+				<line x1="92" y1="39" x2="74" y2="39" stroke="red"/>
+				<line x1="68" y1="33" x2="80" y2="45" stroke="red"/>
+				<line x1="80" y1="33" x2="68" y2="45" stroke="red"/>
+				<line x1="40" y1="0"  x2="44" y2="0"  stroke="red"/>
+				<line x1="38" y1="3"  x2="46" y2="3"  stroke="red"/>
+				<line x1="36" y1="6"  x2="48" y2="6" stroke="red"/>
+				<line x1="42" y1="6"  x2="42" y2="20" stroke="red"/>
+				<line x1="40" y1="20" x2="44" y2="20" stroke="red"/>
+			</g>
+			<g status="13" gpmsstatus="805306369" descr="接地" symbolid="" transform="translate(500,1000)" viewBox="0,0,92,78">
+				<polyline points="0,39,28,39,46,18" stroke="black" fill="none"/>
+				<line x1="92" y1="39" x2="74" y2="39" stroke="black"/>
+				<line x1="68" y1="33" x2="80" y2="45" stroke="black"/>
+				<line x1="80" y1="33" x2="68" y2="45" stroke="black"/>
+				<line x1="40" y1="0"  x2="44" y2="0"  stroke="black"/>
+				<line x1="38" y1="3"  x2="46" y2="3"  stroke="black"/>
+				<line x1="36" y1="6"  x2="48" y2="6" stroke="black"/>
+				<line x1="42" y1="6"  x2="42" y2="20" stroke="black"/>
+				<line x1="40" y1="20" x2="44" y2="20" stroke="black"/>
+			</g>
+		</g>
+		<g name="V型开关" subtype="9">
+			<text style="text-anchor:middle" x="100" y="1120" visibility="visible" font-size="20" font-family="SimSun" fill="rgb(0,0,0)">V型开关</text>
+			<g status="10" gpmsstatus="1073741835" descr="V型开关AB-C" symbolid="LoadBreakSwitch_4080010" transform="translate(200,1100)" viewBox="0,0,88,96">
+				<ellipse cx="10" cy="10" rx="10" ry="10" stroke="green" fill="none"/>
+				<ellipse cx="78" cy="10" rx="10" ry="10" stroke="green" fill="none"/>
+				<ellipse cx="10" cy="86" rx="10" ry="10" stroke="green" fill="none"/>
+				<ellipse cx="78" cy="86" rx="10" ry="10" stroke="green" fill="none"/>
+				<line x1="17"  y1="17" x2="71" y2="79" stroke="green"/>
+				<line x1="71"  y1="17" x2="44" y2="48" stroke="green"/>
+				<text x="10" y="10" stroke="green">A</text>
+				<text x="78" y="10" stroke="green">B</text>
+				<text x="78" y="86" stroke="green">C</text>
+			</g>
+			<g status="11" gpmsstatus="1073741832" descr="V型开关B-C" symbolid="LoadBreakSwitch_4080010" transform="translate(350,1100)" viewBox="0,0,88,96">
+				<ellipse cx="10" cy="10" rx="10" ry="10" stroke="green" fill="none"/>
+				<ellipse cx="78" cy="10" rx="10" ry="10" stroke="green" fill="none"/>
+				<ellipse cx="10" cy="86" rx="10" ry="10" stroke="green" fill="none"/>
+				<ellipse cx="78" cy="86" rx="10" ry="10" stroke="green" fill="none"/>
+				<polyline points="71,17,44,48,71,79" stroke="green" fill="none"/>
+				<text x="10" y="10" stroke="green">A</text>
+				<text x="78" y="10" stroke="green">B</text>
+				<text x="78" y="86" stroke="green">C</text>
+			</g>
+			<g status="12" gpmsstatus="1073741862" descr="V型开关A-C" symbolid="LoadBreakSwitch_4080010" transform="translate(500,1100)" viewBox="0,0,88,96">
+				<ellipse cx="10" cy="10" rx="10" ry="10" stroke="green" fill="none"/>
+				<ellipse cx="78" cy="10" rx="10" ry="10" stroke="green" fill="none"/>
+				<ellipse cx="10" cy="86" rx="10" ry="10" stroke="green" fill="none"/>
+				<ellipse cx="78" cy="86" rx="10" ry="10" stroke="green" fill="none"/>
+				<line x1="17"  y1="17" x2="71" y2="79" stroke="green"/>
+				<line x1="17"  y1="79" x2="44" y2="48" stroke="green"/>
+				<text x="10" y="10" stroke="green">A</text>
+				<text x="78" y="10" stroke="green">B</text>
+				<text x="78" y="86" stroke="green">C</text>
+			</g>
+			<g status="1" gpmsstatus="1073741856" descr="V型开关OPEN" symbolid="LoadBreakSwitch_4080010" transform="translate(650,1100)" viewBox="0,0,88,96">
+				<ellipse cx="10" cy="10" rx="10" ry="10" stroke="green" fill="none"/>
+				<ellipse cx="78" cy="10" rx="10" ry="10" stroke="green" fill="none"/>
+				<ellipse cx="10" cy="86" rx="10" ry="10" stroke="green" fill="none"/>
+				<ellipse cx="78" cy="86" rx="10" ry="10" stroke="green" fill="none"/>
+				<polyline points="17,79,44,48,71,79" stroke="green" fill="none"/>
+				<text x="10" y="10" stroke="green">A</text>
+				<text x="78" y="10" stroke="green">B</text>
+				<text x="78" y="86" stroke="green">C</text>
+			</g>
+		</g>
+		<g name="手车负荷开关" subtype="10">
+			<text style="text-anchor:middle" x="100" y="1240" visibility="visible" font-size="20" font-family="SimSun" fill="rgb(0,0,0)">手车负荷开关</text>
+			<g status="3" gpmsstatus="913003" descr="试验/检修" symbolid="Breaker_4100012@0" transform="translate(200,1240)" viewBox="0,0,174,74">
+				<polyline points="0,17,15,37,30,17" stroke="red" fill="none"/>
+				<polyline points="0,37,15,57,30,37" stroke="red" fill="none"/>
+				<polyline points="30,37,50,37,124,18" stroke="red" fill="none"/>
+				<ellipse cx="109" cy="37" rx="15" ry="15" stroke="red" fill="none"/>
+				<line x1="124" y1="4" x2="124" y2="70" stroke="red"/>
+				<line x1="124" y1="37" x2="144" y2="37" stroke="red"/>
+				<polyline points="144,17,159,37,174,17" stroke="red" fill="none"/>
+				<polyline points="144,37,159,57,174,37" stroke="red" fill="none"/>
+			</g>
+			<g status="1" gpmsstatus="96601" descr="分/冷备" symbolid="Breaker_4100012@1" transform="translate(400,1240)" viewBox="0,0,174,74">
+				<polyline points="0,17,15,37,30,17" stroke="red" fill="none"/>
+				<polyline points="0,37,15,57,30,37" stroke="red" fill="none"/>
+				<polyline points="30,37,50,37,90,0" stroke="red" fill="none"/>
+				<ellipse cx="109" cy="37" rx="15" ry="15" stroke="red" fill="none"/>
+				<line x1="124" y1="4" x2="124" y2="70" stroke="red"/>
+				<line x1="124" y1="37" x2="144" y2="37" stroke="red"/>
+				<polyline points="144,17,159,37,174,17" stroke="red" fill="none"/>
+				<polyline points="144,37,159,57,174,37" stroke="red" fill="none"/>
+			</g>
+			<g status="4" gpmsstatus="96602" descr="分/热备" symbolid="Breaker_4100012@1" transform="translate(600,1240)" viewBox="0,0,174,74">
+				<polyline points="15,18,0,37,15,56" stroke="red" fill="none"/>
+				<polyline points="30,18,15,37,30,56" stroke="red" fill="none"/>
+				<polyline points="0,37,50,37,90,0" stroke="red" fill="none"/>
+				<ellipse cx="109" cy="37" rx="15" ry="15" stroke="red" fill="none"/>
+				<line x1="124" y1="4" x2="124" y2="70" stroke="red"/>
+				<line x1="124" y1="37" x2="174" y2="37" stroke="red"/>
+				<polyline points="159,18,174,37,159,56" stroke="red" fill="none"/>
+				<polyline points="144,18,159,37,144,56" stroke="red" fill="none"/>
+			</g>
+			<g status="2" gpmsstatus="536870913" descr="合/运行" symbolid="Breaker_4100012@1" transform="translate(800,1240)" viewBox="0,0,174,74">
+				<polyline points="15,18,0,37,15,56" stroke="red" fill="none"/>
+				<polyline points="30,18,15,37,30,56" stroke="red" fill="none"/>
+				<polyline points="0,37,50,37,124,18" stroke="red" fill="none"/>
+				<ellipse cx="109" cy="37" rx="15" ry="15" stroke="red" fill="none"/>
+				<line x1="124" y1="4" x2="124" y2="70" stroke="red"/>
+				<line x1="124" y1="37" x2="174" y2="37" stroke="red"/>
+				<polyline points="159,18,174,37,159,56" stroke="red" fill="none"/>
+				<polyline points="144,18,159,37,144,56" stroke="red" fill="none"/>
+			</g>
+		</g>
+		<g name="熔断负荷手车隔离开关" subtype="2">
+			<text style="text-anchor:middle" x="100" y="1240" visibility="visible" font-size="20" font-family="SimSun" fill="rgb(0,0,0)">手车负荷开关</text>
+			<g status="3" gpmsstatus="913003" descr="试验/检修" symbolid="Breaker_4100012@0" transform="translate(200,1240)" viewBox="0,0,174,74">
+				<polyline points="0,17,15,37,30,17" stroke="red" fill="none"/>
+				<polyline points="0,37,15,57,30,37" stroke="red" fill="none"/>
+				<polyline points="30,37,50,37,124,18" stroke="red" fill="none"/>
+				<ellipse cx="109" cy="37" rx="15" ry="15" stroke="red" fill="none"/>
+				<line x1="124" y1="4" x2="124" y2="70" stroke="red"/>
+				<line x1="124" y1="37" x2="144" y2="37" stroke="red"/>
+				<polyline points="144,17,159,37,174,17" stroke="red" fill="none"/>
+				<polyline points="144,37,159,57,174,37" stroke="red" fill="none"/>
+			</g>
+			<g status="1" gpmsstatus="96601" descr="分/冷备" symbolid="Breaker_4100012@1" transform="translate(400,1240)" viewBox="0,0,174,74">
+				<polyline points="0,17,15,37,30,17" stroke="red" fill="none"/>
+				<polyline points="0,37,15,57,30,37" stroke="red" fill="none"/>
+				<polyline points="30,37,50,37,90,0" stroke="red" fill="none"/>
+				<ellipse cx="109" cy="37" rx="15" ry="15" stroke="red" fill="none"/>
+				<line x1="124" y1="4" x2="124" y2="70" stroke="red"/>
+				<line x1="124" y1="37" x2="144" y2="37" stroke="red"/>
+				<polyline points="144,17,159,37,174,17" stroke="red" fill="none"/>
+				<polyline points="144,37,159,57,174,37" stroke="red" fill="none"/>
+			</g>
+			<g status="4" gpmsstatus="96602" descr="分/热备" symbolid="Breaker_4100012@1" transform="translate(600,1240)" viewBox="0,0,174,74">
+				<polyline points="15,18,0,37,15,56" stroke="red" fill="none"/>
+				<polyline points="30,18,15,37,30,56" stroke="red" fill="none"/>
+				<polyline points="0,37,50,37,90,0" stroke="red" fill="none"/>
+				<ellipse cx="109" cy="37" rx="15" ry="15" stroke="red" fill="none"/>
+				<line x1="124" y1="4" x2="124" y2="70" stroke="red"/>
+				<line x1="124" y1="37" x2="174" y2="37" stroke="red"/>
+				<polyline points="159,18,174,37,159,56" stroke="red" fill="none"/>
+				<polyline points="144,18,159,37,144,56" stroke="red" fill="none"/>
+			</g>
+			<g status="2" gpmsstatus="536870913" descr="合/运行" symbolid="Breaker_4100012@1" transform="translate(800,1240)" viewBox="0,0,174,74">
+				<polyline points="15,18,0,37,15,56" stroke="red" fill="none"/>
+				<polyline points="30,18,15,37,30,56" stroke="red" fill="none"/>
+				<polyline points="0,37,50,37,124,18" stroke="red" fill="none"/>
+				<ellipse cx="109" cy="37" rx="15" ry="15" stroke="red" fill="none"/>
+				<line x1="124" y1="4" x2="124" y2="70" stroke="red"/>
+				<line x1="124" y1="37" x2="174" y2="37" stroke="red"/>
+				<polyline points="159,18,174,37,159,56" stroke="red" fill="none"/>
+				<polyline points="144,18,159,37,144,56" stroke="red" fill="none"/>
+			</g>
+		</g>
+		<g name="三工位刀闸" subtype="5">
+			<text style="text-anchor:middle" x="100" y="2620" visibility="visible" font-size="20" font-family="SimSun" fill="rgb(0,0,0)">三工位刀闸</text>
+			<g status="1" gpmsstatus="805306368" descr="分" symbolid="Breaker_4070011@0" transform="translate(200,2600)" viewBox="0,0,92,78">
+				<polyline points="0,39,28,39,63,23" stroke="green" fill="none"/>
+				<line x1="92" y1="39" x2="64" y2="39" stroke="green"/>
+				<line x1="64" y1="32" x2="64" y2="46" stroke="green"/>
+				<line x1="40" y1="0"  x2="44" y2="0"  stroke="green"/>
+				<line x1="38" y1="3"  x2="46" y2="3"  stroke="green"/>
+				<line x1="36" y1="6"  x2="48" y2="6" stroke="green"/>
+				<line x1="42" y1="6"  x2="42" y2="18" stroke="green"/>
+				<line x1="39" y1="18" x2="45" y2="18" stroke="green"/>
+			</g>
+			<g status="2" gpmsstatus="805306370" descr="合" symbolid="Breaker_4070010@1" transform="translate(350,2600)" viewBox="0,0,92,78">
+				<polyline points="0,39,28,39,68,30" stroke="red" fill="none"/>
+				<line x1="92" y1="39" x2="64" y2="39" stroke="red"/>
+				<line x1="64" y1="32" x2="64" y2="46" stroke="red"/>
+				<line x1="40" y1="0"  x2="44" y2="0"  stroke="red"/>
+				<line x1="38" y1="3"  x2="46" y2="3"  stroke="red"/>
+				<line x1="36" y1="6"  x2="48" y2="6" stroke="red"/>
+				<line x1="42" y1="6"  x2="42" y2="18" stroke="red"/>
+				<line x1="38" y1="18" x2="46" y2="18" stroke="red"/>
+			</g>
+			<g status="13" gpmsstatus="805306369" descr="接地" symbolid="Breaker_4070012" transform="translate(500,2600)" viewBox="0,0,92,78">
+				<polyline points="0,39,28,39,48,16" stroke="black" fill="none"/>
+				<line x1="92" y1="39" x2="64" y2="39" stroke="black"/>
+				<line x1="64" y1="32" x2="64" y2="46" stroke="black"/>
+				<line x1="40" y1="0"  x2="44" y2="0"  stroke="black"/>
+				<line x1="38" y1="3"  x2="46" y2="3"  stroke="black"/>
+				<line x1="36" y1="6"  x2="48" y2="6" stroke="black"/>
+				<line x1="42" y1="6"  x2="42" y2="18" stroke="black"/>
+				<line x1="38" y1="18" x2="46" y2="18" stroke="black"/>
+			</g>
+		</g>
+		<g name="双向隔离开关" subtype="6">
+			<text style="text-anchor:middle" x="100" y="3220" visibility="visible" font-size="20" font-family="SimSun" fill="rgb(0,0,0)">双向隔离开关</text>
+			<g status="1" gpmsstatus="805306368" descr="分" symbolid="Disconnector_4050040" transform="translate(200,3200)" viewBox="0,0,96,70">
+				<line x1="0"  y1="10" x2="30" y2="10" stroke="green"/>
+				<line x1="30" y1="0"  x2="30" y2="20" stroke="green"/>
+				<line x1="0"  y1="60" x2="30" y2="60" stroke="green"/>
+				<line x1="30" y1="70" x2="30" y2="50" stroke="green"/>
+
+				<line x1="96" y1="35" x2="70" y2="35" stroke="green"/>
+				<ellipse cx="65" cy="35" rx="5" ry="5" stroke="green" fill="none"/>
+
+				<line x1="60" y1="35" x2="30" y2="35" stroke="green"/>
+			</g>
+			<g status="14" gpmsstatus="805306372" descr="左合" symbolid="Disconnector_4050041" transform="translate(350,3200)" viewBox="0,0,96,70">
+				<line x1="0"  y1="10" x2="30" y2="10" stroke="red"/>
+				<line x1="30" y1="0"  x2="30" y2="20" stroke="red"/>
+				<line x1="0"  y1="60" x2="30" y2="60" stroke="red"/>
+				<line x1="30" y1="70" x2="30" y2="50" stroke="red"/>
+
+				<line x1="96" y1="35" x2="70" y2="35" stroke="red"/>
+				<ellipse cx="65" cy="35" rx="5" ry="5" stroke="red" fill="none"/>
+
+				<line x1="60" y1="35" x2="30" y2="50" stroke="red"/>
+			</g>
+			<g status="15" gpmsstatus="805306370" descr="右合" symbolid="Disconnector_4050042" transform="translate(500,3200)" viewBox="0,0,96,70">
+				<line x1="0"  y1="10" x2="30" y2="10" stroke="red"/>
+				<line x1="30" y1="0"  x2="30" y2="20" stroke="red"/>
+				<line x1="0"  y1="60" x2="30" y2="60" stroke="red"/>
+				<line x1="30" y1="70" x2="30" y2="50" stroke="red"/>
+
+				<line x1="96" y1="35" x2="70" y2="35" stroke="red"/>
+				<ellipse cx="65" cy="35" rx="5" ry="5" stroke="red" fill="none"/>
+
+				<line x1="60" y1="35" x2="30" y2="20" stroke="red"/>
+			</g>
+		</g>
+	</g>
+	<g name="熔断器" devicetype="29">
+		<g name="熔丝" subtype="1">
+			<text style="text-anchor:middle" x="100" y="2020" visibility="visible" font-size="20" font-family="SimSun" fill="rgb(0,0,0)">普通刀闸</text>
+			<g status="1" gpmsstatus="536870912" descr="分" symbolid="" transform="translate(200,2000)" viewBox="0,0,100,40">
+				<line x1="0"  y1="20" x2="15" y2="20" stroke="green"/>
+				<line x1="100"  y1="20" x2="85" y2="20" stroke="green"/>
+				<ellipse cx="20" cy="20" rx="5" ry="5" stroke="green" fill="none"/>
+				<ellipse cx="80" cy="20" rx="5" ry="5" stroke="green" fill="none"/>
+				<line x1="25"  y1="20" x2="70" y2="5" stroke="green"/>
+			</g>
+			<g status="2" gpmsstatus="536870913" descr="合" symbolid="" transform="translate(350,2000)" viewBox="0,0,100,40">
+				<line x1="0"  y1="20" x2="15" y2="20" stroke="red"/>
+				<line x1="100"  y1="20" x2="85" y2="20" stroke="red"/>
+				<ellipse cx="20" cy="20" rx="5" ry="5" stroke="red" fill="none"/>
+				<ellipse cx="80" cy="20" rx="5" ry="5" stroke="red" fill="none"/>
+				<line x1="25"  y1="20" x2="75" y2="20" stroke="red"/>
+			</g>
+		</g>
+		<g name="跌落式熔断器" subtype="2">
+			<text style="text-anchor:middle" x="100" y="2020" visibility="visible" font-size="20" font-family="SimSun" fill="rgb(0,0,0)">普通刀闸</text>
+			<g status="1" gpmsstatus="536870912" descr="分" symbolid="" transform="translate(200,2000)" viewBox="0,0,100,40">
+				<line x1="0"  y1="20" x2="15" y2="20" stroke="green"/>
+				<line x1="100"  y1="20" x2="85" y2="20" stroke="green"/>
+				<ellipse cx="20" cy="20" rx="5" ry="5" stroke="green" fill="none"/>
+				<ellipse cx="80" cy="20" rx="5" ry="5" stroke="green" fill="none"/>
+				<line x1="25"  y1="20" x2="70" y2="5" stroke="green"/>
+			</g>
+			<g status="2" gpmsstatus="536870913" descr="合" symbolid="" transform="translate(350,2000)" viewBox="0,0,100,40">
+				<line x1="0"  y1="20" x2="15" y2="20" stroke="red"/>
+				<line x1="100"  y1="20" x2="85" y2="20" stroke="red"/>
+				<ellipse cx="20" cy="20" rx="5" ry="5" stroke="red" fill="none"/>
+				<ellipse cx="80" cy="20" rx="5" ry="5" stroke="red" fill="none"/>
+				<line x1="25"  y1="20" x2="75" y2="20" stroke="red"/>
+			</g>
+		</g>
+	</g>
+	<g name="配变" devicetype="25">
+		<g name="柱上变压器（专用变）" subtype="2">
+			<text style="text-anchor:middle" x="100" y="4020" visibility="visible" font-size="20" font-family="SimSun" fill="rgb(0,0,0)">专用变</text>
+			<g status="0" symbolid="PowerTransformer_2030010" transform="translate(200,4000) scale(0.3,0.3)" viewBox="0,0,300,120">
+				<ellipse cx="100" cy="60" rx="60" ry="60" stroke="black" fill="none"/>
+				<ellipse cx="200" cy="60" rx="60" ry="60" stroke="black" fill="none"/>
+				<line x1="0" y1="60" x2="40" y2="60" stroke="black"/>
+				<line x1="300" y1="60" x2="260" y2="60" stroke="black"/>
+			</g>
+		</g>
+		<g name="柱上变压器（公用变）" subtype="3">
+			<text style="text-anchor:middle" x="100" y="4120" visibility="visible" font-size="20" font-family="SimSun" fill="rgb(0,0,0)">公用变</text>
+			<g status="0" symbolid="PowerTransformer_2030020" transform="translate(200,4100) scale(0.3,0.3)" viewBox="0,0,300,120">
+				<ellipse cx="100" cy="60" rx="60" ry="60" stroke="black" fill="none"/>
+				<ellipse cx="200" cy="60" rx="60" ry="60" stroke="black" fill="none"/>
+				<ellipse cx="100" cy="60" rx="60" ry="60" stroke="black" fill="grey"/>
+				<line x1="0" y1="60" x2="40" y2="60" stroke="black"/>
+				<line x1="300" y1="60" x2="260" y2="60" stroke="black"/>
+			</g>
+		</g>
+		<g name="双绕组变压器" subtype="1">
+			<text style="text-anchor:middle" x="100" y="4220" visibility="visible" font-size="20" font-family="SimSun" fill="rgb(0,0,0)">双绕组</text>
+			<g status="0" symbolid="PowerTransformer_4020100" transform="translate(200,4200)" viewBox="0,0,88,46">
+				<ellipse cx="25" cy="23" rx="23" ry="23" stroke="black" fill="none"/>
+				<ellipse cx="63" cy="23" rx="23" ry="23" stroke="black" fill="none"/>
+				<line x1="0" y1="23" x2="2" y2="23" stroke="black"/>
+				<line x1="86" y1="23" x2="88" y2="23" stroke="black"/>
+				<line x1="25" y1="23" x2="35" y2="23" stroke="black"/>
+				<polyline points="17,17,25,23,17,29" stroke="black" fill="none"/>
+				<line x1="63" y1="23" x2="73" y2="23" stroke="black"/>
+				<polyline points="55,17,63,23,55,29" stroke="black" fill="none"/>
+			</g>
+		</g>
+		<g name="高压用户" subtype="5">
+			<text style="text-anchor:middle" x="100" y="4320" visibility="visible" font-size="20" font-family="SimSun" fill="rgb(0,0,0)">高压用户</text>
+			<g status="0" symbolid="PowerTransformer_4020100" transform="translate(200,4300)" viewBox="0,0,88,46">
+				<ellipse cx="27" cy="23" rx="20" ry="20" stroke="red" fill="none"/>
+				<ellipse cx="61" cy="23" rx="20" ry="20" stroke="red" fill="none"/>
+				<polyline points="1,1,87,1,87,45,1,45,1,1" stroke="red" fill="none"/>
+			</g>
+		</g>
+	</g>
+	<g name="馈线段" devicetype="26">
+		<g name="电缆" subtype="1"/>
+		<g name="架空线" subtype="2"/>
+	</g>
+	<g name="故障指示器" devicetype="27">
+		<g name="站内故障指示器" subtype="1">
+			<text style="text-anchor:middle" x="100" y="4520" visibility="visible" font-size="20" font-family="SimSun" fill="rgb(0,0,0)">站内故障指示器</text>
+			<g status="0" symbolid="PowerTransformer_4020100" transform="translate(200,4500)" viewBox="0,0,70,70">
+				<ellipse cx="35" cy="35" rx="26" ry="26" stroke="red" fill="none"/>
+				<line x1="35" y1="0" x2="35" y2="70" stroke="red"/>
+				<line x1="13" y1="35" x2="70" y2="35" stroke="red"/>
+				<polyline points="0,35,13,29,13,41,0,35" stroke="red" fill="none"/>
+			</g>
+			<g status="1" symbolid="PowerTransformer_4020100" transform="translate(300,4500)" viewBox="0,0,70,70" >
+				<ellipse cx="35" cy="35" rx="26" ry="26" stroke="red" fill="none"/>
+				<line x1="35" y1="0" x2="35" y2="70" stroke="red"/>
+				<line x1="13" y1="35" x2="70" y2="35" stroke="red"/>
+				<polyline points="35,70,29,58,41,58,35,70" stroke="red" fill="none"/>
+			</g>
+		</g>
+		<g name="柱上故障指示器" subtype="2">
+			<text style="text-anchor:middle" x="100" y="4620" visibility="visible" font-size="20" font-family="SimSun" fill="rgb(0,0,0)">柱上故障指示器</text>
+			<g status="0" symbolid="PowerTransformer_4020100" transform="translate(200,4600)" viewBox="0,0,70,70">
+				<ellipse cx="35" cy="35" rx="26" ry="26" stroke="red" fill="none"/>
+				<line x1="35" y1="0" x2="35" y2="70" stroke="red"/>
+				<line x1="13" y1="35" x2="70" y2="35" stroke="red"/>
+				<polyline points="0,35,13,29,13,41,0,35" stroke="red" fill="none"/>
+			</g>
+			<g status="1" symbolid="PowerTransformer_4020100" transform="translate(300,4600)" viewBox="0,0,70,70" >
+				<ellipse cx="35" cy="35" rx="26" ry="26" stroke="red" fill="none"/>
+				<line x1="35" y1="0" x2="35" y2="70" stroke="red"/>
+				<line x1="13" y1="35" x2="70" y2="35" stroke="red"/>
+				<polyline points="35,70,29,58,41,58,35,70" stroke="red" fill="none"/>
+			</g>
+		</g>
+	</g>
+	<g name="杆塔" devicetype="31">
+		<g name="逻辑杆" subtype="1">
+			<text style="text-anchor:middle" x="100" y="4720" visibility="visible" font-size="20" font-family="SimSun" fill="rgb(0,0,0)">逻辑杆</text>
+			<g status="0" symbolid="PowerTransformer_4020100" transform="translate(200,4700)" viewBox="0,0,70,70">
+				<ellipse cx="35" cy="35" rx="35" ry="35" stroke="red" fill="none"/>
+			</g>
+		</g>
+		<g name="物理杆" subtype="2">
+			<text style="text-anchor:middle" x="100" y="4820" visibility="visible" font-size="20" font-family="SimSun" fill="rgb(0,0,0)">物理杆</text>
+			<g status="0" symbolid="PowerTransformer_4020100" transform="translate(200,4800)" viewBox="0,0,70,70">
+				<ellipse cx="35" cy="35" rx="35" ry="35" stroke="red" fill="none"/>
+			</g>
+		</g>
+	</g>
+	<g name="终端头" devicetype="32">
+		<g name="电缆终端头" subtype="1">
+			<text style="text-anchor:middle" x="100" y="4920" visibility="visible" font-size="20" font-family="SimSun" fill="rgb(0,0,0)">电缆终端头</text>
+			<g status="0" symbolid="PowerTransformer_4020100" transform="translate(200,4900)" viewBox="0,0,70,70">
+				<polyline points="70,35,0,0,0,70,70,35" stroke="red" fill="none"/>
+			</g>
+		</g>
+		<g name="站内终端头" subtype="2">
+			<text style="text-anchor:middle" x="100" y="5020" visibility="visible" font-size="20" font-family="SimSun" fill="rgb(0,0,0)">站内终端头</text>
+			<g status="0" symbolid="PowerTransformer_4020100" transform="translate(200,5000)" viewBox="0,0,90,30">
+				<polyline points="10,15,40,0,40,30,10,15" stroke="red" fill="none"/>
+				<line x1="40" y1="15" x2="55" y2="15" stroke="red"/>
+			</g>
+		</g>
+	</g>
+</g>
+</svg>
