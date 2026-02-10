@@ -86,6 +86,46 @@ func isItemInRedisSet(setKey, item string) (bool, error) {
 	return exists, nil
 }
 
+// 遍历检查9个地市的缓存
+func isItemInRedisHashRoundHasValue(setKey string) (bool, error) {
+	organList := []string{"0021350100", "0021350200", "0021350300", "0021350400", "0021350500", "0021350600", "0021350700", "0021350800", "0021350900"}
+	for _, organ := range organList {
+		exist, err := isItemInRedisHashHasValue(organ + ":" + setKey)
+		if exist {
+			return true, nil
+		}
+		if err != nil {
+			return true, err
+		}
+	}
+
+	return false, nil
+}
+
+func isItemInRedisHashHasValue(setKey string) (bool, error) {
+	if rdb == nil {
+		return false, fmt.Errorf("redis client not initialized")
+	}
+
+	// 使用SIsMember命令检查成员是否存在
+	exists, err := rdb.HGetAll(ctx, setKey).Result()
+	log.Println(setKey, " hash:", exists)
+	for k, v := range exists {
+		if k == "updateTime" {
+			continue
+		}
+		if v != "\"0.000\"" {
+			log.Println("setKey:", setKey)
+			return true, nil
+		}
+	}
+	if err != nil {
+		return false, fmt.Errorf("failed to check hash in %s: %v", setKey, err)
+	}
+
+	return false, nil
+}
+
 // 请求结构体
 type StartRequest struct {
 	BreakerIds    []string `json:"breakerIds"`
@@ -147,15 +187,30 @@ func zyStartHandler(w http.ResponseWriter, r *http.Request) {
 	// Redis set的key
 	pointOffSetKey := "POINTOFF"
 
+	// 查找拓扑, 找出相关馈线的所有拓扑
+	list := getTopoList(onDevices)
+	mainList := getMainTopoList(onDevices)
+	log.Println("mainList:", mainList)
+	feederList := getTopoFeederList(list) // 找有关的馈线
+	var totalTopoList []first.Topo
+	totalTopoList = append(totalTopoList, mainList...) // 添加主网部分的拓扑
+	for _, feeder := range feederList {
+		topoList := queryTopoData(feeder)
+		totalTopoList = append(totalTopoList, topoList...)
+	}
+	var totalDevice []string
+	for _, topo := range totalTopoList {
+		totalDevice = append(totalDevice, topo.ID)
+	}
 	// 检查每个onDevice是否在POINTOFF set中
-	for _, device := range onDevices {
+	for _, device := range totalDevice {
 		exists, err := isItemInRedisSetRound(pointOffSetKey, device)
+		log.Println("query device:" + device)
 		if err != nil {
 			log.Printf("Warning: Failed to check device %s in Redis set: %v", device, err)
 			// 如果检查失败，可以选择将设备保留在onDevices中
 			continue
 		}
-
 		if exists {
 			// 如果设备在POINTOFF set中，则添加到OffDevices
 			response.OffDevices = append(response.OffDevices, device)
@@ -164,54 +219,30 @@ func zyStartHandler(w http.ResponseWriter, r *http.Request) {
 		}
 	}
 
-	// 从OnDevices中移除已经移动到OffDevices的设备
-	// 创建一个map来快速查找需要移除的设备
-	offDeviceMap := make(map[string]bool)
-	for _, device := range response.OffDevices {
-		offDeviceMap[device] = true
-	}
-
-	// 过滤掉已经在OffDevices中的设备
-	filteredOnDevices := make([]string, 0)
-	for _, device := range response.OnDevices {
-		if !offDeviceMap[device] {
-			filteredOnDevices = append(filteredOnDevices, device)
-		}
-	}
-	response.OnDevices = removeRdfIdAndDuplicate(filteredOnDevices)
-
-	// 查找拓扑, 找出相关馈线的所有拓扑
-	list := getTopoList(filteredOnDevices)
-	mainList := getMainTopoList(filteredOnDevices)
-	feederList := getTopoFeederList(list) // 找有关的馈线
-	var totalTopoList []first.Topo
-	totalTopoList = append(totalTopoList, mainList...) // 添加主网部分的拓扑
-	for _, feeder := range feederList {
-		topoList := queryTopoData(feeder)
-		totalTopoList = append(totalTopoList, topoList...)
-	}
+	response.OnDevices = totalDevice // 默认等于全部拓扑
+	response.OnDevices = removeDeviceList(response.OnDevices, response.OffDevices)
+	response.OnDevices = removeRdfIdAndDuplicate(response.OnDevices)
 	{
 		filteredTotalTopoList := make([]first.Topo, 0)
 		// 过滤掉OffDevices的设备
 		for _, topo := range totalTopoList {
-			if offDeviceMap[topo.ID] {
+			if utils.Contains(response.OffDevices, topo.ID) {
 				continue
 			}
 			filteredTotalTopoList = append(filteredTotalTopoList, topo)
 		}
-		totalTopoList = filteredTotalTopoList
-	}
-	graph := first.BuildGraph(totalTopoList)
-	for key, connected := range graph {
-		fmt.Println(key, ": ", connected)
-		if isAllAcLine(connected) {
-			fmt.Println("All AcLine - Pass")
-			response.OnDevices = removeDeviceList(response.OnDevices, connected)
-			//response.OffDevices = append(response.OffDevices, connected...)
-			//response.PointOffDevices = response.OffDevices
+		graph := first.BuildGraph(filteredTotalTopoList)
+		for key, connected := range graph {
+			fmt.Println(key, ": ", connected)
+			if isAllPowerOff(connected) {
+				fmt.Println("All PowerOff - Pass")
+				response.OnDevices = removeDeviceList(response.OnDevices, connected)
+				response.OffDevices = append(response.OffDevices, connected...)
+				//response.PointOffDevices = response.OffDevices
+			}
 		}
+		log.Printf("topoList list: %v", list)
 	}
-	log.Printf("topoList list: %v", list)
 
 	// 设置响应头
 	w.Header().Set("Content-Type", "application/json")
@@ -305,7 +336,7 @@ func removeRdfIdAndDuplicate(list []string) (resultList []string) {
 	return resultList
 }
 
-func isAllAcLine(idList []string) bool {
+func isAllPowerOff(idList []string) bool {
 	for _, item := range idList {
 		if strings.HasPrefix(item, "1702") {
 			continue
@@ -316,10 +347,62 @@ func isAllAcLine(idList []string) bool {
 		if strings.HasPrefix(item, "20100000_") {
 			continue
 		}
+		if strings.HasPrefix(item, "1711") {
+			//var entityList []map[string]interface{}
+			//data.DB.Table("DKY_DB_BIGDATA.SG_DEV_DBUS_H15_MEA_"+time.Now().Format("2006")).
+			//	Where("CREATE_DATE = ? and ID = ?", time.Now().Format("2006-01-02"), item).
+			//	Find(&entityList)
+			//if len(entityList) == 0 {
+			//	continue
+			//}
+			hasValue, err := isItemInRedisHashRoundHasValue("YC:BUS:" + item)
+			if !hasValue {
+				continue
+			}
+			if err != nil {
+				log.Printf(item + " find error: " + err.Error())
+			}
+		}
+		if strings.HasPrefix(item, "1706") {
+			//var entityList []map[string]interface{}
+			//data.DB.Table("DKY_DB_BIGDATA.SG_DEV_DBREAKER_H15_MEA_"+time.Now().Format("2006")).
+			//	Where("CREATE_DATE = ? and ID = ?", time.Now().Format("2006-01-02"), item).
+			//	Find(&entityList)
+			//if len(entityList) == 0 {
+			//	continue
+			//}
+			hasValue, err := isItemInRedisHashRoundHasValue("YC:BREAKER:" + item)
+			if !hasValue {
+				continue
+			}
+			if err != nil {
+				log.Printf(item + " find error: " + err.Error())
+			}
+		}
+		if strings.HasPrefix(item, "1703") {
+			//var entityList []map[string]interface{}
+			//data.DB.Table("DKY_DB_BIGDATA.SG_DEV_DPWRTRANSFM_H15_MEA_"+time.Now().Format("2006")).
+			//	Where("CREATE_DATE = ? and ID = ?", time.Now().Format("2006-01-02"), item).
+			//	Find(&entityList)
+			//if len(entityList) == 0 {
+			//	continue
+			//}
+			hasValue, err := isItemInRedisHashRoundHasValue("YC:POWERTRANSFORMER:" + item)
+			if !hasValue {
+				continue
+			}
+			if err != nil {
+				log.Printf(item + " find error: " + err.Error())
+			}
+		}
 		return false
 	}
 
 	return true
+}
+
+func isAll() {
+
 }
 
 func main() {

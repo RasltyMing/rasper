@@ -230,6 +230,7 @@ func parseFile(filePath, timestamp string) (map[string][]string, error) {
 func processAndStoreToRedis(ctx context.Context, rdb *redis.Client, idMap map[string][]string) error {
 	for key, idList := range idMap {
 		for _, id := range idList {
+			id = "\"" + id + "\""
 			err := rdb.SRem(ctx, strings.ReplaceAll(key, "POINTOFF", "POINTON"), id).Err()
 			if err != nil {
 				return fmt.Errorf("error remove to %s: %v", key, err)
