@@ -395,6 +395,9 @@ func isAllPowerOff(idList []string) bool {
 				log.Printf(item + " find error: " + err.Error())
 			}
 		}
+		if strings.HasPrefix(item, "1709") { // 刀闸没量测
+			continue
+		}
 		return false
 	}
 
